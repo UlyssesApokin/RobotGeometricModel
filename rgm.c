@@ -160,7 +160,7 @@ A0k is relation between S_matrix and S0 matrix
 A0k was named "mtx_s_s0"
 */
 void fill_arr_of_mtx_s_s0(
-	const int num_of_pair,
+	int num_of_pair,
 	const double (*mtx_s_sm1)[SIZE_TRANS_MTX][NMAX],
 	double (*mtx_s_s0)[SIZE_TRANS_MTX][NMAX]
 	)
@@ -210,7 +210,7 @@ int main()
 	double mcos[SIZE_MTX][SIZE_MTX][NMAX];
 	double lvec[SIZE_TRANS_MTX][NMAX];
   
-	mcos[0][0][0] = 1.0; mcos[0][1][0] = 0.0; mcos[0][2][0] = 0.0;
+  mcos[0][0][0] = 1.0; mcos[0][1][0] = 0.0; mcos[0][2][0] = 0.0;
   mcos[1][0][0] = 0.0; mcos[1][1][0] = 1.0; mcos[1][2][0] = 0.0;
   mcos[2][0][0] = 0.0; mcos[2][1][0] = 0.0; mcos[2][2][0] = 1.0;
   
