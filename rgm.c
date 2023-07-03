@@ -201,8 +201,8 @@ int main()
 	int ord_of_pair, num_of_pair = 3;
 	double betavec[num_of_pair];
 	int pvec[] =
-		{ROTARY_PAIR_TYPE_2, MOVING_PAIR, MOVING_PAIR};
-	double qvec[] = {0.0, M_PI/2, 0.0};
+		{ROTARY_PAIR_TYPE_2, ROTARY_PAIR_TYPE_1, MOVING_PAIR};
+	double qvec[] = {0.0, M_PI/2, 1.0};
 	double mtx_s_sh[SIZE_TRANS_MTX][SIZE_TRANS_MTX][num_of_pair + base];
 	double mtx_s_shm1[SIZE_TRANS_MTX][SIZE_TRANS_MTX][num_of_pair + base];
 	double mtx_s_sm1[SIZE_TRANS_MTX][SIZE_TRANS_MTX][num_of_pair + base];
