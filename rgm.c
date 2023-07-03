@@ -8,8 +8,7 @@ Name: Robot Geometric Model (rgm.c)
 #include <stdlib.h>
 #include <math.h>
 #define M_PI 3.14
-/*Maximum number of pair*/
-#define NMAX 10
+
 /*Size of mcos and lvec matrix*/
 #define SIZE_MTX 3
 /*Size of S and S* (Sh) matrix*/
@@ -20,6 +19,8 @@ Name: Robot Geometric Model (rgm.c)
 #define ROTARY_PAIR_TYPE_2 2
 #define MOVING_PAIR 3
 
+enum {base = 1};
+
 /*
 Fill array of Aii* matrix
 Aii* is relation between S_matrix and S*matrix
@@ -27,15 +28,14 @@ Aii* was named "mtx_s_sh"
 */
 void fill_arr_of_mtx_s_sh(
 	int num_of_pair,
-	const double lvec[SIZE_MTX][NMAX],
-	const double (*mcos)[SIZE_MTX][NMAX],
-	double (*a_mtx_s_sh)[SIZE_TRANS_MTX][NMAX]
+	const double lvec[SIZE_MTX][num_of_pair + base],
+	const double (*mcos)[SIZE_MTX][num_of_pair + base],
+	double (*a_mtx_s_sh)[SIZE_TRANS_MTX][num_of_pair + base]
 	)
 {
 	int count, i, j;
 	enum {coord_of_new_sys = 3, initial_pos = 3};
-	if (num_of_pair >= NMAX)
-		return;
+
 	for (count = 0; count <= num_of_pair; count++)
 	{
 		for (i = 0; i < SIZE_MTX; i++)
@@ -62,8 +62,7 @@ void fill_arr_of_betavec(
 	)
 {
 	int n;
-	if (num_of_pair >= NMAX)
-		return;
+
 	for (n = 0; n < num_of_pair; n++)
 	{
 		if (pvec[n] == ROTARY_PAIR_TYPE_1 || pvec[n] == ROTARY_PAIR_TYPE_2)
@@ -85,12 +84,11 @@ void fill_arr_of_mtx_s_shm1(
 	int num_of_pair,
 	const double *betavec,
 	const double *qvec,
-	double (*mtx_s_shm1)[SIZE_TRANS_MTX][NMAX]
+	double (*mtx_s_shm1)[SIZE_TRANS_MTX][num_of_pair + base]
 	)
 {
 	int n, i, j;
-	if (num_of_pair >= NMAX)
-		return;
+
 	for (n = 0; n < num_of_pair; n++)
 		for (i = 0; i < SIZE_TRANS_MTX; i++)
 			for(j = 0; j < SIZE_TRANS_MTX; j++)
@@ -114,12 +112,13 @@ void fill_arr_of_mtx_s_shm1(
 }
 		
 void mult_matrix(
+  int size_of_mtx,
 	int ord_left,
-	const double (*mtx_left)[SIZE_TRANS_MTX][NMAX],
+	const double (*mtx_left)[SIZE_TRANS_MTX][size_of_mtx],
 	const int ord_right,
-	const double (*mtx_right)[SIZE_TRANS_MTX][NMAX],
+	const double (*mtx_right)[SIZE_TRANS_MTX][size_of_mtx],
 	const int ord_rez,
-	double (*mtx_rez)[SIZE_TRANS_MTX][NMAX]
+	double (*mtx_rez)[SIZE_TRANS_MTX][size_of_mtx]
 	)
 {
 	int n, i, j;
@@ -142,16 +141,15 @@ A(i-1),j was named "mtx_s_sm1"
 */
 void fill_arr_of_mtx_s_sm1(
 	int num_of_pair,
-	const double (*mtx_s_sh)[SIZE_TRANS_MTX][NMAX],
-	const double (*mtx_s_shm1)[SIZE_TRANS_MTX][NMAX],
-	double (*mtx_s_sm1)[SIZE_TRANS_MTX][NMAX]
+	const double (*mtx_s_sh)[SIZE_TRANS_MTX][num_of_pair + base],
+	const double (*mtx_s_shm1)[SIZE_TRANS_MTX][num_of_pair + base],
+	double (*mtx_s_sm1)[SIZE_TRANS_MTX][num_of_pair + base]
 	)
 {
 	int n;
-	if (num_of_pair > NMAX)
-		return;
+
 	for (n = 0; n < num_of_pair; n++)
-		mult_matrix(n, mtx_s_sh, n, mtx_s_shm1, n, mtx_s_sm1);
+		mult_matrix(num_of_pair + base, n, mtx_s_sh, n, mtx_s_shm1, n, mtx_s_sm1);
 }
 
 /*
@@ -161,8 +159,8 @@ A0k was named "mtx_s_s0"
 */
 void fill_arr_of_mtx_s_s0(
 	int num_of_pair,
-	const double (*mtx_s_sm1)[SIZE_TRANS_MTX][NMAX],
-	double (*mtx_s_s0)[SIZE_TRANS_MTX][NMAX]
+	const double (*mtx_s_sm1)[SIZE_TRANS_MTX][num_of_pair +base],
+	double (*mtx_s_s0)[SIZE_TRANS_MTX][num_of_pair + base]
 	)
 {
 	int i, j, n;
@@ -172,10 +170,12 @@ void fill_arr_of_mtx_s_s0(
 			mtx_s_s0[i][j][0] = mtx_s_sm1[i][j][0];
 	}
 	for (n = 1; n < SIZE_TRANS_MTX; n++)
-	mult_matrix(n-1, mtx_s_s0, n, mtx_s_sm1, n, mtx_s_s0);		
+	mult_matrix(num_of_pair + base, n-1, mtx_s_s0, n, mtx_s_sm1, n, mtx_s_s0);		
 }
 
-void print_matrix(int n, const double (*arr)[SIZE_TRANS_MTX][NMAX])
+void print_matrix(
+  int size_of_mtx,
+  int n, const double (*arr)[SIZE_TRANS_MTX][size_of_mtx+1])
 {
 	int i, j;
 	printf("K = %d\n\n", n+1);
@@ -199,16 +199,16 @@ void print_vec(int n, const double* p)
 int main()
 {
 	int ord_of_pair, num_of_pair = 3;
-	double betavec[3];
-	int pvec[3] =
-		{ROTARY_PAIR_TYPE_2, ROTARY_PAIR_TYPE_1, MOVING_PAIR};
-	double qvec[SIZE_MTX] = {0.0, M_PI/2, 1.0};
-	double mtx_s_sh[SIZE_TRANS_MTX][SIZE_TRANS_MTX][NMAX];
-	double mtx_s_shm1[SIZE_TRANS_MTX][SIZE_TRANS_MTX][NMAX];
-	double mtx_s_sm1[SIZE_TRANS_MTX][SIZE_TRANS_MTX][NMAX];
-	double mtx_s_s0[SIZE_TRANS_MTX][SIZE_TRANS_MTX][NMAX];
-	double mcos[SIZE_MTX][SIZE_MTX][NMAX];
-	double lvec[SIZE_TRANS_MTX][NMAX];
+	double betavec[num_of_pair];
+	int pvec[] =
+		{ROTARY_PAIR_TYPE_2, MOVING_PAIR, MOVING_PAIR};
+	double qvec[] = {0.0, M_PI/2, 0.0};
+	double mtx_s_sh[SIZE_TRANS_MTX][SIZE_TRANS_MTX][num_of_pair + base];
+	double mtx_s_shm1[SIZE_TRANS_MTX][SIZE_TRANS_MTX][num_of_pair + base];
+	double mtx_s_sm1[SIZE_TRANS_MTX][SIZE_TRANS_MTX][num_of_pair + base];
+	double mtx_s_s0[SIZE_TRANS_MTX][SIZE_TRANS_MTX][num_of_pair + base];
+	double mcos[SIZE_MTX][SIZE_MTX][num_of_pair + base];
+	double lvec[SIZE_TRANS_MTX][num_of_pair + base];
   
   mcos[0][0][0] = 1.0; mcos[0][1][0] = 0.0; mcos[0][2][0] = 0.0;
   mcos[1][0][0] = 0.0; mcos[1][1][0] = 1.0; mcos[1][2][0] = 0.0;
@@ -235,7 +235,7 @@ int main()
 	fill_arr_of_mtx_s_sh(num_of_pair, lvec, mcos, mtx_s_sh);
 	printf("\n[Aii*]:\n\n");
 	for (ord_of_pair = 0; ord_of_pair <= num_of_pair; ord_of_pair++)
-		print_matrix(ord_of_pair, mtx_s_sh);
+		print_matrix(num_of_pair, ord_of_pair, mtx_s_sh);
   /* calculate and print beta-vector */
 	fill_arr_of_betavec(num_of_pair, pvec, betavec);
 	printf("\n{beta}:");
@@ -244,16 +244,16 @@ int main()
 	fill_arr_of_mtx_s_shm1(num_of_pair, betavec, qvec, mtx_s_shm1);
 	printf("\n[Ai*j]:\n\n");
 	for (ord_of_pair = 0; ord_of_pair < num_of_pair; ord_of_pair++)
-		print_matrix(ord_of_pair, mtx_s_shm1);
+		print_matrix(num_of_pair, ord_of_pair, mtx_s_shm1);
   /* calculate and print mtx_s_sm1 (A(i-1),j) */
 	fill_arr_of_mtx_s_sm1(num_of_pair, mtx_s_sh, mtx_s_shm1, mtx_s_sm1);
 	printf("\n[Aij]:\n\n");
 	for (ord_of_pair = 0; ord_of_pair < num_of_pair; ord_of_pair++)
-		print_matrix(ord_of_pair, mtx_s_sm1);
+		print_matrix(num_of_pair, ord_of_pair, mtx_s_sm1);
   /* calculate and print mtx_s_s0 (A0i) */
 	fill_arr_of_mtx_s_s0(num_of_pair, mtx_s_sm1, mtx_s_s0);
 	printf("\n[A0i]:\n\n");
 	for (ord_of_pair = 0; ord_of_pair < num_of_pair; ord_of_pair++)
-		print_matrix(ord_of_pair, mtx_s_s0);
+		print_matrix(num_of_pair, ord_of_pair, mtx_s_s0);
 	return 0;
 }
