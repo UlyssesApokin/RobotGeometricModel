@@ -1,12 +1,13 @@
 /*
 Created: Ulysses Apokin
-Data: 28.06.2023
-Name: Robot Geometric Model (rgm.c)
+Data: 06.07.2023
+Name: OpenGL Robot Geometric Model Visualisator (opengl_rgm.c)
 */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <GL/freeglut.h>
 #define M_PI 3.14
 
 /*Size of mcos and lvec matrix*/
@@ -20,6 +21,16 @@ Name: Robot Geometric Model (rgm.c)
 #define MOVING_PAIR 3
 
 enum {base = 1};
+
+int width_scr = 640, height_scr = 480;
+
+struct Robot
+{
+    double base[3];
+    double pair_1[3];
+    double pair_2[3];
+    double tcp[3];
+};
 
 /*
 Fill array of Aii* matrix
@@ -170,7 +181,7 @@ void fill_arr_of_mtx_s_s0(
 			mtx_s_s0[i][j][0] = mtx_s_sm1[i][j][0];
 	}
 	for (n = 1; n < SIZE_TRANS_MTX; n++)
-    mult_matrix(num_of_pair + base, n-1, mtx_s_s0, n, mtx_s_sm1, n, mtx_s_s0);
+	mult_matrix(num_of_pair + base, n-1, mtx_s_s0, n, mtx_s_sm1, n, mtx_s_s0);		
 }
 
 void append_arr_of_mtx_s_s0(
@@ -183,36 +194,32 @@ void append_arr_of_mtx_s_s0(
   mult_matrix(num_of_pair + base, 2, mtx_s_s0, 3, mtx_s_sh, 3, mtx_s_s0);
 }
 
-void print_matrix(
-  int size_of_mtx,
-  int n, const double (*arr)[SIZE_TRANS_MTX][size_of_mtx+1])
+void create_points(
+	int num_of_pair, int ord_of_pair,
+	const double (*mtx)[4][num_of_pair+1],
+	double *coord
+	)
 {
-	int i, j;
-	printf("K = %d\n\n", n+1);
-	for (i = 0; i < SIZE_TRANS_MTX; i++)
-	{
-		for ( j = 0; j < SIZE_TRANS_MTX; j++)
-			printf("%6.2f", arr[i][j][n]);
-		printf("\n");
-	}
-	printf("\n");
-}
-
-void print_vec(int n, const double* p)
-{
+	enum {x, y, z, mov};
 	int i;
-	for (i = 0; i < n; i++)
-		printf("%5.1f", *(p + i));
-	printf("\n");
+	if (num_of_pair <= 0)
+		return;
+	if (ord_of_pair > num_of_pair)
+		return;
+	for (i = x; i <= z; i++)
+		coord[i] = mtx[i][mov][ord_of_pair];
 }
 
-int main()
+void draw_display(void)
 {
-	int ord_of_pair, num_of_pair = 3;
+    enum {s = 25, y = 10, b = 50, d = 50, width_line = 5};
+    enum {p0, p1, p2, p3};
+    struct Robot robot;
+    int num_of_pair = 3, i;
 	double betavec[num_of_pair];
 	int pvec[] =
 		{ROTARY_PAIR_TYPE_2, ROTARY_PAIR_TYPE_1, ROTARY_PAIR_TYPE_1};
-	double qvec[] = {0.0, 0.0, 0.0};
+	double qvec[] = {0, 0, 0};
 	double mtx_s_sh[SIZE_TRANS_MTX][SIZE_TRANS_MTX][num_of_pair + base];
 	double mtx_s_shm1[SIZE_TRANS_MTX][SIZE_TRANS_MTX][num_of_pair + base];
 	double mtx_s_sm1[SIZE_TRANS_MTX][SIZE_TRANS_MTX][num_of_pair + base];
@@ -220,7 +227,7 @@ int main()
 	double mcos[SIZE_MTX][SIZE_MTX][num_of_pair + base];
 	double lvec[SIZE_TRANS_MTX][num_of_pair + base];
   
-/*  mcos[0][0][0] = 1.0; mcos[0][1][0] = 0.0; mcos[0][2][0] = 0.0;
+ /* mcos[0][0][0] = 1.0; mcos[0][1][0] = 0.0; mcos[0][2][0] = 0.0;
   mcos[1][0][0] = 0.0; mcos[1][1][0] = 1.0; mcos[1][2][0] = 0.0;
   mcos[2][0][0] = 0.0; mcos[2][1][0] = 0.0; mcos[2][2][0] = 1.0;
   
@@ -241,7 +248,7 @@ int main()
   lvec[0][2] = 0.0; lvec[1][2] = 0.0; lvec[2][2] = 3.0;
   lvec[0][3] = 2.0; lvec[1][3] = 0.0; lvec[2][3] = 0.0;*/
   
-    mcos[0][0][0] = 1.0; mcos[0][1][0] = 0.0; mcos[0][2][0] = 0.0;
+  mcos[0][0][0] = 1.0; mcos[0][1][0] = 0.0; mcos[0][2][0] = 0.0;
   mcos[1][0][0] = 0.0; mcos[1][1][0] = 1.0; mcos[1][2][0] = 0.0;
   mcos[2][0][0] = 0.0; mcos[2][1][0] = 0.0; mcos[2][2][0] = 1.0;
   
@@ -261,31 +268,79 @@ int main()
   lvec[0][1] = 9.0; lvec[1][1] = 0.0; lvec[2][1] = 0.0;
   lvec[0][2] = 8.0; lvec[1][2] = 0.0; lvec[2][2] = 0.0;
   lvec[0][3] = 0.0; lvec[1][3] = 0.0; lvec[2][3] = 10.0;
+  
+    fill_arr_of_mtx_s_sh(num_of_pair, lvec, mcos, mtx_s_sh);
+    fill_arr_of_betavec(num_of_pair, pvec, betavec);
+    fill_arr_of_mtx_s_shm1(num_of_pair, betavec, qvec, mtx_s_shm1);
+    fill_arr_of_mtx_s_sm1(num_of_pair, mtx_s_sh, mtx_s_shm1, mtx_s_sm1);
+    fill_arr_of_mtx_s_s0(num_of_pair, mtx_s_sm1, mtx_s_s0);
+    append_arr_of_mtx_s_s0(num_of_pair, mtx_s_sm1, mtx_s_sh, mtx_s_s0);
+    create_points(num_of_pair, p0, mtx_s_s0, robot.base);
+    create_points(num_of_pair, p1, mtx_s_s0, robot.pair_1);
+    create_points(num_of_pair, p2, mtx_s_s0, robot.pair_2);
+    create_points(num_of_pair, p3, mtx_s_s0, robot.tcp);
+    for (i = 0; i < 3; i++)
+		printf("Robot.base[%d] = %lf\n", i, robot.base[i]);
+	putchar('\n');
+	for (i = 0; i < 3; i++)
+		printf("Robot.pair_1[%d] = %lf\n", i, robot.pair_1[i]);
+	putchar('\n');
+	for (i = 0; i < 3; i++)
+		printf("Robot.pair_2[%d] = %lf\n", i, robot.pair_2[i]);
+	putchar('\n');
+	for (i = 0; i < 3; i++)
+		printf("Robot.tcp[%d] = %lf\n", i, robot.tcp[i]);
+	putchar('\n');
+    glClearColor(0.7f, 0.7f, 0.75f, 1);
+    glClear(GL_COLOR_BUFFER_BIT);
+    glColor3ub(255, 5, 20);
+    glLineWidth(width_line);
+    glBegin(GL_LINES);
+        glVertex3f(robot.base[1]*s+b, robot.base[2]*s+d, robot.base[0]);
+        glVertex3f(robot.pair_1[1]*s+b, robot.pair_1[2]*s+d, robot.pair_1[0]/y);
+        glVertex3f(robot.pair_1[1]*s+b, robot.pair_1[2]*s+d, robot.pair_1[0]/y);
+        glVertex3f(robot.pair_2[1]*s+b, robot.pair_2[2]*s+d, robot.pair_2[0]/y);
+        glVertex3f(robot.pair_2[1]*s+b, robot.pair_2[2]*s+d, robot.pair_2[0]/y);
+        glVertex3f(robot.tcp[1]*s+b, robot.tcp[2]*s+d, robot.tcp[0]/y);
+    glEnd();
+    glColor3ub(5, 255, 20);
+    glLineWidth(width_line-3);
+    glBegin(GL_LINES);
+        glVertex3f(robot.base[1]*s+b, robot.base[2]*s+d, robot.base[0]/y);
+        glVertex3f(robot.tcp[1]*s+b, robot.tcp[2]*s+d, robot.tcp[0]/y);
+    glEnd();
+    glFinish();
+    
+}
 
-  /* calculate and print mtx_s_sh (Aii*) */
-	fill_arr_of_mtx_s_sh(num_of_pair, lvec, mcos, mtx_s_sh);
-	printf("\n[Aii*]:\n\n");
-	for (ord_of_pair = 0; ord_of_pair <= num_of_pair; ord_of_pair++)
-		print_matrix(num_of_pair, ord_of_pair, mtx_s_sh);
-  /* calculate and print beta-vector */
-	fill_arr_of_betavec(num_of_pair, pvec, betavec);
-	printf("\n{beta}:");
-	print_vec(num_of_pair, betavec);
-  /* calculate and print mtx_s_shm1 (A(i-1),j*) */
-	fill_arr_of_mtx_s_shm1(num_of_pair, betavec, qvec, mtx_s_shm1);
-	printf("\n[Ai*j]:\n\n");
-	for (ord_of_pair = 0; ord_of_pair < num_of_pair; ord_of_pair++)
-		print_matrix(num_of_pair, ord_of_pair, mtx_s_shm1);
-  /* calculate and print mtx_s_sm1 (A(i-1),j) */
-	fill_arr_of_mtx_s_sm1(num_of_pair, mtx_s_sh, mtx_s_shm1, mtx_s_sm1);
-	printf("\n[Aij]:\n\n");
-	for (ord_of_pair = 0; ord_of_pair < num_of_pair; ord_of_pair++)
-		print_matrix(num_of_pair, ord_of_pair, mtx_s_sm1);
-  /* calculate and print mtx_s_s0 (A0i) */
-	fill_arr_of_mtx_s_s0(num_of_pair, mtx_s_sm1, mtx_s_s0);
-  append_arr_of_mtx_s_s0(num_of_pair, mtx_s_sm1, mtx_s_sh, mtx_s_s0);
-	printf("\n[A0i]:\n\n");
-	for (ord_of_pair = 0; ord_of_pair < num_of_pair+1; ord_of_pair++)
-		print_matrix(num_of_pair, ord_of_pair, mtx_s_s0);
-	return 0;
+void reshape_scr(int w, int h)
+{
+    width_scr = w;
+    height_scr = h;
+    glViewport(0, 0, w, h);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glOrtho(0, w, 0, h, -1.0, 1.0);
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity(); 
+}
+
+void read_keyboard(unsigned char key, int x, int y)
+{
+#define ESCAPE 27
+    if (key == ESCAPE)
+        exit(0);
+}
+
+int main(int argc, char **argv)
+{
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_RGB);
+    glutInitWindowSize(width_scr, height_scr);
+    glutCreateWindow("OpenGL Robot Geometic Model Visualisator");
+    glutDisplayFunc(draw_display);
+    glutReshapeFunc(reshape_scr);
+    glutKeyboardFunc(read_keyboard);
+    glutMainLoop();
+    return 0;
 }
