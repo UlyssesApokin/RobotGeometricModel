@@ -22,7 +22,7 @@ Name: OpenGL Robot Geometric Model Visualisator (opengl_rgm.c)
 
 enum {base = 1};
 
-int width_scr = 640, height_scr = 480;
+int width_scr = 1280, height_scr = 720;
 
 struct Robot
 {
@@ -160,7 +160,8 @@ void fill_arr_of_mtx_s_sm1(
 	int n;
 
 	for (n = 0; n < num_of_pair; n++)
-		mult_matrix(num_of_pair + base, n, mtx_s_sh, n, mtx_s_shm1, n, mtx_s_sm1);
+		mult_matrix(num_of_pair + base, n, mtx_s_sh, n, mtx_s_shm1,
+			n, mtx_s_sm1);
 }
 
 /*
@@ -181,7 +182,8 @@ void fill_arr_of_mtx_s_s0(
 			mtx_s_s0[i][j][0] = mtx_s_sm1[i][j][0];
 	}
 	for (n = 1; n < SIZE_TRANS_MTX; n++)
-	mult_matrix(num_of_pair + base, n-1, mtx_s_s0, n, mtx_s_sm1, n, mtx_s_s0);		
+	mult_matrix(num_of_pair + base, n-1, mtx_s_s0, n, mtx_s_sm1,
+		n, mtx_s_s0);		
 }
 
 void append_arr_of_mtx_s_s0(
@@ -191,12 +193,13 @@ void append_arr_of_mtx_s_s0(
   double (*mtx_s_s0)[SIZE_TRANS_MTX][num_of_pair + base]
   )
 {
-  mult_matrix(num_of_pair + base, 2, mtx_s_s0, 3, mtx_s_sh, 3, mtx_s_s0);
+  mult_matrix(num_of_pair + base, 2, mtx_s_s0, 3, mtx_s_sh,
+	3, mtx_s_s0);
 }
 
 void create_points(
 	int num_of_pair, int ord_of_pair,
-	const double (*mtx)[4][num_of_pair+1],
+	const double (*mtx)[4][num_of_pair+base],
 	double *coord
 	)
 {
@@ -210,87 +213,80 @@ void create_points(
 		coord[i] = mtx[i][mov][ord_of_pair];
 }
 
-void draw_display(void)
+void init_rgm(struct Robot *robot)
 {
-    enum {s = 25, y = 10, b = 50, d = 50, width_line = 5};
-    enum {p0, p1, p2, p3};
-    struct Robot robot;
-    int num_of_pair = 3, i;
+	enum {p0, p1, p2, p3};
+    int num_of_pair = 3; /*init*/
 	double betavec[num_of_pair];
 	int pvec[] =
-		{ROTARY_PAIR_TYPE_2, ROTARY_PAIR_TYPE_1, ROTARY_PAIR_TYPE_1};
-	double qvec[] = {0, 0, 0};
+		{ROTARY_PAIR_TYPE_2, MOVING_PAIR, ROTARY_PAIR_TYPE_1}; /*init*/
+	double qvec[] = {0, -1, M_PI/2}; /*init*/
 	double mtx_s_sh[SIZE_TRANS_MTX][SIZE_TRANS_MTX][num_of_pair + base];
-	double mtx_s_shm1[SIZE_TRANS_MTX][SIZE_TRANS_MTX][num_of_pair + base];
-	double mtx_s_sm1[SIZE_TRANS_MTX][SIZE_TRANS_MTX][num_of_pair + base];
+	double mtx_s_shm1[SIZE_TRANS_MTX][SIZE_TRANS_MTX][num_of_pair+base];
+	double mtx_s_sm1[SIZE_TRANS_MTX][SIZE_TRANS_MTX][num_of_pair+base];
 	double mtx_s_s0[SIZE_TRANS_MTX][SIZE_TRANS_MTX][num_of_pair + base];
-	double mcos[SIZE_MTX][SIZE_MTX][num_of_pair + base];
-	double lvec[SIZE_TRANS_MTX][num_of_pair + base];
-  
- /* mcos[0][0][0] = 1.0; mcos[0][1][0] = 0.0; mcos[0][2][0] = 0.0;
-  mcos[1][0][0] = 0.0; mcos[1][1][0] = 1.0; mcos[1][2][0] = 0.0;
-  mcos[2][0][0] = 0.0; mcos[2][1][0] = 0.0; mcos[2][2][0] = 1.0;
-  
-  mcos[0][0][1] = 0.0; mcos[0][1][1] = -1.0; mcos[0][2][1] = 0.0;
-  mcos[1][0][1] = 1.0; mcos[1][1][1] = 0.0; mcos[1][2][1] = 0.0;
-  mcos[2][0][1] = 0.0; mcos[2][1][1] = 0.0; mcos[2][2][1] = 1.0;
-
-  mcos[0][0][2] = 0.0; mcos[0][1][2] = -1.0; mcos[0][2][2] = 0.0;
-  mcos[1][0][2] = 0.0; mcos[1][1][2] = 0.0; mcos[1][2][2] = -1.0;
-  mcos[2][0][2] = 1.0; mcos[2][1][2] = 0.0; mcos[2][2][2] = 0.0;
-
-  mcos[0][0][3] = 0.0; mcos[0][1][3] = 0.0; mcos[0][2][3] = 1.0;
-  mcos[1][0][3] = 0.0; mcos[1][1][3] = -1.0; mcos[1][2][3] = 0.0;
-  mcos[2][0][3] = 1.0; mcos[2][1][3] = 0.0; mcos[2][2][3] = 0.0;
-
-  lvec[0][0] = 0.0; lvec[1][0] = 0.0; lvec[2][0] = 0.0;
-  lvec[0][1] = 0.0; lvec[1][1] = 0.0; lvec[2][1] = 6.0;
-  lvec[0][2] = 0.0; lvec[1][2] = 0.0; lvec[2][2] = 3.0;
-  lvec[0][3] = 2.0; lvec[1][3] = 0.0; lvec[2][3] = 0.0;*/
-  
-  mcos[0][0][0] = 1.0; mcos[0][1][0] = 0.0; mcos[0][2][0] = 0.0;
-  mcos[1][0][0] = 0.0; mcos[1][1][0] = 1.0; mcos[1][2][0] = 0.0;
-  mcos[2][0][0] = 0.0; mcos[2][1][0] = 0.0; mcos[2][2][0] = 1.0;
-  
-  mcos[0][0][1] = 0.0; mcos[0][1][1] = 0.0; mcos[0][2][1] = 1.0;
-  mcos[1][0][1] = 1.0; mcos[1][1][1] = 0.0; mcos[1][2][1] = 0.0;
-  mcos[2][0][1] = 0.0; mcos[2][1][1] = 1.0; mcos[2][2][1] = 0.0;
-
-  mcos[0][0][2] = 0.0; mcos[0][1][2] = 1.0; mcos[0][2][2] = 0.0;
-  mcos[1][0][2] = 0.0; mcos[1][1][2] = 0.0; mcos[1][2][2] = 1.0;
-  mcos[2][0][2] = 1.0; mcos[2][1][2] = 0.0; mcos[2][2][2] = 0.0;
-
-  mcos[0][0][3] = 0.0; mcos[0][1][3] = 0.0; mcos[0][2][3] = 1.0;
-  mcos[1][0][3] = 1.0; mcos[1][1][3] = 0.0; mcos[1][2][3] = 0.0;
-  mcos[2][0][3] = 0.0; mcos[2][1][3] = 1.0; mcos[2][2][3] = 0.0;
-
-  lvec[0][0] = 0.0; lvec[1][0] = 0.0; lvec[2][0] = 0.0;
-  lvec[0][1] = 9.0; lvec[1][1] = 0.0; lvec[2][1] = 0.0;
-  lvec[0][2] = 8.0; lvec[1][2] = 0.0; lvec[2][2] = 0.0;
-  lvec[0][3] = 0.0; lvec[1][3] = 0.0; lvec[2][3] = 10.0;
-  
-    fill_arr_of_mtx_s_sh(num_of_pair, lvec, mcos, mtx_s_sh);
+	double mcos[SIZE_MTX][SIZE_MTX][num_of_pair + base]; /*init*/
+	double lvec[SIZE_TRANS_MTX][num_of_pair + base]; /*init*/
+	/*Matrix M0*/
+	mcos[0][0][0] = 1.0;	mcos[0][1][0] = 0.0;	mcos[0][2][0] = 0.0;
+	mcos[1][0][0] = 0.0;	mcos[1][1][0] = 1.0;	mcos[1][2][0] = 0.0;
+	mcos[2][0][0] = 0.0;	mcos[2][1][0] = 0.0; 	mcos[2][2][0] = 1.0;
+	/*Matrix M1*/
+	mcos[0][0][1] = 0.0;	mcos[0][1][1] = -1.0;	mcos[0][2][1] = 0.0;
+	mcos[1][0][1] = 1.0;	mcos[1][1][1] = 0.0;	mcos[1][2][1] = 0.0;
+	mcos[2][0][1] = 0.0;	mcos[2][1][1] = 0.0;	mcos[2][2][1] = 1.0;
+	/*Matrix M3*/
+	mcos[0][0][2] = 0.0;	mcos[0][1][2] = -1.0;	mcos[0][2][2] = 0.0;
+	mcos[1][0][2] = 0.0;	mcos[1][1][2] = 0.0;	mcos[1][2][2] = -1.0;
+	mcos[2][0][2] = 1.0;	mcos[2][1][2] = 0.0;	mcos[2][2][2] = 0.0;
+	/*Matrix M4*/
+	mcos[0][0][3] = 0.0;	mcos[0][1][3] = 0.0;	mcos[0][2][3] = 1.0;
+	mcos[1][0][3] = 0.0; 	mcos[1][1][3] = -1.0;	mcos[1][2][3] = 0.0;
+	mcos[2][0][3] = 1.0;	mcos[2][1][3] = 0.0;	mcos[2][2][3] = 0.0;
+	/*X axis		Y axis		Z axis*/
+	/*L0*/
+	lvec[0][0] = 0.0;	lvec[1][0] = 0.0;	lvec[2][0] = 0.0;
+	/*L1*/
+	lvec[0][1] = 0.0;	lvec[1][1] = 0.0;	lvec[2][1] = 6.0;
+	/*L2*/
+	lvec[0][2] = 0.0;	lvec[1][2] = 0.0;	lvec[2][2] = 3.0;
+	/*L3*/
+	lvec[0][3] = 2.0;	lvec[1][3] = 0.0;	lvec[2][3] = 0.0;
+	fill_arr_of_mtx_s_sh(num_of_pair, lvec, mcos, mtx_s_sh);
     fill_arr_of_betavec(num_of_pair, pvec, betavec);
     fill_arr_of_mtx_s_shm1(num_of_pair, betavec, qvec, mtx_s_shm1);
     fill_arr_of_mtx_s_sm1(num_of_pair, mtx_s_sh, mtx_s_shm1, mtx_s_sm1);
     fill_arr_of_mtx_s_s0(num_of_pair, mtx_s_sm1, mtx_s_s0);
     append_arr_of_mtx_s_s0(num_of_pair, mtx_s_sm1, mtx_s_sh, mtx_s_s0);
-    create_points(num_of_pair, p0, mtx_s_s0, robot.base);
-    create_points(num_of_pair, p1, mtx_s_s0, robot.pair_1);
-    create_points(num_of_pair, p2, mtx_s_s0, robot.pair_2);
-    create_points(num_of_pair, p3, mtx_s_s0, robot.tcp);
+	create_points(num_of_pair, p0, mtx_s_s0, robot->base);
+	create_points(num_of_pair, p1, mtx_s_s0, robot->pair_1);
+	create_points(num_of_pair, p2, mtx_s_s0, robot->pair_2);
+	create_points(num_of_pair, p3, mtx_s_s0, robot->tcp);
+}
+
+void print_std_robot(const struct Robot *robot)
+{
+    int i;
     for (i = 0; i < 3; i++)
-		printf("Robot.base[%d] = %lf\n", i, robot.base[i]);
+		printf("Robot.base[%d] = %lf\n", i, robot->base[i]);
 	putchar('\n');
 	for (i = 0; i < 3; i++)
-		printf("Robot.pair_1[%d] = %lf\n", i, robot.pair_1[i]);
+		printf("Robot.pair_1[%d] = %lf\n", i, robot->pair_1[i]);
 	putchar('\n');
 	for (i = 0; i < 3; i++)
-		printf("Robot.pair_2[%d] = %lf\n", i, robot.pair_2[i]);
+		printf("Robot.pair_2[%d] = %lf\n", i, robot->pair_2[i]);
 	putchar('\n');
 	for (i = 0; i < 3; i++)
-		printf("Robot.tcp[%d] = %lf\n", i, robot.tcp[i]);
-	putchar('\n');
+		printf("Robot.tcp[%d] = %lf\n", i, robot->tcp[i]);
+	putchar('\n');	
+}
+
+void draw_display(void)
+{
+    struct Robot robot;
+    enum {s = 25, y = 10, b = 50, d = 50, width_line = 5};
+    init_rgm(&robot);
+    print_std_robot(&robot);
     glClearColor(0.7f, 0.7f, 0.75f, 1);
     glClear(GL_COLOR_BUFFER_BIT);
     glColor3ub(255, 5, 20);
