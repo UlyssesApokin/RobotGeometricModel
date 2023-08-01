@@ -21,7 +21,7 @@ Name: OpenGL Robot Geometric Model Visualisator (opengl_rgm.c)
 #define MOVING_PAIR 3
 
 enum {base = 1};
-
+ 
 int width_scr = 1280, height_scr = 720;
 
 struct Robot
