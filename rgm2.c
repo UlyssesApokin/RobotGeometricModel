@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include <error.h>
 #include <math.h>
 
@@ -28,22 +29,23 @@ void init_rgm(const char *filename, struct Robot *robot)
 		perror(filename);
 		exit(1);
 	}
-	str = malloc(size_str * sizeof(char));
+	str = malloc((size_str+1) * sizeof(char));
+	str[size_str] = '\0';
 	while ((c = fgetc(robot_characteristics)) != EOF)
 	{
-		const char *comment = "COMMENT{";
+		char *type_pair, *lenght_pair, *coords, *rotation_matrix;
 		enum {start = 33, end = 126};
 		if (c >= start && c <= end)
 		{
 			str[size_str - 1] = c;
-			
-			if (strcmp(str, comment)
+			if (c == '}')
 			{
-				
+				printf("%s\n", str);
+				size_str = 0;
 			}
-			
-			
-			str = realloc(str, (size_str) * sizeof(char));
+			size_str++;
+			str = realloc(str, (size_str+1) * sizeof(char));
+			str[size_str] = '\0';
 			if (!str)
 			{
 				perror(str);
@@ -62,6 +64,7 @@ void analyze_text(const char *str, struct Robot *robot)
 
 int main (int argc, char **argv)
 {
-	
+	struct Robot robot;
+	init_rgm(argv[1], &robot);
 	return 0;
 }
