@@ -82,7 +82,6 @@ void fill_type_pair(const char *str, struct Robot *p_robot)
 		const char *ROTARY_TYPE_2 = "ROTARY_TYPE_2";
 		const char *MOVING = "MOVING";
 		c = str[i];
-		i++;
 		if (c == ']')
 		{
 			is_value = 0;
@@ -93,25 +92,33 @@ void fill_type_pair(const char *str, struct Robot *p_robot)
 				vec_of_pair = realloc(vec_of_pair, (num_of_pair + 1) * sizeof(int));
 				vec_of_pair[num_of_pair] = 1;
 			}
-			if (!strcmp(type_pair, ROTARY_TYPE_2))
+			else if (!strcmp(type_pair, ROTARY_TYPE_2))
 			{
 				vec_of_pair = realloc(vec_of_pair, (num_of_pair + 1) * sizeof(int));
 				vec_of_pair[num_of_pair] = 2;
 			}
-			if (!strcmp(type_pair, MOVING))
+			else if (!strcmp(type_pair, MOVING))
 			{
 				vec_of_pair = realloc(vec_of_pair, (num_of_pair + 1) * sizeof(int));
 				vec_of_pair[num_of_pair] = 3;
+			}
+			else
+			{
+				vec_of_pair = realloc(vec_of_pair, (num_of_pair + 1) * sizeof(int));
+				vec_of_pair[num_of_pair] = -1;
+				fprintf(stderr, "Invalid argument:TYPE_PAIR#%d:<%s>\n", num_of_pair, type_pair);
 			}
 			num_of_pair++;
 		}
 		if (is_value == 1)
 		{
 			type_pair[j] = str[i];
+			type_pair[j+1] = '\0';
 			j++;
 		}
 		if (c == '[')
 			is_value = 1;
+		i++;
 	} while (c != '\0');
 	p_robot->pvec = vec_of_pair;
 	p_robot->num = num_of_pair;
@@ -136,13 +143,10 @@ void fill_rotation_matrix(const char *str, struct Robot *robot)
 
 int main (int argc, char **argv)
 {
-	int i;
 	struct Robot robot;
 	if (argc > 1)
 		init_rgm(argv[1], &robot);
 	else
-		puts("To few arguments");
-	for (i = 0; i < robot.num; i++)
-		printf("Type of pair:\t%d\n", robot.pvec[i]);
+		fprintf(stderr, "To few arguments\n");
 	return 0;
 }
