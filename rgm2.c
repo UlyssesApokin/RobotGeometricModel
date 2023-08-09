@@ -9,31 +9,24 @@ enum pair {rotary_type_1, rotary_type_2, moving};
 
 struct Robot
 {
+	int num;
 	int *pvec;
 	double *lvec;
 	double *qvec;
 	double *rmtrx;
 };
 
-void analyze_text(const char *str, struct Robot *robot);
+void fill_type_pair(const char *str, struct Robot *p_robot);
+void fill_length_pair(const char *str, struct Robot *p_robot);
+void fill_coords(const char *str, struct Robot *p_robot);
+void fill_rotation_matrix(const char *str, struct Robot *p_robot);
 
-void init_rgm(const char *filename, struct Robot *robot)
+void init_rgm(const char *filename, struct Robot *p_robot)
 {
 	char c;
 	char *str;
-	char *type_pair, *lenght_pair, *coords, *rotation_matrix;
-	const char *TYPE_PAIR = "TYPE_PAIR";
-	const char *LENGTH_PAIR = "LENGTH_PAIR";
-	const char *COORDS = "COORDS";
-	const char *ROTATION_MATRIX = "ROTATION_MATRIX";
 	int size_str = 1;
-	enum {tp = 9, lp = 11, co = 6, rm = 15, cm = 7};
-	enum {start = 33, end = 126};
 	FILE *robot_characteristics;
-	type_pair = malloc(sizeof(char));
-	lenght_pair = malloc(sizeof(char));
-	coords = malloc(sizeof(char));
-	rotation_matrix = malloc(sizeof(char));
 	robot_characteristics = fopen(filename, "r");
 	if (!robot_characteristics)
 	{
@@ -44,67 +37,112 @@ void init_rgm(const char *filename, struct Robot *robot)
 	str[size_str] = '\0';
 	while ((c = fgetc(robot_characteristics)) != EOF)
 	{
+		enum {tp = 9, lp = 11, co = 6, rm = 15, cm = 7};
+		enum {start = 33, end = 126};
 		if (c >= start && c <= end)
 		{
 			str[size_str - 1] = c;
 			if (c == '}')
 			{
+				const char *TYPE_PAIR = "TYPE_PAIR";
+				const char *LENGTH_PAIR = "LENGTH_PAIR";
+				const char *COORDS = "COORDS";
+				const char *ROTATION_MATRIX = "ROTATION_MATRIX";
 				if (!strncmp(str, TYPE_PAIR, sizeof(char)*tp))
-				{
-					type_pair = malloc((size_str+1) * sizeof(char));
-					strcpy(type_pair, str);
-				}
+					fill_type_pair(str, p_robot);
 				if (!strncmp(str, LENGTH_PAIR, sizeof(char)*lp))
-				{
-					lenght_pair = malloc((size_str+1) * sizeof(char));
-					strcpy(lenght_pair, str);
-
-				}
+					fill_length_pair(str, p_robot);
 				if (!strncmp(str, COORDS, sizeof(char)*co))
-				{
-					coords = malloc((size_str+1) * sizeof(char));
-					strcpy(coords, str);
-				}
+					fill_coords(str, p_robot);
 				if (!strncmp(str, ROTATION_MATRIX, sizeof(char)*rm))
-				{
-					rotation_matrix = malloc((size_str+1) * sizeof(char));
-					strcpy(rotation_matrix, str);
-				}
+					fill_rotation_matrix(str, p_robot);
 				size_str = 0;
 			}
 			size_str++;
 			str = realloc(str, (size_str+1) * sizeof(char));
-			if (!str)
-			{
-				perror(str);
-				exit(2);
-			}
 			str[size_str] = '\0';
 		}
 	}
-	printf("%s\n", type_pair);
-	printf("%s\n", lenght_pair);
-	printf("%s\n", coords);
-	printf("%s\n", rotation_matrix);
 	fclose(robot_characteristics);
 	free(str);
-	free(type_pair);
-	free(lenght_pair);
-	free(coords);
-	free(rotation_matrix);
 }
 
-void analyze_text(const char *str, struct Robot *robot)
+void fill_type_pair(const char *str, struct Robot *p_robot)
 {
+	enum {maxline = 14};
+	char c = '\0';
+	char *type_pair = malloc(sizeof(char) * maxline);
+	int *vec_of_pair = malloc(sizeof(int));
+	int i = 0, j = 0;
+	int is_value = 0;
+	int num_of_pair = 0;
+	do
+	{
+		const char *ROTARY_TYPE_1 = "ROTARY_TYPE_1";
+		const char *ROTARY_TYPE_2 = "ROTARY_TYPE_2";
+		const char *MOVING = "MOVING";
+		c = str[i];
+		i++;
+		if (c == ']')
+		{
+			is_value = 0;
+			type_pair[j+1] = '\0';
+			j = 0;
+			if (!strcmp(type_pair, ROTARY_TYPE_1))
+			{
+				vec_of_pair = realloc(vec_of_pair, (num_of_pair + 1) * sizeof(int));
+				vec_of_pair[num_of_pair] = 1;
+			}
+			if (!strcmp(type_pair, ROTARY_TYPE_2))
+			{
+				vec_of_pair = realloc(vec_of_pair, (num_of_pair + 1) * sizeof(int));
+				vec_of_pair[num_of_pair] = 2;
+			}
+			if (!strcmp(type_pair, MOVING))
+			{
+				vec_of_pair = realloc(vec_of_pair, (num_of_pair + 1) * sizeof(int));
+				vec_of_pair[num_of_pair] = 3;
+			}
+			num_of_pair++;
+		}
+		if (is_value == 1)
+		{
+			type_pair[j] = str[i];
+			j++;
+		}
+		if (c == '[')
+			is_value = 1;
+	} while (c != '\0');
+	p_robot->pvec = vec_of_pair;
+	p_robot->num = num_of_pair;
+	free(type_pair);
 
+}
+
+void fill_length_pair(const char *str, struct Robot *robot)
+{
+	
+}
+
+void fill_coords(const char *str, struct Robot *robot)
+{
+	
+}
+
+void fill_rotation_matrix(const char *str, struct Robot *robot)
+{
+	
 }
 
 int main (int argc, char **argv)
 {
+	int i;
 	struct Robot robot;
 	if (argc > 1)
 		init_rgm(argv[1], &robot);
 	else
 		puts("To few arguments");
+	for (i = 0; i < robot.num; i++)
+		printf("Type of pair:\t%d\n", robot.pvec[i]);
 	return 0;
 }
