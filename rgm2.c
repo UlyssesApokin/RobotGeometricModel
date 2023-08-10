@@ -43,8 +43,9 @@ void init_rgm(const char *filename, struct Robot *p_robot)
 		if (c >= start && c <= end)
 		{
 			str[size_str - 1] = c;
-			if (c == '}')
-			{
+			if (c == '$')
+			{	
+				printf("String:\t%s\n", str);
 				const char *TYPE_PAIR = "TYPE_PAIR";
 				const char *LENGTH_PAIR = "LENGTH_PAIR";
 				const char *COORDS = "COORDS";
@@ -162,7 +163,7 @@ void fill_length_pair(const char *str, struct Robot *p_robot)
 		{
 			if (j >= maxline - 1)
 			{
-				fprintf(stderr, "error");
+				fprintf(stderr, "Invalid argument:LENGTH_PAIR#%d:<%s>\n", num_of_pair, length_pair);
 				exit(2);
 			}
 			length_pair[j] = str[i];
