@@ -72,7 +72,7 @@ void fill_type_pair(const char *str, struct Robot *p_robot)
 	enum {maxline = 14};
 	char c = '\0';
 	char *type_pair = malloc(sizeof(char) * maxline);
-	int *vec_of_pair = malloc(sizeof(int));
+	int *vec_of_pair;
 	int i = 0, j = 0;
 	int is_value = 0;
 	int num_of_pair = 0;
@@ -104,14 +104,18 @@ void fill_type_pair(const char *str, struct Robot *p_robot)
 			}
 			else
 			{
-				vec_of_pair = realloc(vec_of_pair, (num_of_pair + 1) * sizeof(int));
-				vec_of_pair[num_of_pair] = -1;
 				fprintf(stderr, "Invalid argument:TYPE_PAIR#%d:<%s>\n", num_of_pair, type_pair);
+				exit(2);
 			}
 			num_of_pair++;
 		}
 		if (is_value == 1)
 		{
+			if (j >= maxline - 1)
+			{
+				fprintf(stderr, "Invalid argument:TYPE_PAIR#%d:<%s>\n", num_of_pair, type_pair);
+				exit(2);
+			}
 			type_pair[j] = str[i];
 			type_pair[j+1] = '\0';
 			j++;
