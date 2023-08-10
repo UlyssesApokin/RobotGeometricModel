@@ -1,28 +1,28 @@
-COMMENT {
-	Robot1
+
+    Robot1
 	Autor: Ulysses Apokin
 	Data: 30.06.2023
-}
+    }
 
-TYPE_PAIR {
+TYPE_PAIR
 	[ROTARY_TYPE_2]
 	[MOVING]
 	[ROTARY_TYPE_1]
-}
+    }
 
-LENGTH_PAIR {
-	[0.0]		[0.0]	[6.0]
+LENGTH_PAIR
+	[1.0]		[0.0]	[6.0]
 	[0.0]		[0.0]	[3.0]
 	[2.0]		[0.0]	[0.0]
-}
+    }
 
-COORDS {
+COORDS
 	[0]
 	[-1]
 	[1.7]
-}
+    }
 
-ROTATION_MATRIX {
+ROTATION_MATRIX
 	[1.0]		[0.0]		[0.0]
 	[0.0]		[1.0]		[0.0]
 	[0.0]		[0.0]		[1.0]
@@ -38,4 +38,4 @@ ROTATION_MATRIX {
 	[0.0]		[0.0]		[1.0]
 	[0.0]       [-1.0]		[0.0]
 	[1.0]		[0.0]		[0.0]
-}
+    }

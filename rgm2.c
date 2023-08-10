@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <error.h>
+#include <errno.h>
 #include <math.h>
 
 enum mtrx {rotation = 3, transformation};
@@ -85,7 +86,6 @@ void fill_type_pair(const char *str, struct Robot *p_robot)
 		if (c == ']')
 		{
 			is_value = 0;
-			type_pair[j+1] = '\0';
 			j = 0;
 			if (!strcmp(type_pair, ROTARY_TYPE_1))
 			{
@@ -130,9 +130,51 @@ void fill_type_pair(const char *str, struct Robot *p_robot)
 
 }
 
-void fill_length_pair(const char *str, struct Robot *robot)
+void fill_length_pair(const char *str, struct Robot *p_robot)
 {
-	
+	enum {maxline = 33};
+	char c = '\0';
+	char *length_pair = malloc(maxline * sizeof(char));
+	double *p_lvec;
+	int i = 0, j = 0;
+	int is_value = 0;
+	int num_of_pair = 0;
+	do
+	{
+		
+		c = str[i];
+		if (c == ']')
+		{
+			int t;
+			j = 0;
+			is_value = 0;
+			p_lvec = realloc(p_lvec, sizeof(double)*(num_of_pair+1));
+			t = atof(length_pair);
+			if (errno == ERANGE)
+			{
+				fprintf(stderr, "Invalid argument:LENGTH_PAIR#%d:<%s>\n", num_of_pair, length_pair);
+				exit(2);
+			}
+			p_lvec[num_of_pair] = t;
+			num_of_pair++;
+		}
+		if (is_value == 1)
+		{
+			if (j >= maxline - 1)
+			{
+				fprintf(stderr, "error");
+				exit(2);
+			}
+			length_pair[j] = str[i];
+			length_pair[j+1] = '\0';
+			j++;
+		}
+		if (c == '[')
+			is_value = 1;
+		i++;
+	} while (c != '\0');
+	p_robot->lvec = p_lvec;
+	free(length_pair);
 }
 
 void fill_coords(const char *str, struct Robot *robot)
@@ -147,10 +189,16 @@ void fill_rotation_matrix(const char *str, struct Robot *robot)
 
 int main (int argc, char **argv)
 {
+	int i;
 	struct Robot robot;
 	if (argc > 1)
 		init_rgm(argv[1], &robot);
 	else
 		fprintf(stderr, "To few arguments\n");
+	/*Debug output*/
+	for (i = 0; i < robot.num; i++)
+		printf("Type of pair[%d]:\t%d\n", i, robot.pvec[i]);
+	for (i = 0; i < robot.num*3; i++)
+		printf("Length_of_pair[%d]:\t%lf\n", i/3, robot.lvec[i]);
 	return 0;
 }
