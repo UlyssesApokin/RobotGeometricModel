@@ -1,25 +1,23 @@
-# RobotGeometricModel
+# What is this?
 
-File "rgm" - binary application file for Linux-amd64
+Method for constructing geometric models of manipulation systems of industrial robots and multi-axis machinesю
 
-File "rgm.c" - source code
-
-File "clivisrgm" - visualisator for "lvec" of the rgm via ncurses-library
-
-File "opengl_rgm" - visualisator for Robot of the rgm via OpenGl and freeGLUT.
-
-## Compile the program
-
-For example,
+# How to get?
 
 ````
-$ gcc -Wall -g -ansi rgm.c -lm -o rgm
+$ git clone https://github.com/UlyssesApokin/RobotGeometricModel.git
 ````
 
 ````
-$ gcc -Wall -g -ansi opengl_rgm -lm -lGL -lglut -o open_rgm
+$ cd RobotGeometricModel
 ````
 
-## OpenGL_RGM
+````
+$ gcc -Wall -g -ansi rgm2.c -lm -o rgm2
+````
 
-![Example](https://github.com/UlyssesApokin/RobotGeometricModel/raw/main/opengl_rgm.png)
+# How to use?
+
+````
+$ ./rgm2 robot1.rgm
+````
