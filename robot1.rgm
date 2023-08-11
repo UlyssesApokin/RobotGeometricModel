@@ -55,7 +55,7 @@ COORDS
 	[1.7]
     $
 
-    The order in which information sections appear matters.
+    The order in which information sections appear not matters.
     $
 
 ROTATION_MATRIX
