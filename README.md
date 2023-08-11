@@ -1,6 +1,6 @@
 # What is this?
 
-Method for constructing geometric models of manipulation systems of industrial robots and multi-axis machinesю
+Method for constructing geometric models of manipulation systems of industrial robots and multi-axis machines.
 
 # How to get?
 
