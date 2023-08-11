@@ -68,7 +68,7 @@ void init_rgm(const char *filename, struct Robot *p_robot)
 			str[size_str - 1] = c;
 			if (c == '$')
 			{	
-				printf("String:\t%s\n", str);
+				printf("String: %s\n\n", str);
 				const char *TYPE_PAIR = "TYPE_PAIR";
 				const char *LENGTH_PAIR = "LENGTH_PAIR";
 				const char *COORDS = "COORDS";

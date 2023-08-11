@@ -1,31 +1,61 @@
+    Copyright (c) <2023> <Ulysses Apokin (Jelisej Apokin)>
+
+    Permission is hereby granted, free of charge, to any person obtaining
+    a copy of this software and associated documentation files (the
+    "Software"), to deal in the Software without restriction, including
+    without limitation the rights to use, copy, modify, merge, publish,
+    distribute, sublicense, and/or sell copies of the Software, and to
+    permit persons to whom the Software is furnished to do so, subject to
+    the following conditions:
+
+    The above copyright notice and this permission notice shall be
+    included in all copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+    EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+    MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+    NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+    LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+    OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+    WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     
-    Robot1
-	Autor: Ulysses Apokin
-	Data: 30.06.2023
+    This is how the comment is made. The comment must be placed between
+    information sections and terminated with the "$" symbol. However, the "$"
+    character can be used in comment text.
+    Spaces, line breaks, and tabs are non-significant characters and can be
+    placed anywhere and in any number.
+
+    Name: Robot1 -- R2MR1
+    Author: Ulysses Apokin (Jelisej Apokin)
+    Data: 31.06.2023
     $
 
 TYPE_PAIR
+        >The comment can be located inside the information section.
+        >In this case, the dollar symbol is not allowed.
 	[ROTARY_TYPE_2]
 	[MOVING]
+        >Use square brackets to highlight a character that has
+        informational value
 	[ROTARY_TYPE_1]
     $
 
 LENGTH_PAIR
-    L0:
-	[0.0]		[0.0]     	[6.0]
-    L1:
-	[0.0]		[0.0]	    [3.0]
+        X          Y           Z
+L0:	[0.0]		[0.0]     	[6.0]
+Comment formatting doesn't matter
+L1:	[0.0]		[0.0]	    [3.0]
     L2:
-	[2.0]		[0.0]   	[0.0]
-    $
-    
-something comment...
-    $
+L2:	[2.0]		[0.0]   	[0.0]
+    $ 
 
 COORDS
 	[0]
 	[-1]
 	[1.7]
+    $
+
+    The order in which information sections appear matters.
     $
 
 ROTATION_MATRIX
@@ -48,4 +78,5 @@ ROTATION_MATRIX
 	[0.0]		[0.0]		[1.0]
 	[0.0]       [-1.0]		[0.0]
 	[1.0]		[0.0]		[0.0]
-    $
+    $ <-End the information section also with the "$" symbol.
+        $
