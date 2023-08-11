@@ -30,26 +30,26 @@
     Data: 31.06.2023
     $
 
-TYPE_PAIR
+TYPE_OF_PAIR
         >The comment can be located inside the information section.
         >In this case, the dollar symbol is not allowed.
-	[ROTARY_TYPE_2]
-	[MOVING]
+	[TURNING_TYPE_2]
+	[SLIDING]
         >Use square brackets to highlight a character that has
         informational value
-	[ROTARY_TYPE_1]
+	[TURNING_TYPE_1]
     $
 
-LENGTH_PAIR
+SIZE_OF_PAIR
         X          Y           Z
 L0:	[0.0]		[0.0]     	[6.0]
 Comment formatting doesn't matter
 L1:	[0.0]		[0.0]	    [3.0]
-    L2:
+
 L2:	[2.0]		[0.0]   	[0.0]
     $ 
 
-COORDS
+GENERALIZED_COORDINATE
 	[0]
 	[-1]
 	[1.7]

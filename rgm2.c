@@ -33,11 +33,11 @@ enum pair {rotary_type_1, rotary_type_2, moving};
 
 struct Robot
 {
-	int num;
+	int nump;
 	int *pvec;
 	double *lvec;
 	double *qvec;
-	double *rmtrx;
+	double *rmtx;
 };
 
 void fill_type_pair(const char *str, struct Robot *p_robot);
@@ -47,9 +47,9 @@ void fill_rotation_matrix(const char *str, struct Robot *p_robot);
 
 void init_rgm(const char *filename, struct Robot *p_robot)
 {
-	char c;
-	char *str;
 	int size_str = 1;
+	char c;
+	char *str = malloc((size_str+1) * sizeof(char));
 	FILE *robot_characteristics;
 	robot_characteristics = fopen(filename, "r");
 	if (!robot_characteristics)
@@ -57,21 +57,20 @@ void init_rgm(const char *filename, struct Robot *p_robot)
 		perror(filename);
 		exit(1);
 	}
-	str = malloc((size_str+1) * sizeof(char));
 	str[size_str] = '\0';
 	while ((c = fgetc(robot_characteristics)) != EOF)
 	{
-		enum {tp = 9, lp = 11, co = 6, rm = 15, cm = 7};
+		enum {tp = 12, lp = 12, co = 22, rm = 15};
 		enum {start = 33, end = 126};
 		if (c >= start && c <= end)
 		{
 			str[size_str - 1] = c;
 			if (c == '$')
 			{	
-				printf("String: %s\n\n", str);
-				const char *TYPE_PAIR = "TYPE_PAIR";
-				const char *LENGTH_PAIR = "LENGTH_PAIR";
-				const char *COORDS = "COORDS";
+				/*printf("String: %s\n\n", str);*/
+				const char *TYPE_PAIR = "TYPE_OF_PAIR";
+				const char *LENGTH_PAIR = "SIZE_OF_PAIR";
+				const char *COORDS = "GENERALIZED_COORDINATE";
 				const char *ROTATION_MATRIX = "ROTATION_MATRIX";
 				if (!strncmp(str, TYPE_PAIR, sizeof(char)*tp))
 					fill_type_pair(str, p_robot);
@@ -94,7 +93,7 @@ void init_rgm(const char *filename, struct Robot *p_robot)
 
 void fill_type_pair(const char *str, struct Robot *p_robot)
 {
-	enum {maxline = 14};
+	enum {maxline = 15};
 	char c = '\0';
 	char *type_pair = malloc(sizeof(char) * maxline);
 	int *vec_of_pair;
@@ -103,32 +102,37 @@ void fill_type_pair(const char *str, struct Robot *p_robot)
 	int num_of_pair = 0;
 	do
 	{
-		const char *ROTARY_TYPE_1 = "ROTARY_TYPE_1";
-		const char *ROTARY_TYPE_2 = "ROTARY_TYPE_2";
-		const char *MOVING = "MOVING";
+		const char *TURNING_TYPE_1 = "TURNING_TYPE_1";
+		const char *TURNING_TYPE_2 = "TURNING_TYPE_2";
+		const char *SLIDING = "SLIDING";
 		c = str[i];
 		if (c == ']')
 		{
 			is_value = 0;
 			j = 0;
-			if (!strcmp(type_pair, ROTARY_TYPE_1))
+			if (!strcmp(type_pair, TURNING_TYPE_1))
 			{
-				vec_of_pair = realloc(vec_of_pair, (num_of_pair + 1) * sizeof(int));
+				vec_of_pair =
+				realloc(vec_of_pair, (num_of_pair + 1) * sizeof(int));
 				vec_of_pair[num_of_pair] = 1;
 			}
-			else if (!strcmp(type_pair, ROTARY_TYPE_2))
+			else if (!strcmp(type_pair, TURNING_TYPE_2))
 			{
-				vec_of_pair = realloc(vec_of_pair, (num_of_pair + 1) * sizeof(int));
+				vec_of_pair =
+				realloc(vec_of_pair, (num_of_pair + 1) * sizeof(int));
 				vec_of_pair[num_of_pair] = 2;
 			}
-			else if (!strcmp(type_pair, MOVING))
+			else if (!strcmp(type_pair, SLIDING))
 			{
-				vec_of_pair = realloc(vec_of_pair, (num_of_pair + 1) * sizeof(int));
+				vec_of_pair =
+				realloc(vec_of_pair, (num_of_pair + 1) * sizeof(int));
 				vec_of_pair[num_of_pair] = 3;
 			}
 			else
 			{
-				fprintf(stderr, "Invalid argument:TYPE_PAIR#%d:<%s>\n", num_of_pair, type_pair);
+				fprintf(stderr,
+					"Invalid argument:TYPE_PAIR#%d:<%s>\n",
+						num_of_pair, type_pair);
 				exit(2);
 			}
 			num_of_pair++;
@@ -137,7 +141,9 @@ void fill_type_pair(const char *str, struct Robot *p_robot)
 		{
 			if (j >= maxline - 1)
 			{
-				fprintf(stderr, "Invalid argument:TYPE_PAIR#%d:<%s>\n", num_of_pair, type_pair);
+				fprintf(stderr,
+					"Invalid argument:TYPE_PAIR#%d:<%s>\n",
+						num_of_pair, type_pair);
 				exit(2);
 			}
 			type_pair[j] = str[i];
@@ -149,7 +155,7 @@ void fill_type_pair(const char *str, struct Robot *p_robot)
 		i++;
 	} while (c != '\0');
 	p_robot->pvec = vec_of_pair;
-	p_robot->num = num_of_pair;
+	p_robot->nump = num_of_pair;
 	free(type_pair);
 
 }
@@ -159,24 +165,25 @@ void fill_length_pair(const char *str, struct Robot *p_robot)
 	enum {maxline = 33};
 	char c = '\0';
 	char *length_pair = malloc(maxline * sizeof(char));
-	double *p_lvec;
+	double *p_lvec = malloc(sizeof(double));
 	int i = 0, j = 0;
 	int is_value = 0;
 	int num_of_pair = 0;
 	do
 	{
-		
 		c = str[i];
 		if (c == ']')
 		{
-			int t;
+			double t;
 			j = 0;
 			is_value = 0;
 			p_lvec = realloc(p_lvec, sizeof(double)*(num_of_pair+1));
-			t = atof(length_pair);
+			t = (float)atof(length_pair);
 			if (errno == ERANGE)
 			{
-				fprintf(stderr, "Invalid argument:LENGTH_PAIR#%d:<%s>\n", num_of_pair, length_pair);
+				fprintf(stderr,
+					"Invalid argument:LENGTH_PAIR#%d:<%s>\n",
+						num_of_pair, length_pair);
 				exit(2);
 			}
 			p_lvec[num_of_pair] = t;
@@ -186,7 +193,9 @@ void fill_length_pair(const char *str, struct Robot *p_robot)
 		{
 			if (j >= maxline - 1)
 			{
-				fprintf(stderr, "Invalid argument:LENGTH_PAIR#%d:<%s>\n", num_of_pair, length_pair);
+				fprintf(stderr,
+					"Invalid argument:LENGTH_PAIR#%d:<%s>\n",
+						num_of_pair, length_pair);
 				exit(2);
 			}
 			length_pair[j] = str[i];
@@ -201,14 +210,106 @@ void fill_length_pair(const char *str, struct Robot *p_robot)
 	free(length_pair);
 }
 
-void fill_coords(const char *str, struct Robot *robot)
+void fill_coords(const char *str, struct Robot *p_robot)
 {
-	
+	enum {maxline = 33};
+	char c = '\0';
+	char *coords = malloc(maxline * sizeof(char));
+	double *p_qvec = malloc(sizeof(double));
+	int i = 0, j = 0;
+	int is_value = 0;
+	int num_of_pair = 0;
+	do
+	{
+		
+		c = str[i];
+		if (c == ']')
+		{
+			double t;
+			j = 0;
+			is_value = 0;
+			p_qvec = realloc(p_qvec, sizeof(double)*(num_of_pair+1));
+			t = atof(coords);
+			if (errno == ERANGE)
+			{
+				fprintf(stderr,
+					"Invalid argument:COORDS#%d:<%s>\n",
+						num_of_pair, coords);
+				exit(2);
+			}
+			p_qvec[num_of_pair] = t;
+			num_of_pair++;
+		}
+		if (is_value == 1)
+		{
+			if (j >= maxline - 1)
+			{
+				fprintf(stderr,
+					"Invalid argument:COORDS#%d:<%s>\n",
+						num_of_pair, coords);
+				exit(2);
+			}
+			coords[j] = str[i];
+			coords[j+1] = '\0';
+			j++;
+		}
+		if (c == '[')
+			is_value = 1;
+		i++;
+	} while (c != '\0');
+	p_robot->qvec = p_qvec;
+	free(coords);	
 }
 
-void fill_rotation_matrix(const char *str, struct Robot *robot)
+void fill_rotation_matrix(const char *str, struct Robot *p_robot)
 {
-	
+	enum {maxline = 33};
+	char c = '\0';
+	char *rot_matrix = malloc(maxline * sizeof(char));
+	double *rmtx = malloc(sizeof(double));
+	int i = 0, j = 0;
+	int is_value = 0;
+	int num_of_pair = 0;
+	do
+	{
+		
+		c = str[i];
+		if (c == ']')
+		{
+			double t;
+			j = 0;
+			is_value = 0;
+			rmtx = realloc(rmtx, sizeof(double)*(num_of_pair+1));
+			t = atof(rot_matrix);
+			if (errno == ERANGE)
+			{
+				fprintf(stderr,
+					"Invalid argument:COORDS#%d:<%s>\n",
+						num_of_pair, rot_matrix);
+				exit(2);
+			}
+			rmtx[num_of_pair] = t;
+			num_of_pair++;
+		}
+		if (is_value == 1)
+		{
+			if (j >= maxline - 1)
+			{
+				fprintf(stderr,
+					"Invalid argument:COORDS#%d:<%s>\n",
+						num_of_pair, rot_matrix);
+				exit(2);
+			}
+			rot_matrix[j] = str[i];
+			rot_matrix[j+1] = '\0';
+			j++;
+		}
+		if (c == '[')
+			is_value = 1;
+		i++;
+	} while (c != '\0');
+	p_robot->rmtx = rmtx;
+	free(rot_matrix);		
 }
 
 int main (int argc, char **argv)
@@ -220,9 +321,13 @@ int main (int argc, char **argv)
 	else
 		fprintf(stderr, "To few arguments\n");
 	/*Debug output*/
-	for (i = 0; i < robot.num; i++)
+	for (i = 0; i < robot.nump; i++)
 		printf("Type of pair[%d]:\t%d\n", i, robot.pvec[i]);
-	for (i = 0; i < robot.num*3; i++)
-		printf("Length_of_pair[%d]:\t%lf\n", i/3, robot.lvec[i]);
+	for (i = 0; i < robot.nump*3; i++)
+		printf("Size of pair[%d][%d]:\t%lf\n", i/3, i%3, robot.lvec[i]);
+	for (i = 0; i < robot.nump; i++)
+		printf("Coords[%d]:\t%lf\n", i, robot.qvec[i]);
+	for (i = 0; i < (robot.nump+1)*9; i++)
+		printf("Matrix[%d][%d]:\t%lf\n", i/3,i%3, robot.rmtx[i]);
 	return 0;
 }
