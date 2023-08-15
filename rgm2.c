@@ -28,6 +28,19 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <errno.h>
 #include <math.h>
 
+/**
+ * @pvec is vector number defining the type and sequence 
+ * of kinematic pairs
+ * @lvec is the number of the array of vectors defining the shape
+links
+ * @qvec is vector number defening the generalized coordinates
+ * of kinematic pairs
+ * @rmtx is the number of the array of rotation matix
+ * @inar is the number of error of invalid argument
+ * @misb is the number of error of misspelled square bracket
+ */
+enum {pvec, lvec, qvec, rmtx, inar, misb};
+
 struct Robot
 {
 	int nump;
@@ -37,11 +50,45 @@ struct Robot
 	double *rmtx;
 };
 
-void fill_parameter(const char *str, struct Robot *p_robot,
-	int parameter)
+void print_error_in_param(const char *str, int num_of_iter,
+		int param, int misstake)
+{
+	switch (misstake)
+	{
+	case inar:
+		fprintf(stderr, "Invalid argument:");
+		break;
+	case misb:
+		fprintf(stderr, "Misspelled square bracket:");
+		break;
+	default:
+		fprintf(stderr, "API is denied\n");
+		return;
+	}
+	switch (param)
+	{
+	case pvec:
+		fprintf(stderr, "TYPE_OF_PAIR");
+		break;
+	case lvec:
+		fprintf(stderr, "SIZE_OF_PAIR");
+		break;
+	case qvec:
+		fprintf(stderr, "GENERALIZED_COORDINATE");
+		break;
+	case rmtx:
+		fprintf(stderr, "ROTATION_MATRIX");
+		break;
+	default:
+		fprintf(stderr, "non-existent parameter");
+	}
+	fprintf(stderr, "#%d", num_of_iter);
+	fprintf(stderr, "<%s>\n", str);
+}
+
+void fill_param(const char *str, struct Robot *p_robot, int param)
 {
 	enum {maxline = 63};
-	enum {pvec, lvec, qvec, rmtx};
 	char c;
 	int i = 0, j = 0;
 	int reading_started = 0;
@@ -54,25 +101,45 @@ void fill_parameter(const char *str, struct Robot *p_robot,
 		c = str[i];
 		if (c == ']')
 		{
-			const char *TURNING_TYPE_1 = "TURNING_TYPE_1";
-			const char *TURNING_TYPE_2 = "TURNING_TYPE_2";
-			const char *SLIDING = "SLIDING";
+			if (!reading_started)
+			{
+				print_error_in_param(str_of_param, num_of_val,
+						param, misb);
+				exit(2);
+			}
 			reading_started = 0;
 			j = 0;
-			if (parameter == 0)
+			if (param == pvec)
 			{
-				int_of_param = realloc(int_of_param, sizeof(int) * (num_of_val + 1));
+				const char *TURNING_TYPE_1 = "TURNING_TYPE_1";
+				const char *TURNING_TYPE_2 = "TURNING_TYPE_2";
+				const char *SLIDING = "SLIDING";
+				int_of_param = realloc(int_of_param,
+						sizeof(int) * (num_of_val + 1));
 				if (!strcmp(str_of_param, TURNING_TYPE_1))
 					int_of_param[num_of_val] = 1;
 				else if (!strcmp(str_of_param, TURNING_TYPE_2))
 					int_of_param[num_of_val] = 2;
 				else if (!strcmp(str_of_param, SLIDING))
 					int_of_param[num_of_val] = 3;
+				else
+				{
+					print_error_in_param(str_of_param,
+							num_of_val, param, inar);
+					exit(2);
+				}
 			}
 			else
 			{
-				double_of_param = realloc(double_of_param, sizeof(double) * (num_of_val + 1));
+				double_of_param = realloc(double_of_param,
+						sizeof(double) * (num_of_val + 1));
 				double_of_param[num_of_val] = atof(str_of_param);
+				if (errno == ERANGE)
+				{
+					print_error_in_param(str_of_param,
+							num_of_val, param, inar);
+					exit(2);
+				}
 			}
 			num_of_val++;
 		}
@@ -80,7 +147,8 @@ void fill_parameter(const char *str, struct Robot *p_robot,
 		{
 			if (j >= maxline)
 			{
-				fprintf(stderr, "Buffer overflow");
+				print_error_in_param(str_of_param, num_of_val,
+						param, inar);
 				exit(2);
 			}
 			str_of_param[j] = str[i];
@@ -89,35 +157,39 @@ void fill_parameter(const char *str, struct Robot *p_robot,
 		}
 		if (c == '[')
 		{
+			if (reading_started)
+			{
+				print_error_in_param(str_of_param, num_of_val,
+					param, misb);
+				exit(2);
+			} 
 			reading_started = 1;
 		}
 		i++;
 	} while (c != '\0');
-	if (parameter == pvec)
+	if (param == pvec)
 	{
+		free(double_of_param);
 		p_robot->pvec = int_of_param;
 		p_robot->nump = num_of_val;
-		free(double_of_param);
-	}
-	else if (parameter == lvec)
-	{
-		p_robot->lvec = double_of_param;
-		free(int_of_param);
-	}
-	else if (parameter == qvec)
-	{
-		p_robot->qvec = double_of_param;
-		free(int_of_param);
-	}
-	else if (parameter == rmtx)
-	{
-		p_robot->rmtx = double_of_param;
-		free(int_of_param);
 	}
 	else
 	{
-		free(double_of_param);
 		free(int_of_param);
+		switch (param)
+		{
+		case lvec:
+			p_robot->lvec = double_of_param;
+			break;
+		case qvec:
+			p_robot->qvec = double_of_param;
+			break;
+		case rmtx:
+			p_robot->rmtx = double_of_param;
+			break;
+		default:
+			free(double_of_param);
+		}
 	}
 	free(str_of_param);
 }
@@ -142,20 +214,19 @@ void init_rgm(const char *filename, struct Robot *p_robot)
 			str[size_str - 1] = c;
 			if (c == '$')
 			{	
-				enum {pvec, lvec, qvec, rmtx};
 				enum {tp = 12, lp = 12, co = 22, rm = 15};
 				const char *TYPE_PAIR = "TYPE_OF_PAIR";
 				const char *LENGTH_PAIR = "SIZE_OF_PAIR";
 				const char *COORDS = "GENERALIZED_COORDINATE";
 				const char *ROTATION_MATRIX = "ROTATION_MATRIX";
 				if (!strncmp(str, TYPE_PAIR, sizeof(char)*tp))
-					fill_parameter(str, p_robot, pvec);
+					fill_param(str, p_robot, pvec);
 				if (!strncmp(str, LENGTH_PAIR, sizeof(char)*lp))
-					fill_parameter(str, p_robot, lvec);
+					fill_param(str, p_robot, lvec);
 				if (!strncmp(str, COORDS, sizeof(char)*co))
-					fill_parameter(str, p_robot, qvec);
+					fill_param(str, p_robot, qvec);
 				if (!strncmp(str, ROTATION_MATRIX, sizeof(char)*rm))
-					fill_parameter(str, p_robot, rmtx);
+					fill_param(str, p_robot, rmtx);
 				size_str = 0;
 			}
 			size_str++;
@@ -165,6 +236,14 @@ void init_rgm(const char *filename, struct Robot *p_robot)
 	}
 	fclose(robot_characteristics);
 	free(str);
+}
+
+void dest_rgm(struct Robot *p_robot)
+{
+	free(p_robot->pvec);
+	free(p_robot->lvec);
+	free(p_robot->qvec);
+	free(p_robot->rmtx);
 }
 
 int main (int argc, char **argv)
@@ -184,5 +263,6 @@ int main (int argc, char **argv)
 		printf("Coords[%d]:\t%lf\n", i, robot.qvec[i]);
 	for (i = 0; i < (robot.nump+1)*9; i++)
 		printf("Matrix[%d][%d][%d]:\t%lf\n", i/9, (i/3)%3,i%3, robot.rmtx[i]);
+	dest_rgm(&robot);
 	return 0;
 }
