@@ -19,8 +19,3 @@ LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
 OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-This is how the comment is made. The comment must be placed between
-information sections and terminated with the "$" symbol. However, the "$"
-character can be used in comment text.
-Spaces, line breaks, and tabs are non-significant characters and can be
-placed anywhere and in any number.
