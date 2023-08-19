@@ -189,19 +189,12 @@ void fill_param(const char *str, struct Robot *p_robot, int param)
 	free(str_of_param);
 }
 
-void init_rgm(const char *filename, struct Robot *p_robot)
+void read_rgm_file(FILE *rgm_file, struct Robot *p_robot)
 {
-	int size_str = 1;
 	char c;
+	int size_str = 1;
 	char *str = malloc((size_str+1) * sizeof(char));
-	FILE *robot_characteristics;
-	robot_characteristics = fopen(filename, "r");
-	if (!robot_characteristics)
-	{
-		perror(filename);
-		exit(1);
-	}
-	while ((c = fgetc(robot_characteristics)) != EOF)
+	while ((c = fgetc(rgm_file)) != EOF)
 	{
 		enum {start = 33, end = 126};
 		if (c >= start && c <= end)
@@ -210,17 +203,17 @@ void init_rgm(const char *filename, struct Robot *p_robot)
 			if (c == '$')
 			{	
 				enum {tp = 12, lp = 12, co = 22, rm = 15};
-				const char *TYPE_PAIR = "TYPE_OF_PAIR";
-				const char *LENGTH_PAIR = "SIZE_OF_PAIR";
+				const char *T_PAIR = "TYPE_OF_PAIR";
+				const char *L_PAIR = "SIZE_OF_PAIR";
 				const char *COORDS = "GENERALIZED_COORDINATE";
-				const char *ROTATION_MATRIX = "ROTATION_MATRIX";
-				if (!strncmp(str, TYPE_PAIR, sizeof(char)*tp))
+				const char *R_MATRIX = "ROTATION_MATRIX";
+				if (!strncmp(str, T_PAIR, sizeof(char)*tp))
 					fill_param(str, p_robot, pvec);
-				if (!strncmp(str, LENGTH_PAIR, sizeof(char)*lp))
+				if (!strncmp(str, L_PAIR, sizeof(char)*lp))
 					fill_param(str, p_robot, lvec);
 				if (!strncmp(str, COORDS, sizeof(char)*co))
 					fill_param(str, p_robot, qvec);
-				if (!strncmp(str, ROTATION_MATRIX, sizeof(char)*rm))
+				if (!strncmp(str, R_MATRIX, sizeof(char)*rm))
 					fill_param(str, p_robot, rmtx);
 				size_str = 0;
 			}
@@ -229,8 +222,21 @@ void init_rgm(const char *filename, struct Robot *p_robot)
 			str[size_str] = '\0';
 		}
 	}
-	fclose(robot_characteristics);
 	free(str);
+}
+
+void init_rgm(const char *filename, struct Robot *p_robot)
+{
+	FILE *robot_characteristics;
+	robot_characteristics = fopen(filename, "r");
+	if (!robot_characteristics)
+	{
+		perror(filename);
+		exit(1);
+	}
+	read_rgm_file(robot_characteristics, p_robot);
+	fclose(robot_characteristics);
+	
 }
 
 void dest_rgm(struct Robot *p_robot)
