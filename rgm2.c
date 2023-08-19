@@ -103,9 +103,8 @@ void fill_param(const char *str, struct Robot *p_robot, int param)
 		{
 			if (!reading_started)
 			{
-				print_error_in_param(str_of_param, num_of_val,
+				print_error_in_param(str_of_param, num_of_val-1,
 						param, misb);
-				exit(2);
 			}
 			reading_started = 0;
 			j = 0;
@@ -126,7 +125,6 @@ void fill_param(const char *str, struct Robot *p_robot, int param)
 				{
 					print_error_in_param(str_of_param,
 							num_of_val, param, inar);
-					exit(2);
 				}
 			}
 			else
@@ -138,7 +136,6 @@ void fill_param(const char *str, struct Robot *p_robot, int param)
 				{
 					print_error_in_param(str_of_param,
 							num_of_val, param, inar);
-					exit(2);
 				}
 			}
 			num_of_val++;
@@ -149,7 +146,6 @@ void fill_param(const char *str, struct Robot *p_robot, int param)
 			{
 				print_error_in_param(str_of_param, num_of_val,
 						param, inar);
-				exit(2);
 			}
 			str_of_param[j] = str[i];
 			str_of_param[j+1] = '\0';
@@ -161,7 +157,6 @@ void fill_param(const char *str, struct Robot *p_robot, int param)
 			{
 				print_error_in_param(str_of_param, num_of_val,
 					param, misb);
-				exit(2);
 			} 
 			reading_started = 1;
 		}
