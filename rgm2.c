@@ -189,6 +189,29 @@ void fill_param(const char *str, struct Robot *p_robot, int param)
 	free(str_of_param);
 }
 
+void find_str_with_param(struct Robot *p_robot,
+		const char *str, int *size_str, char cur_ch, char des_ch)
+{
+	enum {tp = 12, lp = 12, co = 22, rm = 15};
+	const char *T_PAIR = "TYPE_OF_PAIR";
+	const char *L_PAIR = "SIZE_OF_PAIR";
+	const char *COORDS = "GENERALIZED_COORDINATE";
+	const char *R_MATRIX = "ROTATION_MATRIX";
+	if (cur_ch == des_ch)
+	{	
+		if (!strncmp(str, T_PAIR, sizeof(char)*tp))
+			fill_param(str, p_robot, pvec);
+		if (!strncmp(str, L_PAIR, sizeof(char)*lp))
+			fill_param(str, p_robot, lvec);
+		if (!strncmp(str, COORDS, sizeof(char)*co))
+			fill_param(str, p_robot, qvec);
+		if (!strncmp(str, R_MATRIX, sizeof(char)*rm))
+			fill_param(str, p_robot, rmtx);
+		*size_str = 0;
+	}
+	
+}
+
 void read_rgm_file(FILE *rgm_file, struct Robot *p_robot)
 {
 	char c;
@@ -200,23 +223,7 @@ void read_rgm_file(FILE *rgm_file, struct Robot *p_robot)
 		if (c >= start && c <= end)
 		{
 			str[size_str - 1] = c;
-			if (c == '$')
-			{	
-				enum {tp = 12, lp = 12, co = 22, rm = 15};
-				const char *T_PAIR = "TYPE_OF_PAIR";
-				const char *L_PAIR = "SIZE_OF_PAIR";
-				const char *COORDS = "GENERALIZED_COORDINATE";
-				const char *R_MATRIX = "ROTATION_MATRIX";
-				if (!strncmp(str, T_PAIR, sizeof(char)*tp))
-					fill_param(str, p_robot, pvec);
-				if (!strncmp(str, L_PAIR, sizeof(char)*lp))
-					fill_param(str, p_robot, lvec);
-				if (!strncmp(str, COORDS, sizeof(char)*co))
-					fill_param(str, p_robot, qvec);
-				if (!strncmp(str, R_MATRIX, sizeof(char)*rm))
-					fill_param(str, p_robot, rmtx);
-				size_str = 0;
-			}
+			find_str_with_param(p_robot, str, &size_str, c, '$');
 			size_str++;
 			str = realloc(str, (size_str+1) * sizeof(char));
 			str[size_str] = '\0';
