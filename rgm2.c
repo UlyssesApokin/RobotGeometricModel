@@ -21,6 +21,7 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
+#include "rgm_fifo.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -50,7 +51,7 @@ struct Robot
 	double *rmtx;
 };
 
-void print_error_in_param(const char *str, int num_of_iter,
+void print_rgm_attr_error(const char *str, int num_of_iter,
 		int param, int misstake)
 {
 	switch (misstake)
@@ -85,6 +86,19 @@ void print_error_in_param(const char *str, int num_of_iter,
 	fprintf(stderr, "#%d", num_of_iter);
 	fprintf(stderr, "<%s>\n", str);
 }
+void set_struct_robot(void *data, struct Robot *p_robot, int attr)
+{
+	
+}
+
+void get_data_from_rgm_section(const char *str, struct Robot *p_robot, int attr)
+{
+	enum {maxline = 63};
+	char c;
+	int i = 0, j = 0;
+	int reading_started = 0;
+	int num_of_val = 0;
+}
 
 void fill_param(const char *str, struct Robot *p_robot, int param)
 {
@@ -103,11 +117,12 @@ void fill_param(const char *str, struct Robot *p_robot, int param)
 		{
 			if (!reading_started)
 			{
-				print_error_in_param(str_of_param, num_of_val-1,
+				print_rgm_attr_error(str_of_param, num_of_val-1,
 						param, misb);
 			}
 			reading_started = 0;
 			j = 0;
+			
 			if (param == pvec)
 			{
 				const char *TURNING_TYPE_1 = "TURNING_TYPE_1";
@@ -123,7 +138,7 @@ void fill_param(const char *str, struct Robot *p_robot, int param)
 					int_of_param[num_of_val] = 3;
 				else
 				{
-					print_error_in_param(str_of_param,
+					print_rgm_attr_error(str_of_param,
 							num_of_val, param, inar);
 				}
 			}
@@ -134,7 +149,7 @@ void fill_param(const char *str, struct Robot *p_robot, int param)
 				double_of_param[num_of_val] = atof(str_of_param);
 				if (errno == ERANGE)
 				{
-					print_error_in_param(str_of_param,
+					print_rgm_attr_error(str_of_param,
 							num_of_val, param, inar);
 				}
 			}
@@ -144,7 +159,7 @@ void fill_param(const char *str, struct Robot *p_robot, int param)
 		{
 			if (j >= maxline)
 			{
-				print_error_in_param(str_of_param, num_of_val,
+				print_rgm_attr_error(str_of_param, num_of_val,
 						param, inar);
 			}
 			str_of_param[j] = str[i];
@@ -155,7 +170,7 @@ void fill_param(const char *str, struct Robot *p_robot, int param)
 		{
 			if (reading_started)
 			{
-				print_error_in_param(str_of_param, num_of_val,
+				print_rgm_attr_error(str_of_param, num_of_val,
 					param, misb);
 			} 
 			reading_started = 1;
@@ -189,7 +204,7 @@ void fill_param(const char *str, struct Robot *p_robot, int param)
 	free(str_of_param);
 }
 
-void find_str_with_param(struct Robot *p_robot,
+void read_rgm_section(struct Robot *p_robot,
 		const char *str, int *size_str, char cur_ch, char des_ch)
 {
 	enum {tp = 12, lp = 12, co = 22, rm = 15};
@@ -200,13 +215,13 @@ void find_str_with_param(struct Robot *p_robot,
 	if (cur_ch == des_ch)
 	{	
 		if (!strncmp(str, T_PAIR, sizeof(char)*tp))
-			fill_param(str, p_robot, pvec);
+			get_data_from_rgm_section(str, p_robot, pvec);
 		if (!strncmp(str, L_PAIR, sizeof(char)*lp))
-			fill_param(str, p_robot, lvec);
+			get_data_from_rgm_section(str, p_robot, lvec);
 		if (!strncmp(str, COORDS, sizeof(char)*co))
-			fill_param(str, p_robot, qvec);
+			get_data_from_rgm_section(str, p_robot, qvec);
 		if (!strncmp(str, R_MATRIX, sizeof(char)*rm))
-			fill_param(str, p_robot, rmtx);
+			get_data_from_rgm_section(str, p_robot, rmtx);
 		*size_str = 0;
 	}
 	
@@ -223,7 +238,7 @@ void read_rgm_file(FILE *rgm_file, struct Robot *p_robot)
 		if (c >= start && c <= end)
 		{
 			str[size_str - 1] = c;
-			find_str_with_param(p_robot, str, &size_str, c, '$');
+			read_rgm_section(p_robot, str, &size_str, c, '$');
 			size_str++;
 			str = realloc(str, (size_str+1) * sizeof(char));
 			str[size_str] = '\0';
@@ -262,7 +277,6 @@ int main (int argc, char **argv)
 		init_rgm(argv[1], &robot);
 	else
 		fprintf(stderr, "To few arguments\n");
-	/*Debug output*/
 	for (i = 0; i < robot.nump; i++)
 		printf("Type of pair[%d]:\t%d\n", i, robot.pvec[i]);
 	for (i = 0; i < robot.nump*3; i++)
