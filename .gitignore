@@ -1,6 +1,7 @@
 *.o
 test*
-rgm*
+rgm
+rgm.c
 rgm2
 opengl_rgm
 clivisrgm*
