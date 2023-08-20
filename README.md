@@ -13,7 +13,7 @@ $ cd RobotGeometricModel
 ````
 
 ````
-gcc -Wall -g -ansi -c rgm_fifo.c && gcc -Wall -g -ansi rgm2.c rgm_fifo.o -lm -o rgm2
+gcc -Wall -g -ansi -c rgm_fifo.c && gcc -Wall -g -ansi -c rgm_file.c && gcc -Wall -g -ansi rgm2.c rgm_fifo.o rgm_file.o -o rgm2
 ````
 
 # How to use?
