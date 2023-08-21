@@ -27,6 +27,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 int main (int argc, char **argv)
 {
+	/*
 	int i;
 	Robot robot;
 	
@@ -43,5 +44,22 @@ int main (int argc, char **argv)
 	for (i = 0; i < (robot.nump+1)*9; i++)
 		printf("Matrix[%d][%d][%d]:\t%lf\n", i/9, (i/3)%3,i%3, robot.rmtx[i]);
 	dest_rgm(&robot);
+	*/
+	
+	QueueOfRoboPair robot;
+	RoboPair robopair;
+	double l[3];
+	int k;
+	double i[3] = {1.1, 2.2, 3.3};
+	
+	queue_robopair_init(&robot);
+	queue_robopair_put(&robot, i, lvec, 0);
+	queue_robopair_get(&robot, l, lvec, -2);
+	robopair = *queue_robopair_return(&robot, 0);
+	for (k =0; k < 3; k++)
+		printf("%lf\n", l[k]);
+	puts("sdadsad");
+	for (k =0; k < 3; k++)
+		printf("%lf\n", robopair.length[k]);
 	return 0;
 }

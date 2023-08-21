@@ -37,4 +37,6 @@ links
  */
 enum {pvec, lvec, qvec, rmtx, inar, misb};
 
+enum {vec3 = 3, mtx9 = 9};
+
 #endif

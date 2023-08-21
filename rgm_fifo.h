@@ -24,14 +24,15 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef RGM_H_SENTRY
 #define RGM_H_SENTRY
 
+#include "rgm_consts.h"
 #include <stdlib.h>
 
 struct _RoboPair
 {
 	int type;
-	double length;
-	double vector;
-	double matrix;
+	double length[vec3];
+	double vector[vec3];
+	double matrix[mtx9];
 	struct _RoboPair *next;
 };
 
@@ -56,10 +57,18 @@ typedef struct
 
 void queue_robopair_init(QueueOfRoboPair *queue);
 
-void queue_robopair_put(QueueOfRoboPair *queue);
+void queue_robopair_create(QueueOfRoboPair *queue);
 
-void queue_robopair_get(QueueOfRoboPair *queue);
+void queue_robopair_remove(QueueOfRoboPair *queue);
 
 int queue_robopair_is_empty(QueueOfRoboPair *queue);
+
+int queue_robopair_sizeof(QueueOfRoboPair *queue);
+
+RoboPair *queue_robopair_return(QueueOfRoboPair *queue, int index);
+
+void queue_robopair_put(QueueOfRoboPair *queue, void *data, int datatype, int index);
+
+void queue_robopair_get(QueueOfRoboPair *queue, void *data, int datatype, int index);
 
 #endif
