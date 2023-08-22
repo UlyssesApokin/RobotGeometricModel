@@ -58,7 +58,7 @@ static void print_rgm_attr_error(const char *str, int num_of_iter,
 	fprintf(stderr, "#%d", num_of_iter);
 	fprintf(stderr, "<%s>\n", str);
 }
-
+/*
 static void set_struct_robot(void *data, Robot *p_robot, int attr)
 {
 	
@@ -66,13 +66,13 @@ static void set_struct_robot(void *data, Robot *p_robot, int attr)
 
 static void get_data_from_rgm_section(const char *str, Robot *p_robot, int attr)
 {
-	/*enum {maxline = 63};
+	enum {maxline = 63};
 	char c;
 	int i = 0, j = 0;
 	int reading_started = 0;
-	int num_of_val = 0;*/
+	int num_of_val = 0;
 }
-
+*/
 static void fill_param(const char *str, Robot *p_robot, int param)
 {
 	enum {maxline = 63};

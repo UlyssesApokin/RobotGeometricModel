@@ -21,7 +21,6 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#include "rgm_consts.h"
 #include "rgm_fifo.h"
 #include "rgm_file.h"
 
@@ -47,19 +46,32 @@ int main (int argc, char **argv)
 	*/
 	
 	QueueOfRoboPair robot;
-	RoboPair robopair;
-	double l[3];
 	int k;
-	double i[3] = {1.1, 2.2, 3.3};
-	
+	int type = 33;
+	double length[3] = {1.1, 2.2, 3.3};
+	double vector[3] = {0.4, 0.5, 0.6};
+	double matrix[9] = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+	int *ttt;
+	double *vvv;
 	queue_robopair_init(&robot);
-	queue_robopair_put(&robot, i, lvec, 0);
-	queue_robopair_get(&robot, l, lvec, -2);
-	robopair = *queue_robopair_return(&robot, 0);
+	queue_robopair_put(&robot, &type, pvec, 0);
+	queue_robopair_put(&robot, length, lvec, 0);
+	queue_robopair_put(&robot, vector, qvec, 10);
+	queue_robopair_put(&robot, matrix, rmtx, 0);
+	
+	ttt = queue_robopair_get(&robot, pvec, 0);
+	printf("%d\n", *ttt);
+	puts("________");
+	vvv = queue_robopair_get(&robot, lvec, 0);
 	for (k =0; k < 3; k++)
-		printf("%lf\n", l[k]);
-	puts("sdadsad");
+		printf("%lf\n", vvv[k]);
+	puts("________");
+	vvv = queue_robopair_get(&robot, qvec, 11);
 	for (k =0; k < 3; k++)
-		printf("%lf\n", robopair.length[k]);
+		printf("%lf\n", vvv[k]);
+	puts("________");
+	vvv = queue_robopair_get(&robot, rmtx, 0);
+	for (k =0; k < 9; k++)
+		printf("%lf\n", vvv[k]);
 	return 0;
 }

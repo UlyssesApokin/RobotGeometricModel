@@ -78,13 +78,11 @@ RoboPair *queue_robopair_return(QueueOfRoboPair *queue, int index)
 	RoboPair *tmp;
 	tmp = queue->base;
 	if (index < 0)
-		return NULL;
+		exit(1);
 	if (index >= queue_robopair_sizeof(queue))
 		return NULL;
 	for (i = 0; i <= index; i++)
-	{
 		tmp = tmp->next;
-	}
 	return tmp;
 }
 
@@ -121,27 +119,21 @@ void queue_robopair_put(QueueOfRoboPair *queue, void *data, int datatype, int in
 	}
 }
 
-void queue_robopair_get(QueueOfRoboPair *queue, void *data, int datatype, int index)
+void* queue_robopair_get(QueueOfRoboPair *queue, int datatype, int index)
 {
-	RoboPair *tmp;
-	tmp = queue_robopair_return(queue, index);
-	if (!tmp)
-		return;
+	if (index >= queue_robopair_sizeof(queue))
+		return NULL;
 	switch (datatype)
 	{
 	case pvec:
-		data = &tmp->type;
-		break;
+		return &queue_robopair_return(queue, index)->type;
 	case lvec:
-		data = tmp->length;
-		break;
+		return queue_robopair_return(queue, index)->length;
 	case qvec:
-		data = tmp->vector;
-		break;
+		return queue_robopair_return(queue, index)->vector;
 	case rmtx:
-		data = tmp->matrix;
-		break;
+		return queue_robopair_return(queue, index)->matrix;
 	default:
-		data = NULL;
+		return NULL;
 	}
 }

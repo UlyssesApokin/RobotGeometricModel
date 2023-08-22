@@ -24,7 +24,6 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef RGM_FILE_H_SENTRY
 #define RGM_FILE_H_SENTRY
 
-#include "rgm_consts.h"
 #include "rgm_fifo.h"
 #include <stdio.h>
 #include <string.h>

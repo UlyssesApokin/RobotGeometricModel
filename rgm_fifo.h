@@ -24,8 +24,22 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef RGM_H_SENTRY
 #define RGM_H_SENTRY
 
-#include "rgm_consts.h"
 #include <stdlib.h>
+
+/**
+ * @pvec is vector number defining the type and sequence 
+ * of kinematic pairs
+ * @lvec is the number of the array of vectors defining the shape
+links
+ * @qvec is vector number defening the generalized coordinates
+ * of kinematic pairs
+ * @rmtx is the number of the array of rotation matix
+ * @inar is the number of error of invalid argument
+ * @misb is the number of error of misspelled square bracket
+ */
+enum {pvec, lvec, qvec, rmtx, inar, misb};
+
+enum {vec3 = 3, mtx9 = 9};
 
 struct _RoboPair
 {
@@ -57,18 +71,10 @@ typedef struct
 
 void queue_robopair_init(QueueOfRoboPair *queue);
 
-void queue_robopair_create(QueueOfRoboPair *queue);
-
 void queue_robopair_remove(QueueOfRoboPair *queue);
-
-int queue_robopair_is_empty(QueueOfRoboPair *queue);
-
-int queue_robopair_sizeof(QueueOfRoboPair *queue);
-
-RoboPair *queue_robopair_return(QueueOfRoboPair *queue, int index);
 
 void queue_robopair_put(QueueOfRoboPair *queue, void *data, int datatype, int index);
 
-void queue_robopair_get(QueueOfRoboPair *queue, void *data, int datatype, int index);
+void* queue_robopair_get(QueueOfRoboPair *queue, int datatype, int index);
 
 #endif
