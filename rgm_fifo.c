@@ -86,7 +86,8 @@ RoboPair *queue_robopair_return(QueueOfRoboPair *queue, int index)
 	return tmp;
 }
 
-void queue_robopair_put(QueueOfRoboPair *queue, void *data, int datatype, int index)
+void queue_robopair_put(QueueOfRoboPair *queue, void *data,
+		int datatype, int index)
 {
 	RoboPair *tmp;
 	tmp = queue_robopair_return(queue, index);
@@ -108,8 +109,7 @@ void queue_robopair_put(QueueOfRoboPair *queue, void *data, int datatype, int in
 				tmp->length[i] = *((double*)data + i);
 			break;
 		case qvec:
-			for (i = 0; i < vec3; i++)
-				tmp->vector[i] = *((double*)data + i);
+				tmp->vector = *((double*)data);
 			break;
 		case rmtx:
 			for (i = 0; i < mtx9; i++)
@@ -119,7 +119,8 @@ void queue_robopair_put(QueueOfRoboPair *queue, void *data, int datatype, int in
 	}
 }
 
-void* queue_robopair_get(QueueOfRoboPair *queue, int datatype, int index)
+void* queue_robopair_get(QueueOfRoboPair *queue, int datatype,
+		int index)
 {
 	if (index >= queue_robopair_sizeof(queue))
 		return NULL;
@@ -130,7 +131,7 @@ void* queue_robopair_get(QueueOfRoboPair *queue, int datatype, int index)
 	case lvec:
 		return queue_robopair_return(queue, index)->length;
 	case qvec:
-		return queue_robopair_return(queue, index)->vector;
+		return &queue_robopair_return(queue, index)->vector;
 	case rmtx:
 		return queue_robopair_return(queue, index)->matrix;
 	default:

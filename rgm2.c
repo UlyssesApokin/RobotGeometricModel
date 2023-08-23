@@ -26,52 +26,12 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 int main (int argc, char **argv)
 {
-	/*
-	int i;
-	Robot robot;
-	
+	QueueOfRoboPair robot;
 	if (argc > 1)
 		init_rgm(argv[1], &robot);
 	else
 		fprintf(stderr, "To few arguments\n");
-	for (i = 0; i < robot.nump; i++)
-		printf("Type of pair[%d]:\t%d\n", i, robot.pvec[i]);
-	for (i = 0; i < robot.nump*3; i++)
-		printf("Size of pair[%d][%d]:\t%lf\n", i/3, i%3, robot.lvec[i]);
-	for (i = 0; i < robot.nump; i++)
-		printf("Coords[%d]:\t%lf\n", i, robot.qvec[i]);
-	for (i = 0; i < (robot.nump+1)*9; i++)
-		printf("Matrix[%d][%d][%d]:\t%lf\n", i/9, (i/3)%3,i%3, robot.rmtx[i]);
+	debug_output(&robot);
 	dest_rgm(&robot);
-	*/
-	
-	QueueOfRoboPair robot;
-	int k;
-	int type = 33;
-	double length[3] = {1.1, 2.2, 3.3};
-	double vector[3] = {0.4, 0.5, 0.6};
-	double matrix[9] = {1, 2, 3, 4, 5, 6, 7, 8, 9};
-	int *ttt;
-	double *vvv;
-	queue_robopair_init(&robot);
-	queue_robopair_put(&robot, &type, pvec, 0);
-	queue_robopair_put(&robot, length, lvec, 0);
-	queue_robopair_put(&robot, vector, qvec, 10);
-	queue_robopair_put(&robot, matrix, rmtx, 0);
-	
-	ttt = queue_robopair_get(&robot, pvec, 0);
-	printf("%d\n", *ttt);
-	puts("________");
-	vvv = queue_robopair_get(&robot, lvec, 0);
-	for (k =0; k < 3; k++)
-		printf("%lf\n", vvv[k]);
-	puts("________");
-	vvv = queue_robopair_get(&robot, qvec, 11);
-	for (k =0; k < 3; k++)
-		printf("%lf\n", vvv[k]);
-	puts("________");
-	vvv = queue_robopair_get(&robot, rmtx, 0);
-	for (k =0; k < 9; k++)
-		printf("%lf\n", vvv[k]);
 	return 0;
 }

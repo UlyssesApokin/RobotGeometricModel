@@ -58,31 +58,21 @@ static void print_rgm_attr_error(const char *str, int num_of_iter,
 	fprintf(stderr, "#%d", num_of_iter);
 	fprintf(stderr, "<%s>\n", str);
 }
-/*
-static void set_struct_robot(void *data, Robot *p_robot, int attr)
-{
-	
-}
 
-static void get_data_from_rgm_section(const char *str, Robot *p_robot, int attr)
+void get_data_from_rgm_section(const char *str,
+		QueueOfRoboPair *p_robot, int attr)
 {
-	enum {maxline = 63};
+	enum {max_d_attr = 9, maxline = 63};
 	char c;
-	int i = 0, j = 0;
-	int reading_started = 0;
-	int num_of_val = 0;
-}
-*/
-static void fill_param(const char *str, Robot *p_robot, int param)
-{
-	enum {maxline = 63};
-	char c;
-	int i = 0, j = 0;
-	int reading_started = 0;
-	int num_of_val = 0;
 	char *str_of_param = malloc(sizeof(char) * (maxline + 1));
-	int *int_of_param = malloc(sizeof(int));
-	double *double_of_param = malloc(sizeof(double));
+	/*need to be broken down into sub-functions*/
+	int *i_attr = malloc(sizeof(int));
+	double *d_attr = malloc(sizeof(double) * max_d_attr);
+	int k = 0;
+	/*end*/
+	int i = 0, j = 0;
+	int reading_started = 0, is_error = 0;;
+	int num_of_val = 0;
 	do
 	{
 		c = str[i];
@@ -91,41 +81,65 @@ static void fill_param(const char *str, Robot *p_robot, int param)
 			if (!reading_started)
 			{
 				print_rgm_attr_error(str_of_param, num_of_val-1,
-						param, misb);
+						attr, misb);
+				is_error = 1;
 			}
 			reading_started = 0;
 			j = 0;
-			
-			if (param == pvec)
+			/*need to be broken down into sub-functions*/
+			if (attr == pvec)
 			{
 				const char *TURNING_TYPE_1 = "TURNING_TYPE_1";
 				const char *TURNING_TYPE_2 = "TURNING_TYPE_2";
 				const char *SLIDING = "SLIDING";
-				int_of_param = realloc(int_of_param,
-						sizeof(int) * (num_of_val + 1));
+				const char *TCP = "TOOL_CENTER_POINT";
 				if (!strcmp(str_of_param, TURNING_TYPE_1))
-					int_of_param[num_of_val] = 1;
+					*i_attr = 1;
 				else if (!strcmp(str_of_param, TURNING_TYPE_2))
-					int_of_param[num_of_val] = 2;
+					*i_attr = 2;
 				else if (!strcmp(str_of_param, SLIDING))
-					int_of_param[num_of_val] = 3;
+					*i_attr = 3;
+				else if (!strcmp(str_of_param, TCP))
+					*i_attr = 0;
 				else
 				{
 					print_rgm_attr_error(str_of_param,
-							num_of_val, param, inar);
+							num_of_val, attr, inar);
+					is_error = 1;
 				}
+				queue_robopair_put(p_robot, i_attr, pvec, num_of_val);
+				p_robot->num = num_of_val + 1;
 			}
 			else
 			{
-				double_of_param = realloc(double_of_param,
-						sizeof(double) * (num_of_val + 1));
-				double_of_param[num_of_val] = atof(str_of_param);
-				if (errno == ERANGE)
+				const char *TCP = "TOOL_CENTER_POINT";
+				d_attr[k] = atof(str_of_param);
+				if (!strcmp(str_of_param, TCP))
+					d_attr[k] = 0;
+				k++;
+				if (attr == qvec)
 				{
-					print_rgm_attr_error(str_of_param,
-							num_of_val, param, inar);
+					queue_robopair_put(p_robot, d_attr, qvec, num_of_val);
+					k = 0;
+				}
+				if (attr == rmtx)
+				{
+					if (k == 9)
+					{
+						queue_robopair_put(p_robot, d_attr, rmtx, num_of_val/9);
+						k = 0;
+					}
+				}
+				if (attr == lvec)
+				{
+					if (k == 3)
+					{
+						queue_robopair_put(p_robot, d_attr, lvec, num_of_val/3);
+						k = 0;
+					}
 				}
 			}
+			/*end*/
 			num_of_val++;
 		}
 		if (reading_started == 1)
@@ -133,7 +147,8 @@ static void fill_param(const char *str, Robot *p_robot, int param)
 			if (j >= maxline)
 			{
 				print_rgm_attr_error(str_of_param, num_of_val,
-						param, inar);
+						attr, inar);
+				is_error = 1;
 			}
 			str_of_param[j] = str[i];
 			str_of_param[j+1] = '\0';
@@ -144,40 +159,23 @@ static void fill_param(const char *str, Robot *p_robot, int param)
 			if (reading_started)
 			{
 				print_rgm_attr_error(str_of_param, num_of_val,
-					param, misb);
+					attr, misb);
+				is_error = 1;
 			} 
 			reading_started = 1;
 		}
 		i++;
 	} while (c != '\0');
-	if (param == pvec)
-	{
-		free(double_of_param);
-		p_robot->pvec = int_of_param;
-		p_robot->nump = num_of_val;
-	}
-	else
-	{
-		free(int_of_param);
-		switch (param)
-		{
-		case lvec:
-			p_robot->lvec = double_of_param;
-			break;
-		case qvec:
-			p_robot->qvec = double_of_param;
-			break;
-		case rmtx:
-			p_robot->rmtx = double_of_param;
-			break;
-		default:
-			free(double_of_param);
-		}
-	}
+	if (is_error)
+		exit(2);
 	free(str_of_param);
+	/*need to be broken down into sub-functions*/
+	free(i_attr);
+	free(d_attr);
+	/*end*/
 }
 
-static void read_rgm_section(Robot *p_robot,
+void detect_rgm_section(QueueOfRoboPair *p_robot,
 		const char *str, int *size_str, char cur_ch, char des_ch)
 {
 	enum {tp = 12, lp = 12, co = 22, rm = 15};
@@ -188,19 +186,19 @@ static void read_rgm_section(Robot *p_robot,
 	if (cur_ch == des_ch)
 	{	
 		if (!strncmp(str, T_PAIR, sizeof(char)*tp))
-			fill_param(str, p_robot, pvec);
+			get_data_from_rgm_section(str, p_robot, pvec);
 		if (!strncmp(str, L_PAIR, sizeof(char)*lp))
-			fill_param(str, p_robot, lvec);
+			get_data_from_rgm_section(str, p_robot, lvec);
 		if (!strncmp(str, COORDS, sizeof(char)*co))
-			fill_param(str, p_robot, qvec);
+			get_data_from_rgm_section(str, p_robot, qvec);
 		if (!strncmp(str, R_MATRIX, sizeof(char)*rm))
-			fill_param(str, p_robot, rmtx);
+			get_data_from_rgm_section(str, p_robot, rmtx);
 		*size_str = 0;
 	}
 	
 }
 
-static void read_rgm_file(FILE *rgm_file, Robot *p_robot)
+void read_rgm_file(FILE *rgm_file, QueueOfRoboPair *p_robot)
 {
 	char c;
 	int size_str = 1;
@@ -211,7 +209,7 @@ static void read_rgm_file(FILE *rgm_file, Robot *p_robot)
 		if (c >= start && c <= end)
 		{
 			str[size_str - 1] = c;
-			read_rgm_section(p_robot, str, &size_str, c, '$');
+			detect_rgm_section(p_robot, str, &size_str, c, '$');
 			size_str++;
 			str = realloc(str, (size_str+1) * sizeof(char));
 			str[size_str] = '\0';
@@ -220,9 +218,10 @@ static void read_rgm_file(FILE *rgm_file, Robot *p_robot)
 	free(str);
 }
 
-void init_rgm(const char *filename, Robot *p_robot)
+void init_rgm(const char *filename, QueueOfRoboPair *p_robot)
 {
 	FILE *robot_characteristics;
+	queue_robopair_init(p_robot);
 	robot_characteristics = fopen(filename, "r");
 	if (!robot_characteristics)
 	{
@@ -234,10 +233,35 @@ void init_rgm(const char *filename, Robot *p_robot)
 	
 }
 
-void dest_rgm(Robot *p_robot)
+void dest_rgm(QueueOfRoboPair *p_robot)
 {
-	free(p_robot->pvec);
-	free(p_robot->lvec);
-	free(p_robot->qvec);
-	free(p_robot->rmtx);
+	queue_robopair_remove(p_robot);
+}
+
+void debug_output(QueueOfRoboPair *p_robot)
+{
+	int i, j;
+	int *out_i;
+	double *out_d;
+	printf("NUM_OF_PAIR:\t%d\n\n", p_robot->num);
+	for (i = 0; i < p_robot->num; i++)
+	{
+		printf("PAIR#%d\n", i);
+		out_i = queue_robopair_get(p_robot, pvec, i);
+		printf("TYPE:\t%d\n", *out_i);
+
+		printf("SIZE:\t");
+		out_d = queue_robopair_get(p_robot, lvec, i);
+		for (j = 0; j < 3; j++)
+			printf("%.2lf, ", out_d[j]);
+		puts("");
+		out_d = queue_robopair_get(p_robot, qvec, i);
+		printf("GENERALIZED_COORDINATE:\t%.2lf", *out_d);
+		puts("");
+		out_d = queue_robopair_get(p_robot, rmtx, i);
+		for (j = 0; j < 9; j++)
+			printf("%.2lf, ", out_d[j]);
+		puts("");
+		puts("");
+	}
 }

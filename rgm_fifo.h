@@ -45,7 +45,7 @@ struct _RoboPair
 {
 	int type;
 	double length[vec3];
-	double vector[vec3];
+	double vector;
 	double matrix[mtx9];
 	struct _RoboPair *next;
 };
@@ -73,8 +73,10 @@ void queue_robopair_init(QueueOfRoboPair *queue);
 
 void queue_robopair_remove(QueueOfRoboPair *queue);
 
-void queue_robopair_put(QueueOfRoboPair *queue, void *data, int datatype, int index);
+void queue_robopair_put(QueueOfRoboPair *queue, void *data,
+		int datatype, int index);
 
-void* queue_robopair_get(QueueOfRoboPair *queue, int datatype, int index);
+void* queue_robopair_get(QueueOfRoboPair *queue, int datatype,
+		int index);
 
 #endif

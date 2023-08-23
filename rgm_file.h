@@ -30,8 +30,10 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <error.h> 
 #include <errno.h>
 
-void init_rgm(const char *filename, Robot *p_robot);
+void init_rgm(const char *filename, QueueOfRoboPair *p_robot);
 
-void dest_rgm(Robot *p_robot);
+void dest_rgm(QueueOfRoboPair *p_robot);
+
+void debug_output(QueueOfRoboPair *p_robot);
 
 #endif
