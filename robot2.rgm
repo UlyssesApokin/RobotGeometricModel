@@ -36,23 +36,26 @@ TYPE_OF_PAIR
 	[TURNING_TYPE_2]
 	[TURNING_TYPE_1]
         >Use square brackets to highlight a character that has
-        informational value
+        inform2tional value
 	[TURNING_TYPE_1]
+    [TOOL_CENTER_POINT]
     $
 
 SIZE_OF_PAIR
         X          Y           Z
-L0:	[0.0]		[0.0]     	[100.0]
+L0: [0.0]       [0.0]       [0.0]
+L1:	[0.0]		[0.0]     	[100.0]
 Comment formatting doesn't matter
-L1:	[90.0]		[0.0]	    [0.0]
+L2:	[90.0]		[0.0]	    [0.0]
 
-L2:	[80.0]		[0.0]   	[0.0]
+L3:	[80.0]		[0.0]   	[0.0]
     $ 
 
 GENERALIZED_COORDINATE
 	[0]
 	[0]
 	[0]
+ [TOOL_CENTER_POINT]
     $
 
     The order in which information sections appear not matters.
