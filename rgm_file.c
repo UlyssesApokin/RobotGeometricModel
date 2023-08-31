@@ -118,7 +118,7 @@ void set_data_to_queue(char **str, QueueOfRoboPair *p_robot,
 	{
 		cast_data(i_data, d_data, str, attr);
 		queue_robopair_put(p_robot, i_data, pvec, *num_of_pair);
-		p_robot->num = *num_of_pair+1;
+		p_robot->num = *num_of_pair;
 		*num_of_pair += 1;
 		*num_of_val = 0;
 	}
@@ -241,7 +241,7 @@ void debug_output(QueueOfRoboPair *p_robot)
 	int *out_i;
 	double *out_d;
 	printf("NUM_OF_PAIR:\t%d\n\n", p_robot->num);
-	for (i = 0; i < p_robot->num; i++)
+	for (i = 0; i < p_robot->num+1; i++)
 	{
 		printf("PAIR#%d\n", i);
 		out_i = queue_robopair_get(p_robot, pvec, i);
@@ -255,9 +255,14 @@ void debug_output(QueueOfRoboPair *p_robot)
 		out_d = queue_robopair_get(p_robot, qvec, i);
 		printf("GENERALIZED_COORDINATE:\t%.2lf", *out_d);
 		puts("");
+		printf("ROTATION_MATRIX:");
 		out_d = queue_robopair_get(p_robot, rmtx, i);
 		for (j = 0; j < 9; j++)
-			printf("%.2lf, ", out_d[j]);
+		{
+			if (j % 3 == 0)
+				puts("");
+			printf("\t[%.2lf]", out_d[j]);
+		}
 		puts("");
 		puts("");
 	}
