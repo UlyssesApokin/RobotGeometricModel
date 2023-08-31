@@ -23,12 +23,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "rgm_file.h"
 
-struct _Data
-{
-	int num;
-	char ***txt;
-};
-
+/*
 static void print_rgm_attr_error(const char *str, int num_of_iter,
 		int attr, int misstake)
 {
@@ -63,14 +58,12 @@ static void print_rgm_attr_error(const char *str, int num_of_iter,
 	}
 	fprintf(stderr, "#%d", num_of_iter);
 	fprintf(stderr, "<%s>\n", str);
-}
+}*/
 
-void set_data_to_queue(struct _Data *data, QueueOfRoboPair *p_robot,
-		int *num_of_val, int attr)
+void cast_data(int *i_data, double *d_data,
+		char **str, int attr)
 {
-	/*int i, j;
-	int *idata;
-	double *ddata;
+	int i;
 	switch (attr)
 	{
 	case pvec:
@@ -78,96 +71,106 @@ void set_data_to_queue(struct _Data *data, QueueOfRoboPair *p_robot,
 		const char *TURNING_TYPE_2 = "TURNING_TYPE_2";
 		const char *SLIDING = "SLIDING";
 		const char *TCP = "TOOL_CENTER_POINT";
-		if (!strcmp(data[i], TURNING_TYPE_1))
-			idata[i] = 1;
-		else if (!strcmp(data[i], TURNING_TYPE_2))
-			idata[i] = 2;
-		else if (!strcmp(data[i], SLIDING))
-			idata[i] = 3;
-		else if (!strcmp(data[i], TCP))
-			idata[i] = 0;
+		if (!strcmp(str[0], TURNING_TYPE_1))
+			*i_data = 1;
+		else if (!strcmp(str[0], TURNING_TYPE_2))
+			*i_data = 2;
+		else if (!strcmp(str[0], SLIDING))
+			*i_data = 3;
+		else if (!strcmp(str[0], TCP))
+			*i_data = 0;
 		break;
 	case lvec:
-		
+		for (i = 0; i < vec3; i++)
+			d_data[i] = atof(str[i]);
 		break;
 	case qvec:
-		
+		d_data[0] = atof(str[0]);
 		break;
 	case rmtx:
-		
+		for (i = 0; i < mtx9; i++)
+			d_data[i] = atof(str[i]);
 		break;
-	}*/
+	}
 }
 
-struct _Data *init_data()
+void set_data_to_queue(char **str, QueueOfRoboPair *p_robot,
+		int *num_of_val, int *num_of_pair, int attr)
 {
-	enum {maxval = 9, maxline = 64};
-	int i;
-	struct _Data *data;
-	data = (struct _Data*)malloc(sizeof(struct _Data));
-	data->txt = (char***)malloc(sizeof(char**));
-	data->txt[0] = (char**)malloc(sizeof(char*) * maxval);
-	for (i = 0; i < maxval; i++)
-		data->txt[0][i] = (char*)malloc(sizeof(char) * maxline);
-	data->num = 1;
-	return data;
+	enum {maxval = 9};
+	int *i_data = (int*)malloc(sizeof(int));
+	double *d_data = (double*)malloc(sizeof(double)*maxval);
+	if (attr == lvec && *num_of_val == 3) 
+	{
+		cast_data(i_data, d_data, str, attr);
+		queue_robopair_put(p_robot, d_data, lvec, *num_of_pair);
+		*num_of_pair += 1;
+		*num_of_val = 0;
+	}
+	else if (attr == rmtx && *num_of_val == 9)
+	{
+		cast_data(i_data, d_data, str, attr);
+		queue_robopair_put(p_robot, d_data, rmtx, *num_of_pair);
+		*num_of_pair += 1;
+		*num_of_val = 0;
+	}
+	else if (attr == pvec)
+	{
+		cast_data(i_data, d_data, str, attr);
+		queue_robopair_put(p_robot, i_data, pvec, *num_of_pair);
+		p_robot->num = *num_of_pair+1;
+		*num_of_pair += 1;
+		*num_of_val = 0;
+	}
+	else if (attr == qvec)
+	{
+		cast_data(i_data, d_data, str, attr);
+		queue_robopair_put(p_robot, d_data, qvec, *num_of_pair);
+		*num_of_pair += 1;
+		*num_of_val = 0;
+	}
+	free(i_data);
+	free(d_data);
 }
 
-void remove_data(struct _Data *data)
-{
-	free(data);
-}
 void get_data_from_rgm_section(const char *str,
 		QueueOfRoboPair *p_robot, int attr)
 {
+	enum {maxval = 9, maxline = 64};
 	char c;
-	struct _Data *data = init_data();
-	int i = 0, j = 0;
-	int reading_started = 0, is_error = 0;;
-	int num_of_val = 0;
+	char **str_of_attr;
+	int i = 0, j = 0, k;
+	int reading_started = 0;
+	int num_of_val = 0, num_of_pair = 0;;
+	str_of_attr = (char**)malloc(sizeof(char*)*maxval);
+	for (k = 0; k < maxval; k++)
+		str_of_attr[k] = (char*)malloc(sizeof(char)*maxline);
 	do
 	{
 		c = str[i];
 		if (c == ']')
 		{
-		/*	if (!reading_started)
-			{
-				print_rgm_attr_error(data[num_of_val], num_of_val,
-						attr, misb);
-				is_error = 1;
-			}*/
 			reading_started = 0;
 			j = 0;
-			set_data_to_queue(data, p_robot, &num_of_val, attr);
 			num_of_val++;
+			set_data_to_queue(str_of_attr, p_robot,
+					&num_of_val, &num_of_pair, attr);
 		}
 		if (reading_started == 1)
 		{
-		/*	if (j > maxline - 1)
-			{
-				print_rgm_attr_error(data[num_of_val], num_of_val,
-						attr, inar);
-				is_error = 1;
-			}*/
-		/*	data[num_of_val][j] = str[i];
-			data[num_of_val][j+1] = '\0';*/
+			str_of_attr[num_of_val][j] = str[i];
+			str_of_attr[num_of_val][j+1] = '\0';
 			j++;
 		}
 		if (c == '[')
 		{
-			/*if (reading_started)
-			{
-				print_rgm_attr_error(data[num_of_val], num_of_val,
-					attr, misb);
-				is_error = 1;
-			} */
 			reading_started = 1;
 		}
 		i++;
 	} while (c != '\0');
-	if (is_error)
-		exit(2);
-	remove_data(data);
+	for (k = 0; k < maxval; k++)
+		free(str_of_attr[k]);
+	free(str_of_attr);
 }
 
 void detect_rgm_section(QueueOfRoboPair *p_robot,

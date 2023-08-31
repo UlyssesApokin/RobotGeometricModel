@@ -37,3 +37,4 @@ void dest_rgm(QueueOfRoboPair *p_robot);
 void debug_output(QueueOfRoboPair *p_robot);
 
 #endif
+ 

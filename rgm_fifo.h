@@ -21,8 +21,8 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef RGM_H_SENTRY
-#define RGM_H_SENTRY
+#ifndef RGM_FIFO_H_SENTRY
+#define RGM_FIFO_H_SENTRY
 
 #include <stdlib.h>
 
@@ -60,14 +60,7 @@ struct _QueueOfRoboPair
 
 typedef struct _QueueOfRoboPair QueueOfRoboPair;
 
-typedef struct
-{
-	int nump;
-	int *pvec;
-	double *lvec;
-	double *qvec;
-	double *rmtx;
-} Robot;
+typedef struct _QueueOfRoboPair Robot;
 
 void queue_robopair_init(QueueOfRoboPair *queue);
 

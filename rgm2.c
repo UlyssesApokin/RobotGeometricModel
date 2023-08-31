@@ -26,12 +26,13 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 int main (int argc, char **argv)
 {
-	QueueOfRoboPair robot;
+	Robot robot;
 	if (argc > 1)
 		init_rgm(argv[1], &robot);
 	else
 		fprintf(stderr, "To few arguments\n");
 	debug_output(&robot);
 	dest_rgm(&robot);
+	
 	return 0;
 }
