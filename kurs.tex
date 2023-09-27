@@ -208,11 +208,30 @@
 \begin{equation}\label{f:r_xa}
   R_{x,\alpha} = 
   \begin{bmatrix}
-	2 & 5\\
-	4 & 6
+  1 & 0 & 0\\
+  0 & \cos{\alpha} & -\sin{\alpha}\\
+  0 & \sin{\alpha} & \cos{\alpha}
+  \end{bmatrix}
+  .
+\end{equation}
+\par
+Аналогично матрицы поворота вокруг оси \(OY\) на угол \(\varphi\) (см. формулу \ref{f:r_yphi}) и вокруг оси \(OZ\) на угол \(\theta\) (см. формулу \ref{f:r_ztheta}).
+\begin{equation}\label{f:r_yphi}
+  R_{y,\varphi} =
+  \begin{bmatrix}
+  \cos{\varphi} & 0 & \sin{\varphi}\\
+  0 & 1 & 0\\
+  -\sin{\varphi} & 0 & \cos{\varphi}
   \end{bmatrix}
 \end{equation}
-
+\begin{equation}\label{f:r_ztheta}
+  R_{z,\theta} =
+  \begin{bmatrix}
+  \cos{\theta} & -\sin{\theta} & 0\\
+  \sin{\theta} & \cos{\theta} & 0\\
+  0 & 0 & 1
+  \end{bmatrix}
+\end{equation}
 \newpage
 
 \section{Построение математической модели}
