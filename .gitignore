@@ -1,4 +1,7 @@
-*.o
+*.aux
+*.log
+*.toc
+*.dvi
 test*
 rgm
 rgm.c
