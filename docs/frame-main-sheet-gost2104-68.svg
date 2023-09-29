@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   sodipodi:docname="frame-main-sheet-gost2104-68.svg"
+   inkscape:export-filename="frame-main-sheet-gost2104-68.pdf"
+   inkscape:export-xdpi="512"
+   inkscape:export-ydpi="512"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#999999"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     showgrid="true"
+     inkscape:zoom="16"
+     inkscape:cx="61.9375"
+     inkscape:cy="749.59375"
+     inkscape:window-width="1920"
+     inkscape:window-height="1022"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer3"
+     showguides="false">
+    <inkscape:grid
+       type="xygrid"
+       id="grid2158"
+       dotted="false"
+       snapvisiblegridlinesonly="true"
+       visible="true"
+       enabled="true"
+       units="mm"
+       spacingx="1"
+       spacingy="1"
+       empspacing="5"
+       color="#a6e1ff"
+       opacity="0.14901961" />
+  </sodipodi:namedview>
+  <defs
+     id="defs2" />
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="white_background"
+     sodipodi:insensitive="true">
+    <rect
+       style="fill:#f3f3f3;fill-opacity:1;stroke:none;stroke-width:0.300001"
+       id="rect28987"
+       width="210"
+       height="297"
+       x="0"
+       y="0"
+       inkscape:label="bg" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer4"
+     inkscape:label="left_frame"
+     sodipodi:insensitive="true">
+    <path
+       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.3;stroke-opacity:1"
+       d="M 7.1499996,292 V 147"
+       id="path29659"
+       inkscape:label="line_v" />
+    <path
+       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.3;stroke-opacity:1"
+       d="M 13.15,292 V 147"
+       id="path34776"
+       inkscape:label="line_v" />
+    <path
+       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.3;stroke-opacity:1"
+       d="M 7,147.15 H 20"
+       id="path34812"
+       inkscape:label="line_h" />
+    <path
+       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.3;stroke-opacity:1"
+       d="M 6.9992196,291.85123 H 19.99922"
+       id="path34884"
+       inkscape:label="line_h" />
+    <path
+       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.3;stroke-opacity:1"
+       d="M 7,182.15 H 20"
+       id="path34922"
+       inkscape:label="line_h" />
+    <path
+       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.3;stroke-opacity:1"
+       d="M 7,207.15 H 20"
+       id="path34924"
+       inkscape:label="line_h" />
+    <path
+       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.3;stroke-opacity:1"
+       d="M 7,267.15 H 20"
+       id="path34926"
+       inkscape:label="line_h" />
+    <path
+       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.3;stroke-opacity:1"
+       d="M 7,232.15 H 20"
+       id="path34928"
+       inkscape:label="line_h" />
+  </g>
+  <g
+     inkscape:label="bottom_frame"
+     inkscape:groupmode="layer"
+     id="layer1"
+     sodipodi:insensitive="true">
+    <rect
+       style="fill:none;stroke:#000000;stroke-width:0.300001"
+       id="rect8074"
+       width="184.7"
+       height="286.69998"
+       x="20.15"
+       y="5.1499996"
+       inkscape:label="frame" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.3"
+       d="M 20,277.14999 H 205"
+       id="path11946"
+       inkscape:label="line_h" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.3"
+       d="M 20,282.15 H 85"
+       id="path14859"
+       inkscape:label="line_h" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.3"
+       d="M 20,287.15 H 85"
+       id="path17765"
+       inkscape:label="line_h" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.3"
+       d="m 195,284.15 h 10"
+       id="path19945"
+       inkscape:label="line_h" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.3"
+       d="m 85.15,277 v 15"
+       id="path26570"
+       inkscape:label="line_v" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.3"
+       d="m 195.15,277 v 15"
+       id="path28172"
+       inkscape:label="line_v" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.3"
+       d="m 27.15,277 v 15"
+       id="path29080"
+       inkscape:label="line_v" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.3"
+       d="m 37.15,277 v 15"
+       id="path29082"
+       inkscape:label="line_v" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.3"
+       d="m 60.15,277 v 15"
+       id="path29084"
+       inkscape:label="line_v" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.3"
+       d="m 75.15,277 v 15"
+       id="path29086"
+       inkscape:label="line_v" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer3"
+     inkscape:label="const_text">
+    <text
+       xml:space="preserve"
+       style="font-size:4px;letter-spacing:-0.386292px;fill:#f3f3f3;fill-opacity:1;stroke:none;stroke-width:0.3"
+       x="20.427999"
+       y="290.8049"
+       id="text29144"
+       inkscape:label="изм."><tspan
+         sodipodi:role="line"
+         id="tspan29142"
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4px;font-family:'TeX Gyre Termes';-inkscape-font-specification:'TeX Gyre Termes Italic';fill:#000000;fill-opacity:1;stroke-width:0.3"
+         x="20.427999"
+         y="290.8049">Изм.</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:4px;letter-spacing:-0.264583px;fill:#f3f3f3;fill-opacity:1;stroke:none;stroke-width:0.3"
+       x="27.48"
+       y="290.8049"
+       id="text29361"
+       inkscape:label="лист."><tspan
+         sodipodi:role="line"
+         id="tspan29359"
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4px;font-family:'TeX Gyre Termes';-inkscape-font-specification:'TeX Gyre Termes Italic';fill:#000000;fill-opacity:1;stroke-width:0.3"
+         x="27.48"
+         y="290.8049">Лист.</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:4px;letter-spacing:-0.264583px;fill:#f3f3f3;fill-opacity:1;stroke:none;stroke-width:0.3"
+       x="37.798367"
+       y="290.79266"
+       id="text29365"
+       inkscape:label="н.документа"><tspan
+         sodipodi:role="line"
+         id="tspan29363"
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4px;font-family:'TeX Gyre Termes';-inkscape-font-specification:'TeX Gyre Termes Italic';fill:#000000;fill-opacity:1;stroke-width:0.3"
+         x="37.798367"
+         y="290.79266">№  Докум.</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:4px;letter-spacing:-0.264583px;fill:#f3f3f3;fill-opacity:1;stroke:none;stroke-width:0.3"
+       x="60.461414"
+       y="290.78064"
+       id="text29369"
+       inkscape:label="подп"><tspan
+         sodipodi:role="line"
+         id="tspan29367"
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4px;font-family:'TeX Gyre Termes';-inkscape-font-specification:'TeX Gyre Termes Italic';fill:#000000;fill-opacity:1;stroke-width:0.3"
+         x="60.461414"
+         y="290.78064">Подп.</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:4px;letter-spacing:-0.264583px;fill:#f3f3f3;fill-opacity:1;stroke:none;stroke-width:0.3"
+       x="75.855675"
+       y="290.78064"
+       id="text29466"
+       inkscape:label="дата"><tspan
+         sodipodi:role="line"
+         id="tspan29464"
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4px;font-family:'TeX Gyre Termes';-inkscape-font-specification:'TeX Gyre Termes Italic';fill:#000000;fill-opacity:1;stroke-width:0.3"
+         x="75.855675"
+         y="290.78064">Дата</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:4px;letter-spacing:-0.264583px;fill:#f3f3f3;fill-opacity:1;stroke:none;stroke-width:0.3"
+       x="195.89017"
+       y="281.82477"
+       id="text29528"
+       inkscape:label="Лист"><tspan
+         sodipodi:role="line"
+         id="tspan29526"
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4px;font-family:'TeX Gyre Termes';-inkscape-font-specification:'TeX Gyre Termes Italic';fill:#000000;fill-opacity:1;stroke-width:0.3"
+         x="195.89017"
+         y="281.82477">Лист</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:4px;letter-spacing:-0.264583px;fill:#f3f3f3;fill-opacity:1;stroke:none;stroke-width:0.3"
+       x="-288.43112"
+       y="11.552051"
+       id="text34972"
+       inkscape:label="инв № подл."
+       transform="rotate(-90)"><tspan
+         sodipodi:role="line"
+         id="tspan34970"
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4px;font-family:'TeX Gyre Termes';-inkscape-font-specification:'TeX Gyre Termes Italic';fill:#000000;fill-opacity:1;stroke-width:0.3"
+         x="-288.43112"
+         y="11.552051">Инв. № подл.</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:4px;letter-spacing:-0.264583px;fill:#f3f3f3;fill-opacity:1;stroke:none;stroke-width:0.3"
+       x="-265.63116"
+       y="11.552051"
+       id="text35018"
+       inkscape:label="подп и дата"
+       transform="rotate(-90)"><tspan
+         sodipodi:role="line"
+         id="tspan35016"
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4px;font-family:'TeX Gyre Termes';-inkscape-font-specification:'TeX Gyre Termes Italic';fill:#000000;fill-opacity:1;stroke-width:0.3"
+         x="-265.63116"
+         y="11.552051">Подп. и дата</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:4px;letter-spacing:-0.264583px;fill:#f3f3f3;fill-opacity:1;stroke:none;stroke-width:0.3"
+       x="-230.43159"
+       y="11.552051"
+       id="text35022"
+       inkscape:label="взам инв №"
+       transform="rotate(-90)"><tspan
+         sodipodi:role="line"
+         id="tspan35020"
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4px;font-family:'TeX Gyre Termes';-inkscape-font-specification:'TeX Gyre Termes Italic';fill:#000000;fill-opacity:1;stroke-width:0.3"
+         x="-230.43159"
+         y="11.552051">Взам. инв. №</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:4px;letter-spacing:-0.264583px;fill:#f3f3f3;fill-opacity:1;stroke:none;stroke-width:0.3"
+       x="-206.33159"
+       y="11.552051"
+       id="text35072"
+       inkscape:label="инв № дубл"
+       transform="rotate(-90)"><tspan
+         sodipodi:role="line"
+         id="tspan35070"
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4px;font-family:'TeX Gyre Termes';-inkscape-font-specification:'TeX Gyre Termes Italic';fill:#000000;fill-opacity:1;stroke-width:0.3"
+         x="-206.33159"
+         y="11.552051">Инв. № дубл.</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:4px;letter-spacing:-0.264583px;fill:#f3f3f3;fill-opacity:1;stroke:none;stroke-width:0.3"
+       x="-181.23119"
+       y="11.552051"
+       id="text35076"
+       inkscape:label="подп и дата (2)"
+       transform="rotate(-90)"><tspan
+         sodipodi:role="line"
+         id="tspan35074"
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4px;font-family:'TeX Gyre Termes';-inkscape-font-specification:'TeX Gyre Termes Italic';fill:#000000;fill-opacity:1;stroke-width:0.3"
+         x="-181.23119"
+         y="11.552051">Подп. и дата</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:4px;letter-spacing:-0.264583px;fill:#f3f3f3;fill-opacity:1;stroke:none;stroke-width:0.3"
+       x="71.212563"
+       y="295.52991"
+       id="text35130"
+       inkscape:label="Копировал"><tspan
+         sodipodi:role="line"
+         id="tspan35128"
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4px;font-family:'TeX Gyre Termes';-inkscape-font-specification:'TeX Gyre Termes Italic';fill:#000000;fill-opacity:1;stroke-width:0.3"
+         x="71.212563"
+         y="295.52991">Копировал</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:4px;letter-spacing:-0.264583px;fill:#f3f3f3;fill-opacity:1;stroke:none;stroke-width:0.3"
+       x="140.58319"
+       y="295.45425"
+       id="text35134"
+       inkscape:label="Формат"
+       sodipodi:insensitive="true"><tspan
+         sodipodi:role="line"
+         id="tspan35132"
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4px;font-family:'TeX Gyre Termes';-inkscape-font-specification:'TeX Gyre Termes Italic';fill:#000000;fill-opacity:1;stroke-width:0.3"
+         x="140.58319"
+         y="295.45425">Формат</tspan></text>
+  </g>
+</svg>
