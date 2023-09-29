@@ -27,15 +27,15 @@
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
      showgrid="true"
-     inkscape:zoom="16"
-     inkscape:cx="61.9375"
-     inkscape:cy="749.59375"
+     inkscape:zoom="1"
+     inkscape:cx="339"
+     inkscape:cy="754.5"
      inkscape:window-width="1920"
      inkscape:window-height="1022"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
-     inkscape:current-layer="layer3"
+     inkscape:current-layer="layer5"
      showguides="false">
     <inkscape:grid
        type="xygrid"
@@ -56,10 +56,9 @@
   <g
      inkscape:groupmode="layer"
      id="layer2"
-     inkscape:label="white_background"
-     sodipodi:insensitive="true">
+     inkscape:label="white_background">
     <rect
-       style="fill:#f3f3f3;fill-opacity:1;stroke:none;stroke-width:0.300001"
+       style="fill:none;fill-opacity:1;stroke:none;stroke-width:0.300001"
        id="rect28987"
        width="210"
        height="297"
@@ -176,6 +175,23 @@
        d="m 75.15,277 v 15"
        id="path29086"
        inkscape:label="line_v" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer5"
+     inkscape:label="text">
+    <text
+       xml:space="preserve"
+       style="font-size:7.99999px;font-family:'TeX Gyre Termes';-inkscape-font-specification:'TeX Gyre Termes';fill:#000000;stroke-width:0.3"
+       x="91.829163"
+       y="287.401"
+       id="text284"
+       inkscape:label="задание"><tspan
+         sodipodi:role="line"
+         id="tspan282"
+         style="stroke-width:0.3"
+         x="91.829163"
+         y="287.401">АТС.2023.МиР.мхт.Б.001.ПЗ</tspan></text>
   </g>
   <g
      inkscape:groupmode="layer"
