@@ -29,7 +29,7 @@
      showgrid="true"
      inkscape:zoom="1"
      inkscape:cx="339"
-     inkscape:cy="514.5"
+     inkscape:cy="515.5"
      inkscape:window-width="1920"
      inkscape:window-height="1022"
      inkscape:window-x="0"
@@ -69,10 +69,9 @@
   <g
      inkscape:label="bottom_frame"
      inkscape:groupmode="layer"
-     id="layer1"
-     sodipodi:insensitive="true">
+     id="layer1">
     <rect
-       style="fill:none;stroke:#000000;stroke-width:0.300001"
+       style="fill:none;stroke:#000000;stroke-width:0.5;stroke-dasharray:none"
        id="rect8074"
        width="184.7"
        height="286.69998"

@@ -28,14 +28,14 @@
      inkscape:document-units="mm"
      showgrid="true"
      inkscape:zoom="1.0318224"
-     inkscape:cx="474.88793"
-     inkscape:cy="832.99219"
+     inkscape:cx="483.61036"
+     inkscape:cy="564.53514"
      inkscape:window-width="1920"
      inkscape:window-height="1022"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
-     inkscape:current-layer="layer5"
+     inkscape:current-layer="layer4"
      showguides="true">
     <inkscape:grid
        type="xygrid"
@@ -79,7 +79,7 @@
      inkscape:label="left_frame"
      sodipodi:insensitive="true">
     <path
-       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.3;stroke-opacity:1"
+       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.5;stroke-dasharray:none;stroke-opacity:1"
        d="M 7.1499996,292 V 147"
        id="path29659"
        inkscape:label="line_v" />
@@ -89,12 +89,12 @@
        id="path34776"
        inkscape:label="line_v" />
     <path
-       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.3;stroke-opacity:1"
+       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.5;stroke-dasharray:none;stroke-opacity:1"
        d="M 7,147.15 H 20"
        id="path34812"
        inkscape:label="line_h" />
     <path
-       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.3;stroke-opacity:1"
+       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.5;stroke-dasharray:none;stroke-opacity:1"
        d="M 6.9992196,291.85123 H 19.99922"
        id="path34884"
        inkscape:label="line_h" />
@@ -119,7 +119,7 @@
        id="path34928"
        inkscape:label="line_h" />
     <path
-       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.3;stroke-opacity:1"
+       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.5;stroke-dasharray:none;stroke-opacity:1"
        d="M 7.1499997,130 V 10"
        id="path1184"
        inkscape:label="line_v" />
@@ -129,7 +129,7 @@
        id="path1186"
        inkscape:label="line_v" />
     <path
-       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.3;stroke-opacity:1"
+       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.5;stroke-dasharray:none;stroke-opacity:1"
        d="M 7,10.15 H 20"
        id="path1268"
        inkscape:label="line_h" />
@@ -139,7 +139,7 @@
        id="path1270"
        inkscape:label="line_h" />
     <path
-       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.3;stroke-opacity:1"
+       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.5;stroke-dasharray:none;stroke-opacity:1"
        d="M 7,130.15 H 20"
        id="path1272"
        inkscape:label="line_h" />
@@ -150,7 +150,7 @@
      id="layer1"
      sodipodi:insensitive="true">
     <rect
-       style="fill:none;stroke:#000000;stroke-width:0.300001"
+       style="fill:none;stroke:#000000;stroke-width:0.5;stroke-dasharray:none"
        id="rect8074"
        width="184.7"
        height="286.69998"
@@ -158,7 +158,7 @@
        y="5.1499996"
        inkscape:label="frame" />
     <path
-       style="fill:none;stroke:#000000;stroke-width:0.3"
+       style="fill:none;stroke:#000000;stroke-width:0.5;stroke-dasharray:none"
        d="M 20,252.15 H 205"
        id="path11946"
        inkscape:label="line_h" />
@@ -276,7 +276,7 @@
          y="271.31772">Апокин Е.М.</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.50001px;font-family:'TeX Gyre Termes';-inkscape-font-specification:'TeX Gyre Termes';letter-spacing:-0.4206875px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.3"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.50001px;font-family:'TeX Gyre Termes';-inkscape-font-specification:'TeX Gyre Termes';letter-spacing:-0.420687px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.3"
        x="38.413067"
        y="276.31799"
        id="text3552"
@@ -295,7 +295,7 @@
        inkscape:label="задание"><tspan
          sodipodi:role="line"
          id="tspan3751"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8px;font-family:'TeX Gyre Termes';-inkscape-font-specification:'TeX Gyre Termes';stroke-width:0.3"
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8px;font-family:'TeX Gyre Termes';-inkscape-font-specification:'TeX Gyre Termes Italic';stroke-width:0.3"
          x="92.051468"
          y="262.32385">АТС.2023.МиР.мхт.Б.001.ПЗ</tspan></text>
     <text
@@ -307,30 +307,30 @@
        inkscape:label="вуз"><tspan
          sodipodi:role="line"
          id="tspan3755"
-         style="stroke-width:0.3"
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'TeX Gyre Termes';-inkscape-font-specification:'TeX Gyre Termes Italic';stroke-width:0.3"
          x="169.50232"
          y="287.33087">БГТУ</tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:5.5px;font-family:'TeX Gyre Termes';-inkscape-font-specification:'TeX Gyre Termes';letter-spacing:-0.264583px;fill:#000000;stroke-width:0.3"
-       x="90.129417"
-       y="273.08228"
+       style="font-size:5px;font-family:'TeX Gyre Termes';-inkscape-font-specification:'TeX Gyre Termes';letter-spacing:-0.264583px;fill:#000000;stroke-width:0.3"
+       x="89.23912"
+       y="273.88583"
        id="text325"
        inkscape:label="задание подробно"><tspan
          sodipodi:role="line"
          id="tspan323"
-         style="font-size:5.5px;stroke-width:0.3"
-         x="90.129417"
-         y="273.08228">Разработать математическую </tspan><tspan
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:5px;font-family:'TeX Gyre Termes';-inkscape-font-specification:'TeX Gyre Termes Italic';stroke-width:0.3"
+         x="89.23912"
+         y="273.88583">Разработать математическую </tspan><tspan
          sodipodi:role="line"
-         style="font-size:5.5px;stroke-width:0.3"
-         x="90.129417"
-         y="280.50726"
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:5px;font-family:'TeX Gyre Termes';-inkscape-font-specification:'TeX Gyre Termes Italic';stroke-width:0.3"
+         x="89.23912"
+         y="280.69583"
          id="tspan485">модель трехзвенного </tspan><tspan
          sodipodi:role="line"
-         style="font-size:5.5px;stroke-width:0.3"
-         x="90.129417"
-         y="287.93228"
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:5px;font-family:'TeX Gyre Termes';-inkscape-font-specification:'TeX Gyre Termes Italic';stroke-width:0.3"
+         x="89.23912"
+         y="287.50583"
          id="tspan499">робота-манипулятора</tspan></text>
   </g>
   <g

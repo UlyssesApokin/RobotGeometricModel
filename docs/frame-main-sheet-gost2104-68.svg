@@ -28,14 +28,14 @@
      inkscape:document-units="mm"
      showgrid="true"
      inkscape:zoom="1"
-     inkscape:cx="339"
-     inkscape:cy="754.5"
+     inkscape:cx="223"
+     inkscape:cy="878.5"
      inkscape:window-width="1920"
      inkscape:window-height="1022"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
-     inkscape:current-layer="layer5"
+     inkscape:current-layer="layer4"
      showguides="false">
     <inkscape:grid
        type="xygrid"
@@ -69,10 +69,9 @@
   <g
      inkscape:groupmode="layer"
      id="layer4"
-     inkscape:label="left_frame"
-     sodipodi:insensitive="true">
+     inkscape:label="left_frame">
     <path
-       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.3;stroke-opacity:1"
+       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.5;stroke-opacity:1;stroke-dasharray:none"
        d="M 7.1499996,292 V 147"
        id="path29659"
        inkscape:label="line_v" />
@@ -82,12 +81,12 @@
        id="path34776"
        inkscape:label="line_v" />
     <path
-       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.3;stroke-opacity:1"
+       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.5;stroke-opacity:1;stroke-dasharray:none"
        d="M 7,147.15 H 20"
        id="path34812"
        inkscape:label="line_h" />
     <path
-       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.3;stroke-opacity:1"
+       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.5;stroke-opacity:1;stroke-dasharray:none"
        d="M 6.9992196,291.85123 H 19.99922"
        id="path34884"
        inkscape:label="line_h" />
@@ -115,10 +114,9 @@
   <g
      inkscape:label="bottom_frame"
      inkscape:groupmode="layer"
-     id="layer1"
-     sodipodi:insensitive="true">
+     id="layer1">
     <rect
-       style="fill:none;stroke:#000000;stroke-width:0.300001"
+       style="fill:none;stroke:#000000;stroke-width:0.5;stroke-dasharray:none"
        id="rect8074"
        width="184.7"
        height="286.69998"
@@ -126,7 +124,7 @@
        y="5.1499996"
        inkscape:label="frame" />
     <path
-       style="fill:none;stroke:#000000;stroke-width:0.3"
+       style="fill:none;stroke:#000000;stroke-width:0.5;stroke-dasharray:none"
        d="M 20,277.14999 H 205"
        id="path11946"
        inkscape:label="line_h" />
@@ -183,15 +181,15 @@
     <text
        xml:space="preserve"
        style="font-size:7.99999px;font-family:'TeX Gyre Termes';-inkscape-font-specification:'TeX Gyre Termes';fill:#000000;stroke-width:0.3"
-       x="91.829163"
-       y="287.401"
+       x="90.382469"
+       y="287.0708"
        id="text284"
        inkscape:label="задание"><tspan
          sodipodi:role="line"
          id="tspan282"
-         style="stroke-width:0.3"
-         x="91.829163"
-         y="287.401">АТС.2023.МиР.мхт.Б.001.ПЗ</tspan></text>
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'TeX Gyre Termes';-inkscape-font-specification:'TeX Gyre Termes Italic';stroke-width:0.3"
+         x="90.382469"
+         y="287.0708">АТС.2023.МиР.мхт.Б.001.ПЗ</tspan></text>
   </g>
   <g
      inkscape:groupmode="layer"
