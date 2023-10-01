@@ -5,9 +5,6 @@
 Method for constructing geometric models of manipulation systems of industrial robots and multi-axis machines.
 
 
-A method for constructing geometric models of manipulation systems of industrial robots and multi-axis machines.
-
-
 One of the most important sections of computer modeling of mechatronic systems is the development of control systems for multi-axis robotic manipulators.
 The main purpose of a robotic manipulator is to move the working element in space along a given trajectory.
 Therefore, among the systems that make up such a robot, the executive one is of particular importance.
@@ -70,7 +67,7 @@ Only in Russian.
 The file **kurs.tex** is a latex file according to the documentation.
 Files **frame-content-sheet-gost2104-68.svg**, **frame-main-sheet-gost2104-68.svg**, **frame-titul-sheet-gost2104-68.svg** -- These are ESKD frames made in accordance with GOST 2.104-68.
 The **makepdf.sh** file is designed to translate all of the above files into a single pdf file.
-Don’t forget to convert the svg to pdf using inkscape or any other editor before doing this.
+Don't forget to transfer svg to pdf.
 
 ## RU
 
