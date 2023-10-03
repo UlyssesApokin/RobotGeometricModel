@@ -52,24 +52,40 @@ To achieve this goal, it is necessary to solve the following tasks:
 
 # How does the repository work?
 
+## Repository structure
+
 * **/RobotGeometricModel**
-	* ../docs<sup>documentation</sup>
-		* _frame-content-sheet-gost2104-68.svg_<sup>formalization</sup>
-		* _frame-main-sheet-gost2104-68.svg_<sup>formalization</sup>
-		* _frame-titul-sheet-gost2104-68.svg_<sup>formalization</sup>
-		* _kurs.tex_<sup>specification</sup>
-		* _makepdf.sh_<sup>makepdf</sup>
-		* _rgm_T2_S_T1.dxf_<sup>scheme</sup>
-		* _rgm_T2_S_T1.dxf~_<sup>scheme</sup>
-	* ../source<sup>source code and examples</sup>
-		* _opengl_rgm.c_<sup>opengl_rgm</sup>
-		* _rgm2.c_<sup>rgm2<\sup>
-		* _rgm_fifo.c_<sup>rgm2_header</sup>
-		* _rgm_fifo.h_<sup>rgm2_header</sup>
-		* _rgm_file.c_<sup>rgm2_header</sup>
-		* _rgm_file.h_<sup>rgm2_header</sup>
-		* _robot1.rgm_<sup>example</sup>
-		* _robot2.rgm_<sup>example</sup>
+	* ../docs <sup>documentation</sup>
+		* _frame-content-sheet-gost2104-68.svg_ <sup>formalization</sup>
+		* _frame-main-sheet-gost2104-68.svg_ <sup>formalization</sup>
+		* _frame-titul-sheet-gost2104-68.svg_ <sup>formalization</sup>
+		* _kurs.tex_ <sup>specification</sup>
+		* _makepdf.sh_ <sup>makepdf</sup>
+		* _rgm_T2_S_T1.dxf_ <sup>scheme</sup>
+		* _rgm_T2_S_T1.dxf~_ <sup>scheme</sup>
+	* ../source <sup>source code and examples</sup>
+		* _opengl_rgm.c_ <sup>opengl_rgm</sup>
+		* _rgm2.c_ <sup>rgm2<\sup>
+		* _rgm_fifo.c_ <sup>rgm2_header</sup>
+		* _rgm_fifo.h_ <sup>rgm2_header</sup>
+		* _rgm_file.c_ <sup>rgm2_header</sup>
+		* _rgm_file.h_ <sup>rgm2_header</sup>
+		* _robot1.rgm_ <sup>example</sup>
+		* _robot2.rgm_ <sup>example</sup>
+
+## Description
+
+* documentation - This is the directory where the files are located that are used to generate specifications for the project’s source code and the modeling methods used.
+* formalization - This is a page frame made in accordance with GOST 2.104-68. To use this one, you need to stream it to pdf. For example, using Inkscape.
+* specification - This is the TeX file that contains the specification. It describes the method used to model the robot. It also describes the software development process and comments on the source code of this software. _(in progress! only Russian!)_
+* makepdf - This is the file for assembling the specification into a pdf file.
+* scheme - This is the robot kinematic diagram that is used in the specification. The file was created in LibreCad. In order for this file to be used in the specification, it must be translated into a pdf file. For example, using LibreCad.
+
+* source code and examples - This is the directory in which the source codes of programs and examples are located.
+* opengl_rgm - is a program that provides visualization of a robot's kinematic diagram using OpenGL and freeGlut. Adding your own for visualization is possible only by editing the source text of the program. _(the program is no longer being developed!)_
+* rgm2 - this is a program that builds a geometric model of a robot using a configuration file that it receives as input. _(in progress!)_
+* rgm2_header - these are split compilation files that are used to compile the rgm2 program.
+* example - these are examples of configuration files for rgm2, which contain a text description of the geometric characteristics of the robot.
 
 
 # How to get?
