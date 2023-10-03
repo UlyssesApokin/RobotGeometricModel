@@ -50,6 +50,20 @@ To achieve this goal, it is necessary to solve the following tasks:
 * Проверить правильность модели графо--аналитическим способом.
 * Разработать приложение с CLI-интерфейсом, предоставляющее визуализацию кинематической схемы манипуляционного робота.
 
+# Requirements
+
+To compile the documentation into a pdf file, you will need the following programs or their equivalents (the names of the packages in your distro may vary):
+
+* texlive-full (+= 2022.20230122-3)
+* Inkscape (+= 1.2.2)
+* LibreCad (+= 2.2.0)
+* qpdf (+= 11.3.0)
+
+To compile a program from source texts you will need (the names of the packages in your distro may vary):
+
+* gcc (any version that supports C89/ANSI C)
+* freeglut3-dev (+= 3.4.0)
+
 # How does the repository work?
 
 ## Repository structure
@@ -78,7 +92,7 @@ To achieve this goal, it is necessary to solve the following tasks:
 * documentation - This is the directory where the files are located that are used to generate specifications for the project’s source code and the modeling methods used.
 * formalization - This is a page frame made in accordance with GOST 2.104-68. To use this one, you need to stream it to pdf. For example, using Inkscape.
 * specification - This is the TeX file that contains the specification. It describes the method used to model the robot. It also describes the software development process and comments on the source code of this software. _(in progress! only Russian!)_
-* makepdf - This is the file for assembling the specification into a pdf file.
+* makepdf - This is the file for assembling the specification into a pdf file. To run the script, install the qpdf console utility.
 * scheme - This is the robot kinematic diagram that is used in the specification. The file was created in LibreCad. In order for this file to be used in the specification, it must be translated into a pdf file. For example, using LibreCad.
 
 * source code and examples - This is the directory in which the source codes of programs and examples are located.
@@ -105,9 +119,8 @@ $ cd RobotGeometricModel/source
 
 **To compile you need the following packages:**
 
-* gcc (any version in the distro)
-
-* freeglut3-dev (+=3.0 version) _(The package name on your distro may vary)_
+* gcc (any version that supports C89/ANSI C)
+* freeglut3-dev (+= 3.4.0)
 
 Run the command:
 
@@ -118,7 +131,7 @@ $ gcc -Wall -g -ansi opengl_rgm.c -lm -lGL -lglut -o opengl_rgm
 
 **To compile you need the following packages:**
 
-* gcc (any version in the distro)
+* gcc (any version that supports C89/ANSI C)
 
 Run the command:
 
