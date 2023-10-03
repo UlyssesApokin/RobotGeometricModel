@@ -14,7 +14,7 @@ Due to their flexible configurability, manipulation robots are capable of perfor
 This causes high demand for such systems from industry, which confirms the relevance of the problem.
 
 
-The purpose of the course work is to develop methods for constructing and analyzing mathematical models of manipulation systems that connect the generalized coordinates of the robot and the Cartesian coordinates of the characteristic point on the third link _(TCP -- Tool Center Point)_.
+The purpose of the course work is to develop methods for constructing and analyzing mathematical models of manipulation systems that connect the generalized coordinates of the robot and the Cartesian coordinates of the characteristic point on the third link _(TCP~--- Tool Center Point)_.
 
 
 To achieve this goal, it is necessary to solve the following tasks:
@@ -54,37 +54,11 @@ To achieve this goal, it is necessary to solve the following tasks:
 
 ## EN
 
-The "source" directory contains the source codes for the **rgm2** and **opengl_rgm** programs.
-
-* rgm2 is a program that reads information about the geometric characteristics of the robot and performs calculations on them, that is, builds a geometric model. Example configuration files for rgm2 are located in the files _robot1.rgm_ and _robot2.rgm_.
-
-* opengl_rgm is a program that renders the geometric model of a robot using OpenGL and freeglut. Adding your model to this program is done by editing the source code of the program. At the moment this program is no longer being developed.
-
-The files **rgm_fifo.c**, **rgm_fifo.h** and **rgm_file.c**, **rgm_file.h** are header files for the _rgm2_ program. The first two are responsible for organizing the data structure about the geometric model of the robot. The latter are responsible for reading and interpreting information from the configuration files _robot1.rgm_ and _robot2.rgm_.
-
-The "docs" directory contains documentation on the modeling method and the source code of the program.
-Only in Russian.
-The file **kurs.tex** is a latex file according to the documentation.
-Files **frame-content-sheet-gost2104-68.svg**, **frame-main-sheet-gost2104-68.svg**, **frame-titul-sheet-gost2104-68.svg** -- These are ESKD frames made in accordance with GOST 2.104-68.
-The **makepdf.sh** file is designed to translate all of the above files into a single pdf file.
-Don't forget to transfer svg to pdf.
 
 ## RU
 
-В директории "source" расположены исходные тексты программ **rgm2** и **opengl_rgm**.
-
-* rgm2 -- это программа, которая считывает информацию о геометрических характеристиках робота, и выполняет над ними вычисления, то есть строит геометрическую модель. Пример конфигурационных файлов для rgm2 расположены в файлах _robot1.rgm_ и _robot2.rgm_.
-
-* opengl_rgm -- это программа, которая визуализирует геометрическую модель робота с помощью OpenGL и freeglut. Добавление своей модели в эту программу производится с помощью редактиривания исходных текстов программы. В данный момент эта программа больше не разваивается.
-
-Файлы **rgm_fifo.c**, **rgm_fifo.h**  и **rgm_file.c**, **rgm_file.h** это заголовочные файлы для программы _rgm2_. Первые два отвечают за организацию  структуры данных о геометрической модели робота. Последние отвечают за чтение и интерпритацию информации из конфигурационных файлов _robot1.rgm_ и _robot2.rgm_.
-
-В директории "docs" расположена документация по способу моделирования и исходным текстам программы.
-Только на русском языке.
-Файл **kurs.tex** это latex-файл по документации.
-Файлы **frame-content-sheet-gost2104-68.svg**, **frame-main-sheet-gost2104-68.svg**, **frame-titul-sheet-gost2104-68.svg** -- это рамки ЕСКД, выполненные по ГОСТ 2.104-68.
-Файл **makepdf.sh** предназначен для трансляции всех выше перечисленных файлов в единый pdf-файл.
-Не забудьте перед этим svg транслировать в pdf с помощью inkscape или любого другого редактора.
+* **/RobotGeometricModel**
+	* **../docs**
 
 # How to get?
 
