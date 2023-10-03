@@ -52,13 +52,25 @@ To achieve this goal, it is necessary to solve the following tasks:
 
 # How does the repository work?
 
-## EN
-
-
-## RU
-
 * **/RobotGeometricModel**
-	* **../docs**
+	* ../docs<sup>documentation<\sup>
+		* _frame-content-sheet-gost2104-68.svg_<sup>formalization<\sup>
+		* _frame-main-sheet-gost2104-68.svg_<sup>formalization<\sup>
+		* _frame-titul-sheet-gost2104-68.svg_<sup>formalization<\sup>
+		* _kurs.tex_<sup>specification<\sup>
+		* _makepdf.sh_<sup>makepdf<\sup>
+		* _rgm_T2_S_T1.dxf_<sup>scheme<\sup>
+		* _rgm_T2_S_T1.dxf~_<sup>scheme<\sup>
+	* ../source<sup>source code and examples<\sup>
+		* _opengl_rgm.c_<sup>opengl_rgm<\sup>
+		* _rgm2.c_<sup>rgm2<\sup>
+		* _rgm_fifo.c_<sup>rgm2_header<\sup>
+		* _rgm_fifo.h_<sup>rgm2_header<\sup>
+		* _rgm_file.c_<sup>rgm2_header<\sup>
+		* _rgm_file.h_<sup>rgm2_header<\sup>
+		* _robot1.rgm_<sup>example<\sup>
+		* _robot2.rgm_<sup>example<\sup>
+
 
 # How to get?
 
