@@ -14,7 +14,7 @@ Due to their flexible configurability, manipulation robots are capable of perfor
 This causes high demand for such systems from industry, which confirms the relevance of the problem.
 
 
-The purpose of the course work is to develop methods for constructing and analyzing mathematical models of manipulation systems that connect the generalized coordinates of the robot and the Cartesian coordinates of the characteristic point on the third link _(TCP~--- Tool Center Point)_.
+The purpose of the course work is to develop methods for constructing and analyzing mathematical models of manipulation systems that connect the generalized coordinates of the robot and the Cartesian coordinates of the characteristic point on the third link _(TCP - Tool Center Point)_.
 
 
 To achieve this goal, it is necessary to solve the following tasks:
