@@ -166,7 +166,13 @@ $ cd RobotGeometricModel/docs
 Run the command:
 
 ````
-$ ./makepdf.sh
+$ ./makepdf.sh full
+````
+
+And again (LaTeX generates a table of contents):
+
+````
+$ ./makepdf.sh tex
 ````
 
 # How to use?
