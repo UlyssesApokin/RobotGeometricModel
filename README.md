@@ -109,11 +109,7 @@ Clone the repository to your machine:
 ````
 $ git clone https://github.com/UlyssesApokin/RobotGeometricModel.git
 ````
-Navigate to the source directory:
 
-````
-$ cd RobotGeometricModel/source
-````
 
 ## Compile the opengl_rgm
 
@@ -122,21 +118,55 @@ $ cd RobotGeometricModel/source
 * gcc (any version that supports C89/ANSI C)
 * freeglut3-dev (+= 3.4.0)
 
+Navigate to the source directory:
+
+````
+$ cd RobotGeometricModel/source
+````
+
 Run the command:
 
 ````
 $ gcc -Wall -g -ansi opengl_rgm.c -lm -lGL -lglut -o opengl_rgm
 ````
+
 ## Compile the rgm2
 
 **To compile you need the following packages:**
 
 * gcc (any version that supports C89/ANSI C)
 
+Navigate to the source directory:
+
+````
+$ cd RobotGeometricModel/source
+````
+
 Run the command:
 
 ````
 $ gcc -Wall -g -ansi -c rgm_fifo.c && gcc -Wall -g -ansi -c rgm_file.c && gcc -Wall -g -ansi rgm2.c rgm_fifo.o rgm_file.o -o rgm2
+````
+
+# Make the documentation
+
+**To compile you need the following packages:**
+
+* texlive-full (+= 2022.20230122-3)
+* Inkscape (+= 1.2.2)
+* LibreCad (+= 2.2.0)
+* qpdf (+= 11.3.0)
+
+Navigate to the docs directory:
+
+````
+$ cd RobotGeometricModel/docs
+````
+
+Run the command:
+
+````
+$ ./makepdf.sh
 ````
 
 # How to use?
