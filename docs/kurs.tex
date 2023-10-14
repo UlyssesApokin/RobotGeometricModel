@@ -394,15 +394,14 @@
 \par
 Как было отмечено в разделе {\ref{sec:an_mat_ap} на странице \pageref{p:dh-param}, метод Денавита--Хартенберга позволяет сократить количество координат, однозначно определяющих тело (систему координат) в пространстве, с шести до четырех (см табл. ).
 \begin{table}[t]
-\label{t:dh-param}
-\begin{tabular}{|p{0.22\textwidth}|p{0.16\textwidth}|p{0.16\textwidth}|p{0.16\textwidth}|p{0.16\textwidth}|}
+\centering
+\begin{tabular}{|r|c|c|c|c|}
   \hline Сочленение \(i\) & \(a_i\) & \(\alpha_i\) & \(d_i\) & \(\theta_i\) \\ \hline
-  1 & - & - & - & - \\ \hline
-  2 & - & - & - & - \\ \hline
-  3 & - & - & - & - \\ \hline
-  4 & - & - & - & - \\ \hline
-
+  1 & 0 & 0 & \(L_1 + d_1\) & \(\theta_1\) \\ \hline
+  2 & 0 & \(\frac{\pi}{2}\) & \(L_2\) & \(\pi\) \\ \hline
+  3 & \(L_3\) & 0 & 0 & \(\theta_3 + \frac{\pi}{2}\) \\ \hline
 \end{tabular}
+\label{t:dh-param}
 \caption{ДХ-параметры робота--манипулятора}
 \end{table}
 
