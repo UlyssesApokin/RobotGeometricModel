@@ -64,6 +64,10 @@ To compile a program from source texts you will need (the names of the packages 
 * gcc (any version that supports C89/ANSI C)
 * freeglut3-dev (+= 3.4.0)
 
+To run a program written in MatLab you need to have the following package versions:
+
+* GNU Octave (+= 8.3.0)
+
 # How does the repository work?
 
 ## Repository structure
@@ -86,6 +90,9 @@ To compile a program from source texts you will need (the names of the packages 
 		* _rgm_file.h_ <sup>rgm2_header</sup>
 		* _robot1.rgm_ <sup>example</sup>
 		* _robot2.rgm_ <sup>example</sup>
+	* ../octave <sup>matlab</sup>
+		* _crDHmatrix.m_ <sup>matlab</sup>
+		* _rgm.m_ <sup>matlab</sup>
 
 ## Description
 
@@ -101,6 +108,14 @@ To compile a program from source texts you will need (the names of the packages 
 * rgm2_header - these are split compilation files that are used to compile the rgm2 program.
 * example - these are examples of configuration files for rgm2, which contain a text description of the geometric characteristics of the robot.
 
+* octave - this is a directory for prototyping a program in MatLab using the free GNU Octave software
+
+# License
+
+The source code for software contained in this repository is licensed under the MIT License unless otherwise noted in the file preamble.
+
+
+Any other files, including documentation, vector graphics files, etc., are distributed without any license. The author disclaims rights and liability for these documents. With the exception of those files in the preamble of which it is indicated otherwise. For example, in the file kurs.tex
 
 # How to get?
 
