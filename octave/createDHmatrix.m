@@ -19,7 +19,7 @@
 ##  OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 ##  WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-function DHmatrix = crDHmatrix(theta, d, alpha, a)
+function DHmatrix = createDHmatrix(theta, d, alpha, a)
 DHmatrix = [
   cos(theta), -cos(alpha) *sin(theta), sin(alpha) *sin(theta), a *cos(theta) ;
   sin(theta), cos(alpha) *cos(theta), -sin(alpha) *cos(theta), a *sin(theta) ;
