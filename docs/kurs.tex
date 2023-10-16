@@ -563,9 +563,9 @@
 Таким образом, для рассматриваемого робота должны быть определены четыре системы координат, а именно \(X_0\,Y_0\,Z_0\), \(X_1\,Y_1\,Z_1\), \(X_2\,Y_2\,Z_2\), \(X_3\,Y_3\,Z_3\), причем последняя связана с рабочим звеном манипулятора ({\itshape TCP~--- Tool Center Point}).
 \begin{figure}[h]
   \centering
-  \includegraphics[width=0.5\textwidth]{rgm_T2_S_T1_DH-param}
+  \includegraphics[width=0.5\textwidth]{rgm_T2_S_T1_DH-axis}
   \caption{Ориентация СК робота--манипулятора}
-  \label{i:rgm_T2_S_T1_DH-param}
+  \label{i:rgm_T2_S_T1_DH-axis}
 \end{figure}
 \par
 Условием формирования базовой системы координат является направленность оси \(Z_0\) вдоль оси первого сочленения.
@@ -587,9 +587,17 @@
 В таком случае, ось \(X_3\) может быть направлена только вдоль плоскости звеньев три и четыре.
 Ось \(Y_3\) дополняет систему координат до правой тройки векторов.
 
+\subsection{Определение ДХ--параметров}
 
-\par
 Как было отмечено в разделе \ref{sec:an_mat_ap} на странице \pageref{p:dh-param}, метод Денавита--Хартенберга позволяет сократить количество координат, однозначно определяющих тело (систему координат) в пространстве, с шести до четырех (см табл.~\ref{t:dh-param}).
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.5\textwidth]{rgm_T2_S_T1_DH-param}
+  \caption{ДХ--параметры робота--манипулятора}
+  \label{i:rgm_T2_S_T1_DH-param}
+\end{figure}
+
 \begin{table}[t]
 \centering
 \begin{tabular}{|r|c|c|c|c|}
@@ -601,8 +609,6 @@
 \caption{ДХ-параметры робота--манипулятора}
 \label{t:dh-param}
 \end{table}
-
-\newpage
 
 \section{Разработка ПО}
 
