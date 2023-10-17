@@ -21,24 +21,24 @@
 
 disp('---------------')
 disp('     RGM       ')
-pairLenght = struct('L1', 6, 'L2', 3, 'L3', 2);
-d1 = 0;
+pairLenght = struct('L1', 60, 'L2', 50, 'L3', 25);
+d2 = 0;
 theta1 = 0;
 theta3 = 0;
-aDHParam = struct('P1', 0, 'P2', 0, 'P3', pairLenght.L3);
-alphaDHParam = struct('P1', 0, 'P2', pi/2, 'P3', 0);
-dDHParam = struct('P1', pairLenght.L1 + d1, 'P2', pairLenght.L2, 'P3', 0);
-thetaDHParam = struct('P1', theta1, 'P2', pi, 'P3', theta3 + pi/2);
-A01 = createDHmatrix(thetaDHParam.P1, dDHParam.P1, alphaDHParam.P1, aDHParam.P1);
-A12 = createDHmatrix(thetaDHParam.P2, dDHParam.P2, alphaDHParam.P2, aDHParam.P2);
-A23 = createDHmatrix(thetaDHParam.P3, dDHParam.P3, alphaDHParam.P3, aDHParam.P3);
+aDHPar = struct('P1', 0, 'P2', 0, 'P3', pairLenght.L3);
+alphaDHPar = struct('P1', 0, 'P2', pi/2, 'P3', 0);
+dDHPar = struct('P1', pairLenght.L1, 'P2', pairLenght.L2 + d2, 'P3', 0);
+thetaDHPar = struct('P1', theta1, 'P2', pi, 'P3', theta3 + pi/2);
+A01 = createDHmatrix(thetaDHPar.P1, dDHPar.P1, alphaDHPar.P1, aDHPar.P1);
+A12 = createDHmatrix(thetaDHPar.P2, dDHPar.P2, alphaDHPar.P2, aDHPar.P2);
+A23 = createDHmatrix(thetaDHPar.P3, dDHPar.P3, alphaDHPar.P3, aDHPar.P3);
 A03 = A01 * A12 * A23;
 disp('theta1 = ');
 disp(theta1);
+disp('d2 = ');
+disp(d2);
 disp('theta3 = ');
 disp(theta3);
-disp('d1 = ');
-disp(d1);
 disp('A03 = ');
 disp(A03);
 disp('----------------');

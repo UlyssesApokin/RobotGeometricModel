@@ -38,6 +38,8 @@
 \usepackage{graphicx}
 % преамбула для удобной работы с математическими формулами
 \usepackage{amsmath}
+% преамбула для удобной работы с листингами программ
+\usepackage{moreverb}
 
 % преамбула для редактирования заголовков
 \usepackage{titlesec}
@@ -692,7 +694,16 @@
 
 \appendix
 
-\section{Программа}
+\section{ЯП "<MatLab">: функция "<createDHmatrix">}
+{\small
+\listinginput{1}{createDHmatrix.m}
+}
+\newpage
+
+\section{ЯП "<MatLab">: скрипт "<rgm.m">}
+{\small
+\listinginput{1}{rgm.m}
+}
 
 % конец документа
 \end{document}
