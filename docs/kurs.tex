@@ -636,6 +636,36 @@
 
 \subsection{Формирование ДХ--матриц преобразования}
 
+\begin{displaymath}
+  {}^0A_1 = 
+  \begin{bmatrix}
+    \cos{\theta_1} & -\sin{\theta_1} & 0 & 0 \\
+	\sin{\theta_1} & \cos{\theta_1} & 0 & 0 \\
+	0 & 0 & 1 & 60 \\
+	0 & 0 & 0 & 1
+  \end{bmatrix}
+\end{displaymath}
+
+\begin{displaymath}
+  {}^1A_2 = 
+  \begin{bmatrix}
+    -1 & 0 & 0 & 0 \\
+	0 & 0 & 1 & 0 \\
+	0 & 1 & 0 & 50+d_2 \\
+	0 & 0 & 0 & 1
+  \end{bmatrix}
+\end{displaymath}
+
+\begin{displaymath}
+  {}^2A_3 = 
+  \begin{bmatrix}
+    \cos{(\theta_3+\frac{\pi}{2})} & -\sin{(\theta_3+\frac{\pi}{2})} & 0 & 25 \cdot \cos{(\theta_3+\frac{\pi}{2})} \\
+	\sin{(\theta_3+\frac{\pi}{2})} & \cos{(\theta_3+\frac{\pi}{2})} & 0 & 25 \cdot \cos{(\theta_3+\frac{\pi}{2})} \\
+	0 & 0 & 1 & 0 \\
+	0 & 0 & 0 & 1
+  \end{bmatrix}
+\end{displaymath}
+
 \subsection{Формирование матрицы манипулятора}
 
 \newpage
