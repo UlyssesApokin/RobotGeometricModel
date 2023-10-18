@@ -68,6 +68,10 @@ To run a program written in MatLab you need to have the following package versio
 
 * GNU Octave (+= 8.3.0)
 
+To run a program written in Maxima you need to have the following package versions:
+
+* Maxima (+= 5.46.0)
+
 # How does the repository work?
 
 ## Repository structure
@@ -93,6 +97,8 @@ To run a program written in MatLab you need to have the following package versio
 	* ../octave <sup>matlab</sup>
 		* _crDHmatrix.m_ <sup>matlab</sup>
 		* _rgm.m_ <sup>matlab</sup>
+	* ../maxima <sup>maxima</sup>
+		* _rgm.maxima_ <sup>maxima</sup>
 
 ## Description
 
@@ -108,7 +114,8 @@ To run a program written in MatLab you need to have the following package versio
 * rgm2_header - these are split compilation files that are used to compile the rgm2 program.
 * example - these are examples of configuration files for rgm2, which contain a text description of the geometric characteristics of the robot.
 
-* octave - this is a directory for prototyping a program in MatLab using the free GNU Octave software
+* octave - this is a directory for prototyping a program in MatLab using the free GNU Octave software.
+* maxima - this is the directory that stores the program written for Maxima-CAS (Computer Algebra System).
 
 # License
 
