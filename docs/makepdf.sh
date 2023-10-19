@@ -26,6 +26,7 @@ if [[ "$STATUS" == *"$dxf2pdf"* ]]; then
 	librecad dxf2pdf rgm_T2_S_T1_DH-param.dxf
 	librecad dxf2pdf rgm_T2_S_T1_DH-checkup1.dxf
 	librecad dxf2pdf rgm_T2_S_T1_DH-checkup2.dxf
+	librecad dxf2pdf rgm_T2_S_T1_DH-checkup3.dxf
 fi
 
 # Inkscape: draft in .dxf to PDF-file
