@@ -22,11 +22,11 @@
 disp('---------------')
 disp('     RGM       ')
 pairLenght = struct('L1', 60, 'L2', 50, 'L3', 25);
-d2 = 0;
-theta1 = 0;
-theta3 = 0;
 aDHPar = struct('P1', 0, 'P2', 0, 'P3', pairLenght.L3);
 alphaDHPar = struct('P1', 0, 'P2', pi/2, 'P3', 0);
+theta1 = 0;
+d2 = 0;
+theta3 = 0;
 dDHPar = struct('P1', pairLenght.L1, 'P2', pairLenght.L2 + d2, 'P3', 0);
 thetaDHPar = struct('P1', theta1, 'P2', pi, 'P3', theta3 + pi/2);
 A01 = createDHmatrix(thetaDHPar.P1, dDHPar.P1, alphaDHPar.P1, aDHPar.P1);
