@@ -900,13 +900,19 @@ d2 = 0;
 theta3 = 0;
 dDHPar = struct('P1', pairLenght.L1, 'P2', pairLenght.L2 + d2, 'P3', 0);
 thetaDHPar = struct('P1', theta1, 'P2', pi, 'P3', theta3 + pi/2);
+\end{listing} 
+}
+\par
+
+Вызовем функцию, которую мы описали в файле "<{\ttfamily createDHmatix.m}">, чтобы сформировать ДХ--матрицы манипулятора.
+
+{\small \begin{listing}{27}
 A01 = createDHmatrix(thetaDHPar.P1, dDHPar.P1, alphaDHPar.P1, aDHPar.P1);
 A12 = createDHmatrix(thetaDHPar.P2, dDHPar.P2, alphaDHPar.P2, aDHPar.P2);
 A23 = createDHmatrix(thetaDHPar.P3, dDHPar.P3, alphaDHPar.P3, aDHPar.P3);
 \end{listing} 
 }
 \par
-
 Перемножение матриц в Octave обозначается оператором "<{\verb|*|">.
 
 {\small \begin{listing}{35}
