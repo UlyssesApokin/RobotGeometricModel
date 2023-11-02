@@ -906,7 +906,7 @@ thetaDHPar = struct('P1', theta1, 'P2', pi, 'P3', theta3 + pi/2);
 
 Вызовем функцию, которую мы описали в файле "<{\ttfamily createDHmatix.m}">, чтобы сформировать ДХ--матрицы манипулятора.
 
-{\small \begin{listing}{27}
+{\small \begin{listing}{32}
 A01 = createDHmatrix(thetaDHPar.P1, dDHPar.P1, alphaDHPar.P1, aDHPar.P1);
 A12 = createDHmatrix(thetaDHPar.P2, dDHPar.P2, alphaDHPar.P2, aDHPar.P2);
 A23 = createDHmatrix(thetaDHPar.P3, dDHPar.P3, alphaDHPar.P3, aDHPar.P3);
