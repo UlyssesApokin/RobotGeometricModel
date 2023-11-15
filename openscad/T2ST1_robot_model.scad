@@ -116,9 +116,9 @@ module turning_pair_type_1(
 	translate(position)
 	color(yellow_crayola_col)
 	rotate([
-		acos(orientation[0]),
-		acos(orientation[4]),
-		acos(orientation[8])
+		atan2(orientation[7], orientation[8]),
+		atan2(-orientation[6], sqrt((orientation[7])^2 + (orientation[8])^2)),
+		atan2(orientation[3], orientation[0])
 	])
 	cylinder(h = hpair, r = rpair, center = true);
 	axis(position, orientation);
@@ -135,9 +135,9 @@ module turning_pair_type_2(
 	translate(position)
 	color(yellow_crayola_col)
 	rotate([
-		acos(orientation[0]),
-		acos(orientation[4]),
-		acos(orientation[8])
+		atan2(orientation[7], orientation[8]),
+		atan2(-orientation[6], sqrt((orientation[7])^2 + (orientation[8])^2)),
+		atan2(orientation[3], orientation[0])
 	])
 	cylinder(h = hpair, r = rpair, center = true);
 	axis(position, orientation);
@@ -154,15 +154,12 @@ module sliding_pair(
 	translate(position)
 	color(yellow_crayola_col)
 	rotate([
-		acos(1),
-		acos(1),
-		acos(orientation[0])
+		atan2(orientation[7], orientation[8]),
+		atan2(-orientation[6], sqrt((orientation[7])^2 + (orientation[8])^2)),
+		atan2(orientation[3], orientation[0])
 	])
 	cube([wpair, wpair, hpair], center = true);
 	axis(position, orientation);
-    echo(orientation[0]);
-    echo(orientation[4]);
-    echo(orientation[8]);
 };
 
 module link(pos1 = 0, pos2 = 0) {
@@ -181,9 +178,9 @@ module link(pos1 = 0, pos2 = 0) {
 L1 = 60; //centimeter
 L2 = 50; //centimeter
 L3 = 25; //centimeter
-Theta1 = rad2deg(PI/3); //radian
-D2 = -10; //centimeter
-Theta3 = rad2deg(0); //radian
+Theta1 = rad2deg($t*180); //radian
+D2 = 5*sin(rad2deg(30*$t)); //centimeter
+Theta3 = rad2deg($t*180); //radian
 
 //Kinematic pair Turning type 2
 function position_pair_0() = [
