@@ -38,7 +38,8 @@ red_col = "#FF4040";
 hpair = 10;
 rpair = 3;
 wpair = sqrt(PI * rpair ^ 2);
-rlink = 0.5;
+rlink = 1;
+raxis = 0.5;
 
 module axis(pos, ort)
 {
@@ -48,7 +49,7 @@ module axis(pos, ort)
 	hull() {
 		//1th point
 		translate(pos)
-		sphere(r = rlink);
+		sphere(r = raxis);
 		//2nd point
 		translate(pos)
 		translate([
@@ -56,14 +57,14 @@ module axis(pos, ort)
 			ort[3]*axis_scale,
 			ort[6]*axis_scale
 		])
-		sphere(r = rlink);
+		sphere(r = raxis);
 	};
 	//Y-axis
 	color(green_col)
 	hull() {
 		//1th point
 		translate(pos)
-		sphere(r = rlink);
+		sphere(r = raxis);
 		//2nd point
 		translate(pos)
 		translate([
@@ -71,14 +72,14 @@ module axis(pos, ort)
 			ort[4]*axis_scale,
 			ort[7]*axis_scale
 		])
-		sphere(r = rlink);
+		sphere(r = raxis);
 	};
 	//Z-axis
 	color(dark_blue_col)
 	hull() {
 		//1th point
 		translate(pos)
-		sphere(r = rlink);
+		sphere(r = raxis);
 		//2nd point
 		translate(pos)
 		translate([
@@ -86,7 +87,7 @@ module axis(pos, ort)
 			ort[5]*axis_scale,
 			ort[8]*axis_scale
 		])
-		sphere(r = rlink);
+		sphere(r = raxis);
 	};
 };
 
@@ -100,11 +101,6 @@ module tool_center_point(
 {
 	translate(position)
 	color(pink_candy_col)
-	rotate([
-		acos(orientation[0]),
-		acos(orientation[4]),
-		acos(orientation[8])
-	])
 	sphere(r = rpair);
 	axis(position, orientation);
 };
@@ -159,11 +155,24 @@ module sliding_pair(
 	color(yellow_crayola_col)
 	rotate([
 		acos(1),
-		acos(orientation[4]),
+		acos(1),
 		acos(orientation[0])
 	])
 	cube([wpair, wpair, hpair], center = true);
 	axis(position, orientation);
+    echo(orientation[0]);
+    echo(orientation[4]);
+    echo(orientation[8]);
+};
+
+module link(pos1 = 0, pos2 = 0) {
+	color(summer_salad_col, 0.3)
+	hull() {
+		translate(pos1)
+		sphere(r = rlink);
+		translate(pos2)
+		sphere(r = rlink);
+	};
 };
 
 //ROBOT_GEOMETRIC_MODEL
@@ -172,9 +181,9 @@ module sliding_pair(
 L1 = 60; //centimeter
 L2 = 50; //centimeter
 L3 = 25; //centimeter
-Theta1 = rad2deg(PI/8); //radian
+Theta1 = rad2deg(PI/3); //radian
 D2 = -10; //centimeter
-Theta3 = rad2deg(PI/10); //radian
+Theta3 = rad2deg(0); //radian
 
 //Kinematic pair Turning type 2
 function position_pair_0() = [
@@ -240,3 +249,7 @@ function orientation_tcp() = [
 	0 //8
 ];
 tool_center_point(position_tcp(), orientation_tcp());
+
+link(position_pair_0(), position_pair_1());
+link(position_pair_1(), position_pair_2());
+link(position_pair_2(), position_tcp());
