@@ -63,4 +63,6 @@ sin(alpha3)*sin(theta3), a3*cos(theta3)],
 [0, 0, 0, 1]
 );
 /*robot-matix*/
+A01;
+A02:(A01 . A12);
 T:(A01 . A12 . A23);
