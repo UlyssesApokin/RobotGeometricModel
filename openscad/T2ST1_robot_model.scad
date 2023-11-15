@@ -101,7 +101,13 @@ module tool_center_point(
 {
 	translate(position)
 	color(pink_candy_col)
-	sphere(r = rpair);
+	rotate([
+		atan2(orientation[7], orientation[8]),
+		atan2(-orientation[6], sqrt((orientation[7])^2 + (orientation[8])^2)),
+		atan2(orientation[3], orientation[0])
+	])
+	rotate([0,90,0])
+	cylinder(h = hpair, r1 = rpair/2, r2 = rpair*1.5);
 	axis(position, orientation);
 };
 
