@@ -31,10 +31,11 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 tcp_pair_color = "#E4717A";
 turning_pair_color = "#FCE883";
 sliding_pair_color = "#FCE883";
-link_color = "#99FF99";
+link_color = "#F5F5DC";
+link_alpha = 0.3;
 //https://get-color.ru/rich/
 x_axis_color = "#FF4040";
-y_axis_color = "#50C878";
+y_axis_color = "#00A86B";
 z_axis_color = "#082567";
 
 //Dimensions of rendered objects
@@ -131,7 +132,7 @@ module link:
 		of the second kinematic pair
 */
 module link(pos1 = 0, pos2 = 0) {
-	color(link_color, 0.3)
+	color(link_color, link_alpha)
 	hull() {
 		translate(pos1)
 		sphere(r = rlink);
