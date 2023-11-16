@@ -141,7 +141,16 @@ module link(pos1 = 0, pos2 = 0) {
 	};
 };
 
-//Multiplies two matrices on the right
+/*
+function mul_matrix:
+--Multiplies two matrices--
+@m1 = this is a matrix.
+		The zero element of the vector is M(1,1).
+		The eighth element of the vector is M(3,3).
+@m2 = this is a matrix.
+		The zero element of the vector is M(1,1).
+		The eighth element of the vector is M(3,3).
+*/
 function mul_matrix(
 	m1 = [1, 0, 0,
 		0, 1, 0,
@@ -162,7 +171,14 @@ function mul_matrix(
 	m1[6] * m2[2] + m1[7] * m2[5] + m1[8] * m2[8]
 ];
 
-//Multiplies matrix and vector
+/*
+function mul_vector:
+--Multiply matrix by vector--
+@m = this is a matrix.
+		The zero element of the vector is M(1,1).
+		The eighth element of the vector is M(3,3).
+@v = this is a 3D vector 
+*/
 function mul_vector(
 	m = [1, 0, 0,
 		0, 1, 0,
