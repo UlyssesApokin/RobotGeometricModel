@@ -66,3 +66,8 @@ sin(alpha3)*sin(theta3), a3*cos(theta3)],
 A01;
 A02:(A01 . A12);
 T:(A01 . A12 . A23);
+
+theta1:ev(-%pi/4, numer);
+d2:-20;
+theta3:ev(%pi/2, numer);
+ev(T, numer, float);
