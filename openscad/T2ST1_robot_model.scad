@@ -26,10 +26,6 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 		Don't change it unless necessary!
 ###################################################################*/
 
-
-//Convert radian to degrees
-function rad2deg(rad) = (rad * 180) / PI;
-
 //Colors of rendered objects
 //https://get-color.ru/pastel/
 tcp_pair_color = "#E4717A";
@@ -144,6 +140,30 @@ module link(pos1 = 0, pos2 = 0) {
 	};
 };
 
+//Multiplies two matrices on the right
+function mul_matrix(
+	m1 = [1, 0, 0,
+		0, 1, 0,
+		0, 0, 1],
+	m2 = [1, 0, 0,
+		0, 1, 0,
+		0, 0, 1]
+) = 
+[
+	m1[0] * m2[0] + m1[1] * m2[3] + m1[2] * m2[6],
+	m1[0] * m2[1] + m1[1] * m2[4] + m1[2] * m2[7],
+	m1[0] * m2[2] + m1[1] * m2[5] + m1[2] * m2[8],
+	m1[3] * m2[0] + m1[4] * m2[3] + m1[5] * m2[6],
+	m1[3] * m2[1] + m1[4] * m2[4] + m1[5] * m2[7],
+	m1[3] * m2[2] + m1[4] * m2[5] + m1[5] * m2[8],
+	m1[6] * m2[0] + m1[7] * m2[3] + m1[8] * m2[6],
+	m1[6] * m2[1] + m1[7] * m2[4] + m1[8] * m2[7],
+	m1[6] * m2[2] + m1[7] * m2[5] + m1[8] * m2[8]
+];
+
+//Convert radian to degrees
+function rad2deg(rad) = (rad * 180) / PI;
+
 /*###################################################################
  E X A M P L E   O F  T H E  R O B O T  G E O M E T R I C  M O D E L
 						variable part
@@ -153,9 +173,13 @@ module link(pos1 = 0, pos2 = 0) {
 L1 = 60; //centimeter
 L2 = 50; //centimeter
 L3 = 25; //centimeter
-Theta1 = rad2deg(-PI/4); //radian
-D2 = 5*sin(rad2deg(-20)); //centimeter
-Theta3 = rad2deg(PI/2); //radian
+Theta1 = rad2deg(0); //radian
+D2 = 5*sin(rad2deg(0)); //centimeter
+Theta3 = rad2deg(0); //radian
+
+Base = [-1, 0, 0,
+		0, -1, 0,
+		0, 0, 1];
 
 //Kinematic pair Turning type 2
 function position_pair_0() = [
@@ -163,7 +187,7 @@ function position_pair_0() = [
 	0,
 	0
 ];
-pair("turning", position_pair_0());
+pair("turning", position_pair_0(), mul_matrix(Base));
 
 //Kinematic pair Sliding
 function position_pair_1() = [
@@ -182,7 +206,7 @@ function orientation_pair_1() = [
 	0, //7
 	1 //8
 ];
-pair("sliding", position_pair_1(), orientation_pair_1());
+pair("sliding", position_pair_1(), mul_matrix(Base, orientation_pair_1()));
 
 //Kinematic pair Turning type 1
 function position_pair_2() = [
@@ -201,7 +225,7 @@ function orientation_pair_2() = [
 	1, //7
 	0 //8
 ];
-pair("turning", position_pair_2(), orientation_pair_2());
+pair("turning", position_pair_2(), mul_matrix(Base, orientation_pair_2()));
 
 //Tool Center Point
 function position_tcp() = [
@@ -220,7 +244,7 @@ function orientation_tcp() = [
 	-sin(Theta3), //7
 	0 //8
 ];
-pair("tcp", position_tcp(), orientation_tcp());
+pair("tcp", position_tcp(), mul_matrix(Base, orientation_tcp()));
 
 link(position_pair_0(), position_pair_1());
 link(position_pair_1(), position_pair_2());
