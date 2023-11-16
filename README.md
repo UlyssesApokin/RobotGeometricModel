@@ -48,6 +48,10 @@ To run a program written in Maxima you need to have the following package versio
 
 * Maxima (+= 5.46.0)
 
+To run the robot visualization program you will need to have the following package versions:
+
+* OpenSCAD (+= 2021.01)
+
 # How does the repository work?
 
 ## Repository structure
@@ -75,6 +79,8 @@ To run a program written in Maxima you need to have the following package versio
 		* _rgm.m_ <sup>matlab</sup>
 	* ../maxima <sup>maxima</sup>
 		* _rgm.maxima_ <sup>maxima</sup>
+	* ../openscad <sup>openscad</sup>
+		* _T2ST1_robot_model.scad_ <sup>openscad</sup>
 
 ## Description
 
@@ -92,6 +98,7 @@ To run a program written in Maxima you need to have the following package versio
 
 * octave - this is a directory for prototyping a program in MatLab using the free GNU Octave software.
 * maxima - this is the directory that stores the program written for Maxima-CAS (Computer Algebra System).
+* openscad - this directory contains a control program designed for OpenSCAD, which visualizes the robotic arm.
 
 # License
 
