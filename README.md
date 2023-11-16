@@ -1,6 +1,6 @@
 # What is this?
 
-![Visualization of a robot model using OpenSCAD](https://codeberg.org/UlyssesApokin/RobotGeometicModel/raw/main/T2ST1_prog_example.gif)
+![Visualization of a robot model using OpenSCAD](https://codeberg.org/UlyssesApokin/RobotGeometricModel/src/branch/main/T2ST1_prog_example.gif)
 
 
 Method for constructing geometric models of manipulation systems of industrial robots and multi-axis machines.
