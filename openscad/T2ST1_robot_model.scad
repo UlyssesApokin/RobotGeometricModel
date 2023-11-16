@@ -21,6 +21,13 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
+/*###################################################################
+			I M P L E M E N T A T I O N
+		Don't change it unless necessary!
+###################################################################*/
+
+
+//Convert radian to degrees
 function rad2deg(rad) = (rad * 180) / PI;
 
 //Colors of rendered objects
@@ -35,40 +42,27 @@ y_axis_color = "#50C878";
 z_axis_color = "#082567";
 
 //Dimensions of rendered objects
-hpair = 10;
-rpair = 3;
-wpair = sqrt(PI * rpair ^ 2);
-rlink = 1;
-raxis = 0.5;
+hpair = 10; //height of the kinematic pair
+rpair = 3; //radius of the kinematic pair
+wpair = sqrt(PI * rpair ^ 2); //width of the kinematic pair
+rlink = 1; //radius of the link between kinematic pair
+raxis = 0.5; //radius of the axes in the system of axes
 
-module system_of_axes(pos, ort)
-{
-	module axis (pos, ort, p1, p2, p3, axcol)
-	{
-		axis_scale = 15;
-		color(axcol)
-		hull() {
-			//1th point
-			translate(pos)
-			sphere(r = raxis);
-			//2nd point
-			translate(pos)
-			translate([
-				ort[p1]*axis_scale,
-				ort[p2]*axis_scale,
-				ort[p3]*axis_scale
-			])
-			sphere(r = raxis);
-		};
-	};
-	//X-axis
-	axis(pos, ort, 0, 3, 6, x_axis_color);
-	//Y-axis
-	axis(pos, ort, 1, 4, 7, y_axis_color);
-	//Z-axis
-	axis(pos, ort, 2, 5, 8, z_axis_color);
-};
-
+/*
+module pair:
+--Draws a kinematic pair--
+@pair_type
+	= "turning" for turning kinematic pair
+		of the first type or the second
+	= "sliding" for the sliding kinematic pair
+	= "tcp" for the tool center point (last kinematic pair"
+@position = this is a 3D vector (last column
+		of the homogeneous coordinate transformation matrix)
+@orientation = this is the rotation matrix
+		of the current link relative to the zero link.
+		The zero element of the vector is M(1,1).
+		The eighth element of the vector is M(3,3).
+*/
 module pair(
 	pair_type = "turning",
 	position = [0,0,0],
@@ -78,6 +72,33 @@ module pair(
 		0,0,1]
 	)
 {
+	module system_of_axes(pos, ort)
+	{
+		module axis (pos, ort, p1, p2, p3, axcol)
+		{
+			axis_scale = 15;
+			color(axcol)
+			hull() {
+				//1th point
+				translate(pos)
+				sphere(r = raxis);
+				//2nd point
+				translate(pos)
+				translate([
+					ort[p1]*axis_scale,
+					ort[p2]*axis_scale,
+					ort[p3]*axis_scale
+				])
+				sphere(r = raxis);
+			};
+		};
+		//X-axis
+		axis(pos, ort, 0, 3, 6, x_axis_color);
+		//Y-axis
+		axis(pos, ort, 1, 4, 7, y_axis_color);
+		//Z-axis
+		axis(pos, ort, 2, 5, 8, z_axis_color);
+	};
 	translate(position)
 	rotate([
 		atan2(orientation[7], orientation[8]),
@@ -103,6 +124,16 @@ module pair(
 	system_of_axes(position, orientation);
 };
 
+/*
+module link:
+--Draws connections between kinematic pairs--
+@pos1 = this is a 3D vector (last column
+		of the homogeneous coordinate transformation matrix)
+		of the first kinematic pair
+@pos2 = this is a 3D vector (last column
+		of the homogeneous coordinate transformation matrix)
+		of the second kinematic pair
+*/
 module link(pos1 = 0, pos2 = 0) {
 	color(link_color, 0.3)
 	hull() {
@@ -113,7 +144,10 @@ module link(pos1 = 0, pos2 = 0) {
 	};
 };
 
-//ROBOT_GEOMETRIC_MODEL
+/*###################################################################
+ E X A M P L E   O F  T H E  R O B O T  G E O M E T R I C  M O D E L
+						variable part
+###################################################################*/
 
 //Robotic arm dimensions
 L1 = 60; //centimeter
