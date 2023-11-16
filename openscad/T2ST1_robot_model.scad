@@ -25,14 +25,14 @@ function rad2deg(rad) = (rad * 180) / PI;
 
 //Colors of rendered objects
 //https://get-color.ru/pastel/
-blue_frost_col = "#AFDAFC";
-pink_candy_col = "#E4717A";
-yellow_crayola_col = "#FCE883";
-summer_salad_col = "#99FF99";
+tcp_pair_color = "#E4717A";
+turning_pair_color = "#FCE883";
+sliding_pair_color = "#FCE883";
+link_color = "#99FF99";
 //https://get-color.ru/rich/
-dark_blue_col = "#082567";
-green_col = "#50C878";
-red_col = "#FF4040";
+x_axis_color = "#FF4040";
+y_axis_color = "#50C878";
+z_axis_color = "#082567";
 
 //Dimensions of rendered objects
 hpair = 10;
@@ -41,57 +41,36 @@ wpair = sqrt(PI * rpair ^ 2);
 rlink = 1;
 raxis = 0.5;
 
-module axis(pos, ort)
+module system_of_axes(pos, ort)
 {
-	axis_scale = 15;
+	module axis (pos, ort, p1, p2, p3, axcol)
+	{
+		axis_scale = 15;
+		color(axcol)
+		hull() {
+			//1th point
+			translate(pos)
+			sphere(r = raxis);
+			//2nd point
+			translate(pos)
+			translate([
+				ort[p1]*axis_scale,
+				ort[p2]*axis_scale,
+				ort[p3]*axis_scale
+			])
+			sphere(r = raxis);
+		};
+	};
 	//X-axis
-	color(red_col)
-	hull() {
-		//1th point
-		translate(pos)
-		sphere(r = raxis);
-		//2nd point
-		translate(pos)
-		translate([
-			ort[0]*axis_scale,
-			ort[3]*axis_scale,
-			ort[6]*axis_scale
-		])
-		sphere(r = raxis);
-	};
+	axis(pos, ort, 0, 3, 6, x_axis_color);
 	//Y-axis
-	color(green_col)
-	hull() {
-		//1th point
-		translate(pos)
-		sphere(r = raxis);
-		//2nd point
-		translate(pos)
-		translate([
-			ort[1]*axis_scale,
-			ort[4]*axis_scale,
-			ort[7]*axis_scale
-		])
-		sphere(r = raxis);
-	};
+	axis(pos, ort, 1, 4, 7, y_axis_color);
 	//Z-axis
-	color(dark_blue_col)
-	hull() {
-		//1th point
-		translate(pos)
-		sphere(r = raxis);
-		//2nd point
-		translate(pos)
-		translate([
-			ort[2]*axis_scale,
-			ort[5]*axis_scale,
-			ort[8]*axis_scale
-		])
-		sphere(r = raxis);
-	};
+	axis(pos, ort, 2, 5, 8, z_axis_color);
 };
 
-module tool_center_point(
+module pair(
+	pair_type = "turning",
 	position = [0,0,0],
 	orientation =
 		[1,0,0,
@@ -100,76 +79,32 @@ module tool_center_point(
 	)
 {
 	translate(position)
-	color(pink_candy_col)
 	rotate([
 		atan2(orientation[7], orientation[8]),
 		atan2(-orientation[6], sqrt((orientation[7])^2 + (orientation[8])^2)),
 		atan2(orientation[3], orientation[0])
 	])
-	rotate([0,90,0])
-	cylinder(h = hpair, r1 = rpair/2, r2 = rpair*1.5);
-	axis(position, orientation);
-};
-
-module turning_pair_type_1(
-	position = [0,0,0],
-	orientation =
-		[1,0,0,
-		0,1,0,
-		0,0,1]
-	)
-{
-	translate(position)
-	color(yellow_crayola_col)
-	rotate([
-		atan2(orientation[7], orientation[8]),
-		atan2(-orientation[6], sqrt((orientation[7])^2 + (orientation[8])^2)),
-		atan2(orientation[3], orientation[0])
-	])
-	cylinder(h = hpair, r = rpair, center = true);
-	axis(position, orientation);
-};
-
-module turning_pair_type_2(
-	position = [0,0,0],
-	orientation =
-		[1,0,0,
-		0,1,0,
-		0,0,1]
-	)
-{
-	translate(position)
-	color(yellow_crayola_col)
-	rotate([
-		atan2(orientation[7], orientation[8]),
-		atan2(-orientation[6], sqrt((orientation[7])^2 + (orientation[8])^2)),
-		atan2(orientation[3], orientation[0])
-	])
-	cylinder(h = hpair, r = rpair, center = true);
-	axis(position, orientation);
-};
-
-module sliding_pair(
-	position = [0,0,0],
-	orientation =
-		[1,0,0,
-		0,1,0,
-		0,0,1]
-	)
-{
-	translate(position)
-	color(yellow_crayola_col)
-	rotate([
-		atan2(orientation[7], orientation[8]),
-		atan2(-orientation[6], sqrt((orientation[7])^2 + (orientation[8])^2)),
-		atan2(orientation[3], orientation[0])
-	])
-	cube([wpair, wpair, hpair], center = true);
-	axis(position, orientation);
+	if (pair_type == "turning") {
+		color(turning_pair_color)
+		cylinder(h = hpair, r = rpair, center = true);
+	}
+	else if (pair_type == "sliding") {
+		color(sliding_pair_color)
+		cube([wpair, wpair, hpair], center = true);
+	}
+	else if (pair_type == "tcp") {
+		color(tcp_pair_color)
+		rotate([0, 90, 0])
+		cylinder(h = hpair, r1 = rpair/2, r2 = rpair*1.5);
+	}
+	else {
+		assert(false, "undefined sequence");
+	}
+	system_of_axes(position, orientation);
 };
 
 module link(pos1 = 0, pos2 = 0) {
-	color(summer_salad_col, 0.3)
+	color(link_color, 0.3)
 	hull() {
 		translate(pos1)
 		sphere(r = rlink);
@@ -184,9 +119,9 @@ module link(pos1 = 0, pos2 = 0) {
 L1 = 60; //centimeter
 L2 = 50; //centimeter
 L3 = 25; //centimeter
-Theta1 = rad2deg($t*180); //radian
-D2 = 5*sin(rad2deg(30*$t)); //centimeter
-Theta3 = rad2deg($t*180); //radian
+Theta1 = rad2deg(-PI/4); //radian
+D2 = 5*sin(rad2deg(-20)); //centimeter
+Theta3 = rad2deg(PI/2); //radian
 
 //Kinematic pair Turning type 2
 function position_pair_0() = [
@@ -194,7 +129,7 @@ function position_pair_0() = [
 	0,
 	0
 ];
-turning_pair_type_2(position_pair_0());
+pair("turning", position_pair_0());
 
 //Kinematic pair Sliding
 function position_pair_1() = [
@@ -213,7 +148,7 @@ function orientation_pair_1() = [
 	0, //7
 	1 //8
 ];
-sliding_pair(position_pair_1(), orientation_pair_1());
+pair("sliding", position_pair_1(), orientation_pair_1());
 
 //Kinematic pair Turning type 1
 function position_pair_2() = [
@@ -232,7 +167,7 @@ function orientation_pair_2() = [
 	1, //7
 	0 //8
 ];
-turning_pair_type_1(position_pair_2(), orientation_pair_2());
+pair("turning", position_pair_2(), orientation_pair_2());
 
 //Tool Center Point
 function position_tcp() = [
@@ -251,7 +186,7 @@ function orientation_tcp() = [
 	-sin(Theta3), //7
 	0 //8
 ];
-tool_center_point(position_tcp(), orientation_tcp());
+pair("tcp", position_tcp(), orientation_tcp());
 
 link(position_pair_0(), position_pair_1());
 link(position_pair_1(), position_pair_2());
