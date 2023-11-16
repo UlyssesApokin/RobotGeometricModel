@@ -46,6 +46,59 @@ rlink = 1; //radius of the link between kinematic pair
 raxis = 0.5; //radius of the axes in the system of axes
 
 /*
+function cast_Rmatrix:
+--Multiplies two rotation matrix--
+@_b = this is a matrix.
+		The zero element of the vector is M(1,1).
+		The eighth element of the vector is M(3,3).
+@_c = this is a matrix.
+		The zero element of the vector is M(1,1).
+		The eighth element of the vector is M(3,3).
+*/
+function cast_Rmatrix(
+	_b = [1, 0, 0,
+		0, 1, 0,
+		0, 0, 1],
+	_c = [1, 0, 0,
+		0, 1, 0,
+		0, 0, 1]
+) = 
+[
+	_b[0] * _c[0] + _b[1] * _c[3] + _b[2] * _c[6],
+	_b[0] * _c[1] + _b[1] * _c[4] + _b[2] * _c[7],
+	_b[0] * _c[2] + _b[1] * _c[5] + _b[2] * _c[8],
+	_b[3] * _c[0] + _b[4] * _c[3] + _b[5] * _c[6],
+	_b[3] * _c[1] + _b[4] * _c[4] + _b[5] * _c[7],
+	_b[3] * _c[2] + _b[4] * _c[5] + _b[5] * _c[8],
+	_b[6] * _c[0] + _b[7] * _c[3] + _b[8] * _c[6],
+	_b[6] * _c[1] + _b[7] * _c[4] + _b[8] * _c[7],
+	_b[6] * _c[2] + _b[7] * _c[5] + _b[8] * _c[8]
+];
+
+/*
+function cast_3Dvector:
+--Multiply base matrix by vector of position--
+@_m = this is a matrix.
+		The zero element of the vector is M(1,1).
+		The eighth element of the vector is M(3,3).
+@_v = this is a 3D vector 
+*/
+function cast_3Dvector(
+	_m = [1, 0, 0,
+		0, 1, 0,
+		0, 0, 1],
+	_v = [0, 0, 0]
+) =
+[
+	_m[0] * _v[0] + _m[1] * _v[1] + _m[2] * _v[2],
+	_m[3] * _v[0] + _m[4] * _v[1] + _m[5] * _v[2],
+	_m[6] * _v[0] + _m[7] * _v[1] + _m[8] * _v[2]
+];
+
+//Convert radian to degrees
+function rad2deg(_rad) = (_rad * 180) / PI;
+
+/*
 module pair:
 --Draws a kinematic pair--
 @pair_type
@@ -142,57 +195,68 @@ module link(pos1 = 0, pos2 = 0) {
 };
 
 /*
-function mul_matrix:
---Multiplies two matrices--
-@m1 = this is a matrix.
-		The zero element of the vector is M(1,1).
-		The eighth element of the vector is M(3,3).
-@m2 = this is a matrix.
+module extended_pair:
+--Draws a kinematic pair--
+@base_cs = orientation of the robot arm base coordinate system 
+		in the standard OpenSCAD coordinate system.
+@pair_type
+	= "turning" for turning kinematic pair
+		of the first type or the second
+	= "sliding" for the sliding kinematic pair
+	= "tcp" for the tool center point (last kinematic pair"
+@position = this is a 3D vector (last column
+		of the homogeneous coordinate transformation matrix)
+@orientation = this is the rotation matrix
+		of the current link relative to the zero link.
 		The zero element of the vector is M(1,1).
 		The eighth element of the vector is M(3,3).
 */
-function mul_matrix(
-	m1 = [1, 0, 0,
-		0, 1, 0,
+module extended_pair(
+	base_cs =
+		[1, 0, 0,
+		0, 1, 0, 
 		0, 0, 1],
-	m2 = [1, 0, 0,
-		0, 1, 0,
+	pair_type = "turing", 
+	position =
+		[0,
+		0,
+		0],
+	orientation =
+		[1, 0, 0,
+		0, 1, 0, 
 		0, 0, 1]
-) = 
-[
-	m1[0] * m2[0] + m1[1] * m2[3] + m1[2] * m2[6],
-	m1[0] * m2[1] + m1[1] * m2[4] + m1[2] * m2[7],
-	m1[0] * m2[2] + m1[1] * m2[5] + m1[2] * m2[8],
-	m1[3] * m2[0] + m1[4] * m2[3] + m1[5] * m2[6],
-	m1[3] * m2[1] + m1[4] * m2[4] + m1[5] * m2[7],
-	m1[3] * m2[2] + m1[4] * m2[5] + m1[5] * m2[8],
-	m1[6] * m2[0] + m1[7] * m2[3] + m1[8] * m2[6],
-	m1[6] * m2[1] + m1[7] * m2[4] + m1[8] * m2[7],
-	m1[6] * m2[2] + m1[7] * m2[5] + m1[8] * m2[8]
-];
+)
+{
+	base_position = cast_3Dvector(base_cs, position);
+	base_orientation = cast_Rmatrix(base_cs, orientation);
+	pair(pair_type, base_position, base_orientation);
+};
 
 /*
-function mul_vector:
---Multiply matrix by vector--
-@m = this is a matrix.
-		The zero element of the vector is M(1,1).
-		The eighth element of the vector is M(3,3).
-@v = this is a 3D vector 
+module extended_link:
+--Draws connections between kinematic pairs--
+@base_cs = orientation of the robot arm base coordinate system 
+		in the standard OpenSCAD coordinate system.
+@pos1 = this is a 3D vector (last column
+		of the homogeneous coordinate transformation matrix)
+		of the first kinematic pair
+@pos2 = this is a 3D vector (last column
+		of the homogeneous coordinate transformation matrix)
+		of the second kinematic pair
 */
-function mul_vector(
-	m = [1, 0, 0,
-		0, 1, 0,
+module extended_link(
+	base_cs =
+		[1, 0, 0,
+		0, 1, 0, 
 		0, 0, 1],
-	v = [0, 0, 0]
-) =
-[
-	m[0] * v[0] + m[1] * v[1] + m[2] * v[2],
-	m[3] * v[0] + m[4] * v[1] + m[5] * v[2],
-	m[6] * v[0] + m[7] * v[1] + m[8] * v[2]
-];
-
-//Convert radian to degrees
-function rad2deg(rad) = (rad * 180) / PI;
+	pos1 = 0,
+	pos2 = 0
+)
+{
+	base_pos1 = cast_3Dvector(base_cs, pos1);
+	base_pos2 = cast_3Dvector(base_cs, pos2);
+	link(base_pos1, base_pos2);
+};
 
 /*###################################################################
  E X A M P L E   O F  T H E  R O B O T  G E O M E T R I C  M O D E L
@@ -200,83 +264,40 @@ function rad2deg(rad) = (rad * 180) / PI;
 ###################################################################*/
 
 //Robotic arm dimensions
-L1 = 60; //centimeter
-L2 = 50; //centimeter
-L3 = 25; //centimeter
-Theta1 = rad2deg(-PI/4); //radian
-D2 = -20; //centimeter
-Theta3 = rad2deg(PI/2); //radian
-
+L1 = 60; //length 1 pair
+L2 = 50; //length 2 pair
+L3 = 25; //length 3 pair 
+Theta1 = rad2deg(-PI/4); //generalized coordinate 1 pair
+D2 = -20; //generalized coordinate 2 pair
+Theta3 = rad2deg(PI/2); //generalized coordinate 3 pair
+/*
+Orientation of the robot arm base coordinate system 
+in the standard OpenSCAD coordinate system.
+*/
 Base = [-1, 0, 0,
 		0, -1, 0,
 		0, 0, 1];
+A01 = [ cos(Theta1), -sin(Theta1), 0,
+		sin(Theta1), cos(Theta1), 0,
+		0, 0, 1 ];
+A02 = [ -cos(Theta1), 0, -sin(Theta1),
+		-sin(Theta1), 0, cos(Theta1),
+		0, 1, 0 ];
+T = [ cos(Theta1)*sin(Theta3), cos(Theta1)*cos(Theta3), -sin(Theta1),
+		sin(Theta1)*sin(Theta3), sin(Theta1)*cos(Theta3), cos(Theta1),
+		cos(Theta3), -sin(Theta3), 0 ];
+P_Base = [0, 0, 0];
+P1 = [0, 0, L1];
+P2 = [0, 0, D2 + L1 + L2];
+P_TCP = [L3 * cos(Theta1) * sin(Theta3),
+		L3 * sin(Theta1) * sin(Theta3),
+		L3 * cos(Theta3) + D2 + L1 + L2];
 
-//Kinematic pair Turning type 2
-function position_pair_0() = [
-	0,
-	0,
-	0
-];
-pair("turning", mul_vector(Base, position_pair_0()), mul_matrix(Base));
-
-//Kinematic pair Sliding
-function position_pair_1() = [
-	0,
-	0,
-	L1
-];
-function orientation_pair_1() = [
-	cos(Theta1), //0
-	-sin(Theta1), //1
-	0, //2
-	sin(Theta1), //3
-	cos(Theta1), //4
-	0, //5
-	0, //6
-	0, //7
-	1 //8
-];
-pair("sliding", mul_vector(Base, position_pair_1()), mul_matrix(Base, orientation_pair_1()));
-
-//Kinematic pair Turning type 1
-function position_pair_2() = [
-	0,
-	0,
-	D2 + L1 + L2
-];
-function orientation_pair_2() = [
-	-cos(Theta1), //0
-	0, //1
-	-sin(Theta1), //2
-	-sin(Theta1), //3
-	0, //4
-	cos(Theta1), //5
-	0, //6
-	1, //7
-	0 //8
-];
-pair("turning", mul_vector(Base, position_pair_2()), mul_matrix(Base, orientation_pair_2()));
-
-//Tool Center Point
-function position_tcp() = [
-	L3 * cos(Theta1) * sin(Theta3),
-	L3 * sin(Theta1) * sin(Theta3),
-	L3 * cos(Theta3) + D2 + L1 + L2
-];
-function orientation_tcp() = [
-	cos(Theta1) * sin(Theta3), //0
-	cos(Theta1) * cos(Theta3), //1
-	-sin(Theta1), //2
-	sin(Theta1) * sin(Theta3), //3
-	sin(Theta1) * cos(Theta3), //4
-	cos(Theta1), //5
-	cos(Theta3), //6
-	-sin(Theta3), //7
-	0 //8
-];
-pair("tcp", mul_vector(Base, position_tcp()), mul_matrix(Base, orientation_tcp()));
-echo(position_tcp());
-
-link(mul_vector(Base, position_pair_0()), mul_vector(Base, position_pair_1()));
-link(mul_vector(Base, position_pair_1()), mul_vector(Base, position_pair_2()));
-link(mul_vector(Base, position_pair_2()), mul_vector(Base, position_tcp()));
+extended_pair(Base, "turning", P_Base);
+extended_pair(Base, "sliding", P1, A01);
+extended_pair(Base, "turning", P2, A02);
+extended_pair(Base, "tcp", P_TCP, T);
+echo("TOOL CENTER POINT:", P_TCP);
+extended_link(Base, P_Base, P1);
+extended_link(Base, P1, P2);
+extended_link(Base, P2, P_TCP);
