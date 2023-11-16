@@ -161,6 +161,19 @@ function mul_matrix(
 	m1[6] * m2[2] + m1[7] * m2[5] + m1[8] * m2[8]
 ];
 
+//Multiplies matrix and vector
+function mul_vector(
+	m = [1, 0, 0,
+		0, 1, 0,
+		0, 0, 1],
+	v = [0, 0, 0]
+) =
+[
+	m[0] * v[0] + m[1] * v[1] + m[2] * v[2],
+	m[3] * v[0] + m[4] * v[1] + m[5] * v[2],
+	m[6] * v[0] + m[7] * v[1] + m[8] * v[2]
+];
+
 //Convert radian to degrees
 function rad2deg(rad) = (rad * 180) / PI;
 
@@ -173,9 +186,9 @@ function rad2deg(rad) = (rad * 180) / PI;
 L1 = 60; //centimeter
 L2 = 50; //centimeter
 L3 = 25; //centimeter
-Theta1 = rad2deg(0); //radian
-D2 = 5*sin(rad2deg(0)); //centimeter
-Theta3 = rad2deg(0); //radian
+Theta1 = rad2deg(-PI/4); //radian
+D2 = -20; //centimeter
+Theta3 = rad2deg(PI/2); //radian
 
 Base = [-1, 0, 0,
 		0, -1, 0,
@@ -187,7 +200,7 @@ function position_pair_0() = [
 	0,
 	0
 ];
-pair("turning", position_pair_0(), mul_matrix(Base));
+pair("turning", mul_vector(Base, position_pair_0()), mul_matrix(Base));
 
 //Kinematic pair Sliding
 function position_pair_1() = [
@@ -206,7 +219,7 @@ function orientation_pair_1() = [
 	0, //7
 	1 //8
 ];
-pair("sliding", position_pair_1(), mul_matrix(Base, orientation_pair_1()));
+pair("sliding", mul_vector(Base, position_pair_1()), mul_matrix(Base, orientation_pair_1()));
 
 //Kinematic pair Turning type 1
 function position_pair_2() = [
@@ -225,7 +238,7 @@ function orientation_pair_2() = [
 	1, //7
 	0 //8
 ];
-pair("turning", position_pair_2(), mul_matrix(Base, orientation_pair_2()));
+pair("turning", mul_vector(Base, position_pair_2()), mul_matrix(Base, orientation_pair_2()));
 
 //Tool Center Point
 function position_tcp() = [
@@ -244,8 +257,9 @@ function orientation_tcp() = [
 	-sin(Theta3), //7
 	0 //8
 ];
-pair("tcp", position_tcp(), mul_matrix(Base, orientation_tcp()));
+pair("tcp", mul_vector(Base, position_tcp()), mul_matrix(Base, orientation_tcp()));
+echo(position_tcp());
 
-link(position_pair_0(), position_pair_1());
-link(position_pair_1(), position_pair_2());
-link(position_pair_2(), position_tcp());
+link(mul_vector(Base, position_pair_0()), mul_vector(Base, position_pair_1()));
+link(mul_vector(Base, position_pair_1()), mul_vector(Base, position_pair_2()));
+link(mul_vector(Base, position_pair_2()), mul_vector(Base, position_tcp()));
