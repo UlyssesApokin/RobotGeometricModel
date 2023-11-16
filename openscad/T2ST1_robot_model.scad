@@ -37,6 +37,10 @@ link_alpha = 0.3;
 x_axis_color = "#FF4040";
 y_axis_color = "#00A86B";
 z_axis_color = "#082567";
+//size axis name label
+text_size = 2;
+//offset axis name label
+offset_text = 2;
 
 //Dimensions of rendered objects
 hpair = 10; //height of the kinematic pair
@@ -126,6 +130,27 @@ module pair(
 	{
 		module axis (pos, ort, p1, p2, p3, axcol)
 		{
+			module name_of_axis(pos, ort, axcol)
+			{
+				color(axcol)
+				translate(pos)
+				translate([
+					ort[p1]*axis_scale,
+					ort[p2]*axis_scale,
+					ort[p3]*axis_scale
+				])
+				translate([offset_text, offset_text, offset_text])
+				rotate([acos(ort[0]), acos(ort[4]), acos(ort[8])])
+				if (axcol == x_axis_color) {
+					text("X", size = text_size);
+				}
+				else if (axcol == y_axis_color) {
+					text("Y", size = text_size);
+				}
+				else {
+					text("Z", size = text_size);
+				}
+			};
 			axis_scale = 15;
 			color(axcol)
 			hull() {
@@ -141,6 +166,7 @@ module pair(
 				])
 				sphere(r = raxis);
 			};
+				name_of_axis(pos, ort, axcol);
 		};
 		//X-axis
 		axis(pos, ort, 0, 3, 6, x_axis_color);
