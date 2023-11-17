@@ -272,7 +272,7 @@ module extended_pair(
 		[1, 0, 0,
 		0, 1, 0, 
 		0, 0, 1],
-	pair_type = "turing", 
+	pair_type = "turning", 
 	position =
 		[0,
 		0,
