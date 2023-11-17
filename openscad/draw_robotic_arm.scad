@@ -100,12 +100,7 @@ function cast_3Dvector(
 ];
 
 //Convert radian to degrees
-NULL = 0.000001;
-function rad2deg(_rad) =
-(_rad == 0 || (_rad % 180) == 0) ?
-	(_rad * 180) / PI + NULL
-:
-	(_rad * 180) / PI;
+function rad2deg(_rad) = (_rad * 180) / PI;
 
 //Convert combine rotation matrix 
 //as a Product of Three Rotation Matrices Rz*Ry*Rx
@@ -118,10 +113,10 @@ function Rmatrix2EulerAngle(mtxeul) =
 		asin(-mtxeul[6]),
 		atan2(mtxeul[3], mtxeul[0])]
 	:
-		[0, PI/2, -atan2(-mtxeul[5], mtxeul[4])]
+		[0, 90, -atan2(-mtxeul[5], mtxeul[4])]
 )
 :
-	[0, -PI/2, atan2(-mtxeul[5], mtxeul[4])];
+	[0, -90, atan2(-mtxeul[5], mtxeul[4])];
 
 /*
 module pair:
