@@ -102,6 +102,22 @@ function cast_3Dvector(
 //Convert radian to degrees
 function rad2deg(_rad) = (_rad * 180) / PI;
 
+//Convert combine rotation matrix 
+//as a Product of Three Rotation Matrices Rz*Ry*Rx
+//to Euler angles
+function Rmatrix2EulerAngle(mtxeul) =
+(mtxeul[6] < 1) ?
+(
+	(mtxeul[6] > -1) ?
+		[atan2(mtxeul[7], mtxeul[8]),
+		asin(-mtxeul[6]), atan2(mtxeul[3],
+		mtxeul[0])]
+	:
+		[0, PI/2, -atan2(-mtxeul[5], mtxeul[4])]
+)
+:
+	[0, -PI/2, atan2(-mtxeul[5], mtxeul[4])];
+
 /*
 module pair:
 --Draws a kinematic pair--
@@ -140,7 +156,7 @@ module pair(
 					ort[p3]*axis_scale
 				])
 				translate([offset_text, offset_text, offset_text])
-				rotate([acos(ort[0]), acos(ort[4]), acos(ort[8])])
+				rotate(Rmatrix2EulerAngle(orientation))
 				if (axcol == x_axis_color) {
 					text("X", size = text_size);
 				}
@@ -176,11 +192,8 @@ module pair(
 		axis(pos, ort, 2, 5, 8, z_axis_color);
 	};
 	translate(position)
-	rotate([
-		atan2(orientation[7], orientation[8]),
-		atan2(-orientation[6], sqrt((orientation[7])^2 + (orientation[8])^2)),
-		atan2(orientation[3], orientation[0])
-	])
+	rotate(Rmatrix2EulerAngle(orientation))
+	echo("ATAN2:", Rmatrix2EulerAngle(orientation))
 	if (pair_type == "turning") {
 		color(turning_pair_color)
 		cylinder(h = hpair, r = rpair, center = true);
@@ -189,16 +202,16 @@ module pair(
 		color(sliding_pair_color)
 		cube([wpair, wpair, hpair], center = true);
 	}
-	else if (pair_type == "tcp") {
+	else if (pair_type == "tcpz") {
+		rotate([0, 0, 0])
 		color(tcp_pair_color)
-		rotate([0, 90, 0])
 		cylinder(h = hpair, r1 = rpair/2, r2 = rpair*1.5);
 	}
 	else {
 		assert(false, "undefined sequence");
 	}
 	system_of_axes(position, orientation);
-};
+};	
 
 /*
 module link:
