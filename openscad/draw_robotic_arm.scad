@@ -28,11 +28,11 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 //Colors of rendered objects
 //https://get-color.ru/pastel/
-tcp_pair_color = "#E4717A";
-turning_pair_color = "#FCE883";
-sliding_pair_color = "#FCE883";
-link_color = "#F5F5DC";
-link_alpha = 0.3;
+tcp_pair_color = "#FDDB6D";
+turning_pair_color = "#FFBD88";
+sliding_pair_color = "#F5DEB3";
+link_color = "#FFF0F5";
+link_alpha = 0.38;
 //https://get-color.ru/rich/
 x_axis_color = "#FF4040";
 y_axis_color = "#00A86B";
@@ -40,7 +40,7 @@ z_axis_color = "#082567";
 //size axis name label
 text_size = 2;
 //offset axis name label
-offset_text = 2;
+offset_text = 2.1;
 
 //Dimensions of rendered objects
 hpair = 10; //height of the kinematic pair
@@ -125,7 +125,11 @@ module pair:
 	= "turning" for turning kinematic pair
 		of the first type or the second
 	= "sliding" for the sliding kinematic pair
-	= "tcp" for the tool center point (last kinematic pair"
+	= "tcp" for the tool center point (last kinematic pair)
+	= "tcpx" for the tcp (Non-standard grip orientation. 
+		Directed along the X axis)
+	= "tcpy" for the tcp (Non-standard grip orientation. 
+		Directed along the Y axis)
 @position = this is a 3D vector (last column
 		of the homogeneous coordinate transformation matrix)
 @orientation = this is the rotation matrix
@@ -193,7 +197,6 @@ module pair(
 	};
 	translate(position)
 	rotate(Rmatrix2EulerAngle(orientation))
-	echo("ATAN2:", Rmatrix2EulerAngle(orientation))
 	if (pair_type == "turning") {
 		color(turning_pair_color)
 		cylinder(h = hpair, r = rpair, center = true);
@@ -202,8 +205,18 @@ module pair(
 		color(sliding_pair_color)
 		cube([wpair, wpair, hpair], center = true);
 	}
-	else if (pair_type == "tcpz") {
+	else if (pair_type == "tcp") {
 		rotate([0, 0, 0])
+		color(tcp_pair_color)
+		cylinder(h = hpair, r1 = rpair/2, r2 = rpair*1.5);
+	}
+	else if (pair_type == "tcpx") {
+		rotate([0, 90, 0])
+		color(tcp_pair_color)
+		cylinder(h = hpair, r1 = rpair/2, r2 = rpair*1.5);
+	}
+	else if (pair_type == "tcpy") {
+		rotate([-90, 0, 0])
 		color(tcp_pair_color)
 		cylinder(h = hpair, r1 = rpair/2, r2 = rpair*1.5);
 	}
@@ -242,7 +255,11 @@ module extended_pair:
 	= "turning" for turning kinematic pair
 		of the first type or the second
 	= "sliding" for the sliding kinematic pair
-	= "tcp" for the tool center point (last kinematic pair"
+	= "tcp" for the tool center point (last kinematic pair)
+	= "tcpx" for the tcp (Non-standard grip orientation. 
+		Directed along the X axis)
+	= "tcpy" for the tcp (Non-standard grip orientation. 
+		Directed along the Y axis)
 @position = this is a 3D vector (last column
 		of the homogeneous coordinate transformation matrix)
 @orientation = this is the rotation matrix

@@ -61,7 +61,7 @@ P_TCP = [L3 * cos(Theta1) * sin(Theta3),
 extended_pair(Base, "turning", P_Base);
 extended_pair(Base, "sliding", P1, A01);
 extended_pair(Base, "turning", P2, A02);
-extended_pair(Base, "tcpz", P_TCP, T);
+extended_pair(Base, "tcpx", P_TCP, T);
 echo("TOOL CENTER POINT:", P_TCP);
 extended_link(Base, P_Base, P1);
 extended_link(Base, P1, P2);
