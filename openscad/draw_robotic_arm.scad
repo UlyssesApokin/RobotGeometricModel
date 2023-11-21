@@ -313,3 +313,18 @@ module extended_link(
 	base_pos2 = cast_3Dvector(base_cs, pos2);
 	link(base_pos1, base_pos2);
 };
+
+/*
+module tcp_term_output:
+-- Prints a homogeneous transformation matrix to the terminal--
+@_RM = rotation matrix of TCP
+@_VM = matrix position vector
+*/
+module tcp_term_output(_RM, _VP)
+{
+	echo("TOOL CENTER POINT:");
+	echo(str("| ", _RM[0], "\t", _RM[1], "\t", _RM[2], "\t", _VP[0], "\t|"));
+	echo(str("| ", _RM[3], "\t", _RM[4], "\t", _RM[5], "\t", _VP[1], "\t|"));
+	echo(str("| ", _RM[6], "\t", _RM[7], "\t", _RM[8], "\t", _VP[2], "\t|"));
+	echo(str("| ", 0, "\t", 0, "\t", 0, "\t", 1, "\t|"));	
+};
