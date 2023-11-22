@@ -164,3 +164,34 @@ double iteration_orientat_step(double(***f)(double, ...), double final[3][4],
 	va_end(vl);
 	return q_iter;
 };
+double break_up_meas(double qmin, double qmax, int n)
+{
+	return((qmax - qmin) / (double)n);
+}
+double** current_tcp_matrix(double(***f)(double, ...), double q1, ...)
+{
+	va_list vl;
+	int i, j;
+	double q2, q3;
+	va_start(vl, q1);
+	q2 = va_arg(vl, double);
+	q3 = va_arg(vl, double);
+	double **t = malloc(3*sizeof(double*));
+	for (i = 0; i < 3; i++)
+		t[i] = malloc(4*sizeof(double));
+	for (i = 0; i < 3; i++)
+		for (j = 0; j < 4; j++) {
+	t[i][j] = f[i][j](q1, q2, q3);
+	}
+	va_end(vl);
+	return t;
+}
+double** errror_tcp_matrix(double **t, double final[3][4])
+{
+	int i, j;
+	for (i = 0; i < 3; i++)
+		for (j = 0; j < 4; j++) {
+			t[i][j] = t[i][j] - final[i][j];
+		}
+	return t;
+}

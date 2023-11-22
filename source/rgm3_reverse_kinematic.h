@@ -40,5 +40,10 @@ double iteration_position_step(double(***f)(double, ...), double final[3][4],
 
 double iteration_orientat_step(double(***f)(double, ...), double final[3][4],
 	int type_q, double delta_q, double q1, ...);
-	
+
+double break_up_meas(double qmin, double qmax, int n);
+
+double** current_tcp_matrix(double(***f)(double, ...), double q1, ...);
+
+double** errror_tcp_matrix(double **t, double final[3][4]);
 #endif

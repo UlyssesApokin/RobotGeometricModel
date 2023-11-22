@@ -164,8 +164,18 @@ double tcp_zp(double q1, ...)
 
 int main(int argc, char **argv)
 {
+	int iter = 0, jj;
+	int a, b;
+	double **em;
+	double q_iter, q_iter2;
+	double q1min = -PI, q1max = +PI,
+		q2min = -30, q2max = 30,
+		q3min = -5*PI/6, q3max = 5*PI/6;
+	int break_up_low = 50;
+	double dq1, dq2, dq3;
+	
 	enum {tcp_row = 3, tcp_col = 4};
-	double q1 = 0, q2 = 0.0, q3 = PI/4;
+	double q1 = 0, q2 = 0, q3 = PI/4;
 	double final[3][4] = {
 		{0.664, -0.664, 0.342, 16.612},
 		{-0.242, 0.242, 0.970, -6.046},
@@ -196,6 +206,78 @@ int main(int argc, char **argv)
 	dir_kin_tcp[2][2] = tcp_zzh;
 	dir_kin_tcp[2][3] = tcp_zp;
 	
+	
+	for (jj =0; jj < 7; jj++) {
+		if (jj == 1) break_up_low = 100;
+		if (jj == 2) break_up_low = 200;
+		if (jj == 3) break_up_low = 400;
+		if (jj == 4) break_up_low = 800;
+		if (jj == 5) break_up_low = 1600;
+		if (jj == 6) break_up_low = 3200;
+		printf("\tApproximation #%2d:\t STEP = %3d\n", jj+1, break_up_low);
+		
+		/* 1 STAGE*/
+		puts("\t\tTURNING Q1 (POSITION) and SLIDING Q2 (POSITION)");
+		iter = 0;
+		dq2 = break_up_meas(q2min, q2max, break_up_low);
+		dq1 = break_up_meas(q1min, q1max, break_up_low);
+		q_iter = q1;
+		q_iter2 = q2;
+		do {
+			iter++;
+			q1 = q_iter;
+			q_iter = iteration_position_step(dir_kin_tcp, final2, 0, dq1, q_iter, q2, q3);
+			printf("Iter #%3d:\tq1=%2.4lf\n", iter, q_iter);
+			if (q1 == q_iter) break;
+			q2 = q_iter2;
+			q_iter2 = iteration_position_step(dir_kin_tcp, final2, 1, dq3, q1, q_iter2, q3);
+			printf("\t\tq2=%2.4lf\n", q_iter2);
+			if (q2 == q_iter2) break;
+		} while (1);
+				
+		/* 2 STAGE */
+		puts("\t\tSLIDIND Q2 (POSITION) AND TURNING Q3 (POSITION)");
+		iter = 0;
+		dq2 = break_up_meas(q2min, q2max, break_up_low);
+		dq3 = break_up_meas(q3min, q3max, break_up_low);
+		q_iter = q2;
+		q_iter2 = q3;
+		do {
+			iter++;
+			q2 = q_iter;
+			q_iter = iteration_position_step(dir_kin_tcp, final2, 1, dq2, q1, q_iter, q3);
+			printf("Iter #%3d:\tq2=%2.4lf\n", iter, q_iter);
+			if (q2 == q_iter) break;
+			q3 = q_iter2;
+			q_iter2 = iteration_position_step(dir_kin_tcp, final2, 2, dq3, q1, q2, q_iter2);
+			printf("\t\tq3=%2.4lf\n", q_iter2);
+			if (q3 == q_iter2) break;
+		} while (1);
+		
+		/* 3 STAGE */
+		puts("\t\tTURNING Q3 (ORIENTATION)");
+		iter = 0;
+		dq3 = break_up_meas(q3min, q3max, break_up_low);
+		q_iter = q3;
+		do {
+			iter++;
+			q3 = q_iter;
+			q_iter = iteration_orientat_step(dir_kin_tcp, final2, 2, dq3, q1, q2, q_iter);
+			printf("Iter #%3d:\tq3=%2.4lf\n", iter, q_iter);
+		} while (q3 != q_iter);
+		
+		puts("VALUE OF ERROR:");
+		em = errror_tcp_matrix(current_tcp_matrix(dir_kin_tcp, q1, q2, q3), final2);
+		for (a = 0; a < 3; a++) {
+			printf("|\t");
+		for (b = 0; b < 4; b++) {
+			printf("%2.4lf\t", em[a][b]);
+		}
+		puts("|");
+	}
+	}
+	
+
 	
 	
 	for (i = 0; i < tcp_row; i++) {
