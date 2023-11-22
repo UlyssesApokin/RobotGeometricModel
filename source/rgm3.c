@@ -1,7 +1,5 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include <stdarg.h>
-#include <math.h>
+#include "rgm3_reverse_kinematic.h"
 #define PI 3.14
 #define L1 60
 #define L2 50
@@ -140,49 +138,48 @@ double tcp_zp(double q1, ...)
 	va_end(vl);
 	return L3 * cos(q3) + q2 + L1 + L2;
 }
-double iterative_inc_of_gen_coord(double q, int sign, double delta_q)
-{
-	return q + pow(-1, sign) * delta_q;
-}
-double iteration_step
-	(int type_q, double(***f)(double, ...), double **final,
-	double q_min, double q_max, int sign,
-	double q1, ...)
-{
-	va_list vl;
-	double q2;
-	va_start(vl, q1);
-	q2 = va_arg(vl, double);
-	va_end(vl);
-	return ;
-};
+
 int main(int argc, char **argv)
 {
 	enum {tcp_row = 3, tcp_col = 4};
+	double q, q_prev, q1 = -PI/3, q2 = 0.0, q3 = PI/2;
+	q_prev = q = q1;
+	q_prev += 1;
+	double final[3][4] = {
+		{0.664, -0.664, 0.342, 16.612},
+		{-0.242, 0.242, 0.970, -6.046},
+		{-0.707, -0.707, 0, 77.732}
+	};
 	int i;
-	double (***direct_kinematics_tcp)(double, ...)
+	double (***dir_kin_tcp)(double, ...)
 		= malloc(tcp_row * sizeof(double(**)(double, ...)));
 	for (i = 0; i < tcp_row; i++) {
-		direct_kinematics_tcp[i]
+		dir_kin_tcp[i]
 			= malloc(tcp_col * sizeof(double(*)(double, ...)));
 	}
-	direct_kinematics_tcp[0][0] = tcp_xxh;
-	direct_kinematics_tcp[0][1] = tcp_xyh;
-	direct_kinematics_tcp[0][2] = tcp_xzh;
-	direct_kinematics_tcp[0][3] = tcp_xp;
-	direct_kinematics_tcp[1][0] = tcp_yxh;
-	direct_kinematics_tcp[1][1] = tcp_yyh;
-	direct_kinematics_tcp[1][2] = tcp_yzh;
-	direct_kinematics_tcp[1][3] = tcp_yp;
-	direct_kinematics_tcp[2][0] = tcp_zxh;
-	direct_kinematics_tcp[2][1] = tcp_zyh;
-	direct_kinematics_tcp[2][2] = tcp_zzh;
-	direct_kinematics_tcp[2][3] = tcp_zp;
-	printf("\t%.2lf\n", iterative_inc_of_gen_coord(PI, 0, 2*PI/100));
-	printf("\t%.2lf\n", direct_kinematics_tcp[2][1](2.0, 2.0, 1.0));
-	for (i = 0; i < tcp_row; i++) {
-		free(direct_kinematics_tcp[i]);
+	dir_kin_tcp[0][0] = tcp_xxh;
+	dir_kin_tcp[0][1] = tcp_xyh;
+	dir_kin_tcp[0][2] = tcp_xzh;
+	dir_kin_tcp[0][3] = tcp_xp;
+	dir_kin_tcp[1][0] = tcp_yxh;
+	dir_kin_tcp[1][1] = tcp_yyh;
+	dir_kin_tcp[1][2] = tcp_yzh;
+	dir_kin_tcp[1][3] = tcp_yp;
+	dir_kin_tcp[2][0] = tcp_zxh;
+	dir_kin_tcp[2][1] = tcp_zyh;
+	dir_kin_tcp[2][2] = tcp_zzh;
+	dir_kin_tcp[2][3] = tcp_zp;
+	i = 0;
+	printf("iter: %3d\t%.4lf\n", i, q);
+	while (q_prev != q) {
+		i++;
+		q_prev = q;
+		q = iteration_position_step(dir_kin_tcp, final, 0, 2*PI/100, q, q2, q3);
+		printf("iter: %3d\t%.4lf\n", i, q);
 	}
-	free(direct_kinematics_tcp);
+	for (i = 0; i < tcp_row; i++) {
+		free(dir_kin_tcp[i]);
+	}
+	free(dir_kin_tcp);
 	return 0;
 }
