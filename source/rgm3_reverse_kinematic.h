@@ -26,12 +26,19 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <stdlib.h>
 #include <stdarg.h>
 #include <math.h>
-double iterative_inc_of_gen_coord(double q, int sign, double delta_q);
-
-double vector_current_final(double(***f)(double, ...),
-	double final[3][4], double q1, ...);
+#define X_AXIS 0
+#define Y_AXIS 1
+#define Z_AXIS 2
+#define Q1_C 0
+#define Q2_C 1
+#define Q3_С 2
+#define POS 0
+#define NEG 1
 
 double iteration_position_step(double(***f)(double, ...), double final[3][4],
 	int type_q, double delta_q, double q1, ...);
 
+double iteration_orientat_step(double(***f)(double, ...), double final[3][4],
+	int type_q, double delta_q, double q1, ...);
+	
 #endif

@@ -165,13 +165,16 @@ double tcp_zp(double q1, ...)
 int main(int argc, char **argv)
 {
 	enum {tcp_row = 3, tcp_col = 4};
-	double q, q_prev, q1 = -PI/3, q2 = 0.0, q3 = PI/2;
-	q_prev = q = q1;
-	q_prev += 1;
+	double q1 = 0, q2 = 0.0, q3 = PI/4;
 	double final[3][4] = {
 		{0.664, -0.664, 0.342, 16.612},
 		{-0.242, 0.242, 0.970, -6.046},
 		{-0.707, -0.707, 0, 77.732}
+	};
+	double final2[3][4] = {
+		{0.250, 0.433, 0.866, 6.250},
+		{-0.433, -0.750, 0.500, -10.825},
+		{0.866, -0.5, 0, 131.651}
 	};
 	int i;
 	double (***dir_kin_tcp)(double, ...)
@@ -192,14 +195,9 @@ int main(int argc, char **argv)
 	dir_kin_tcp[2][1] = tcp_zyh;
 	dir_kin_tcp[2][2] = tcp_zzh;
 	dir_kin_tcp[2][3] = tcp_zp;
-	i = 0;
-	printf("iter: %3d\t%.4lf\n", i, q);
-	while (q_prev != q) {
-		i++;
-		q_prev = q;
-		q = iteration_position_step(dir_kin_tcp, final, 0, 2*PI/100, q, q2, q3);
-		printf("iter: %3d\t%.4lf\n", i, q);
-	}
+	
+	
+	
 	for (i = 0; i < tcp_row; i++) {
 		free(dir_kin_tcp[i]);
 	}
