@@ -168,7 +168,7 @@ double set_iteration_step(double qmin, double qmax, int n)
 {
 	return((qmax - qmin) / (double)n);
 }
-double** current_tcp_matrix(double(***f)(double, ...), double q1, ...)
+double** get_tcp_matrix(double(***f)(double, ...), double q1, ...)
 {
 	va_list vl;
 	int i, j;
