@@ -73,7 +73,7 @@ int is_limit_reached(double q, double q_min, double q_max)
 	return ((q < q_min) || (q > q_max));
 }
 double do_iter_step_position(double(***f)(double, ...), double final[3][4],
-	int type_q, double delta_q, double q1, ...)
+	int num_q, double delta_q, double q1, ...)
 {
 	va_list vl;
 	static int sign = 0;
@@ -83,7 +83,7 @@ double do_iter_step_position(double(***f)(double, ...), double final[3][4],
 	q2 = va_arg(vl, double);
 	q3 = va_arg(vl, double);
 	v_prev = get_displacement_vector(f, final, q1, q2, q3);
-	switch (type_q) {
+	switch (num_q) {
 	case 0:
 		q_prev = q1;
 		q_iter = iterative_inc_of_gen_coord(q1, sign, delta_q);
@@ -112,13 +112,13 @@ double do_iter_step_position(double(***f)(double, ...), double final[3][4],
 			return q_prev;
 		}
 		sign++;
-		do_iter_step_position(f, final, type_q, delta_q, q1, q2, q3);
+		do_iter_step_position(f, final, num_q, delta_q, q1, q2, q3);
 	}
 	va_end(vl);
 	return q_iter;
 };
 double do_iter_step_orientation(double(***f)(double, ...), double final[3][4],
-	int type_q, double delta_q, double q1, ...)
+	int num_q, double delta_q, double q1, ...)
 {
 	va_list vl;
 	enum {row = 3};
@@ -131,7 +131,7 @@ double do_iter_step_orientation(double(***f)(double, ...), double final[3][4],
 	q3 = va_arg(vl, double);
 	for (i = 0; i < row; i++)
 		v_prev[i] = get_diff_btwn_axes(f, final, i, i, q1, q2, q3);
-	switch (type_q) {
+	switch (num_q) {
 	case 0:
 		q_prev = q1;
 		q_iter = iterative_inc_of_gen_coord(q1, sign, delta_q);
@@ -166,7 +166,7 @@ double do_iter_step_orientation(double(***f)(double, ...), double final[3][4],
 			return q_prev;
 		}
 		sign++;
-		do_iter_step_orientation(f, final, type_q, delta_q, q1, q2, q3);
+		do_iter_step_orientation(f, final, num_q, delta_q, q1, q2, q3);
 	}
 	va_end(vl);
 	return q_iter;
