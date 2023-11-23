@@ -37,9 +37,10 @@ double get_max_element(double *arr, int num)
 	}
 	return max;
 }	
-double iterative_inc_of_gen_coord(double q, int sign, double delta_q)
+double iterative_inc_of_gen_coord(int q_num, const double *q, int sign,
+	const double* delta_q)
 {
-	return q + pow(-1, sign) * delta_q;
+	return q[q_num] + pow(-1, sign) * delta_q[q_num];
 }
 double get_displacement_vector(double(***f)(double, ...),
 	double final[3][4], double q1, ...)
