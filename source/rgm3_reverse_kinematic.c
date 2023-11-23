@@ -26,7 +26,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <stdarg.h>
 #include <math.h>
 
-double maximum(double *arr, int num)
+double get_max_element(double *arr, int num)
 {
 	int i;
 	double max = arr[0];
@@ -152,7 +152,7 @@ double do_iter_step_orientation(double(***f)(double, ...), double final[3][4],
 	}
 	for (i = 0; i < row; i++)
 		v_prev[i] = v_prev[i] - v_iter[i];
-	v_prev[0] = maximum(v_prev, sizeof(v_prev)/sizeof(*v_prev));
+	v_prev[0] = get_max_element(v_prev, sizeof(v_prev)/sizeof(*v_prev));
 	if (v_prev[0] > 0) {
 		return q_iter;
 	}
