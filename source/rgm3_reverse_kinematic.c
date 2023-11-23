@@ -37,10 +37,9 @@ double get_max_element(double *arr, int num)
 	}
 	return max;
 }	
-double iterative_inc_of_gen_coord(int q_num, const double *q, int sign,
-	const double* delta_q)
+double iterative_inc_of_gen_coord(double q, int sign, double delta)
 {
-	return q[q_num] + pow(-1, sign) * delta_q[q_num];
+	return q + pow(-1, sign) * delta;
 }
 double get_displacement_vector(double(**f)(double*),
 	const double *final, double *q)
@@ -70,7 +69,7 @@ double do_iter_step_position(double(**f)(double*), const double *final,
 	double q_iter[count_of_pairs];
 	for (i = 0; i < count_of_pairs; i++)
 		q_iter[i] = q[i];
-	q_iter[q_num] = iterative_inc_of_gen_coord(q_num, q, sign, delta);
+	q_iter[q_num] = iterative_inc_of_gen_coord(q[q_num], sign, delta[q_num]);
 	if (get_displacement_vector(f, final, q)
 		- get_displacement_vector(f, final, q_iter) > 0) {
 		return q_iter[q_num];
@@ -93,7 +92,7 @@ double do_iter_step_orientation(double(**f)(double*), const double *final,
 	double q_iter[count_of_pairs], errors[mtxs-1];
 	for (i = 0; i < count_of_pairs; i++)
 		q_iter[i] = q[i];
-	q_iter[q_num] = iterative_inc_of_gen_coord(q_num, q, sign, delta);
+	q_iter[q_num] = iterative_inc_of_gen_coord(q[q_num], sign, delta[q_num]);
 	for (i = 0; i < (mtxs-1); i++) {
 		errors[i] = get_diff_btwn_axes(f, final, i, i, q)
 			- get_diff_btwn_axes(f, final, i, i, q_iter);
