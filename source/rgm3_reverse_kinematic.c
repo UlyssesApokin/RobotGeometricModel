@@ -110,9 +110,9 @@ double do_iter_step_orientation(double(**f)(double*), const double *final,
 	}
 	return q_iter[q_num];
 }
-double set_iteration_step(int q_num, const double *q_limit, int n)
+double set_iteration_step(int q_num, const double *q_limit, int division)
 {
-	return((q_limit[clim*q_num+1] - q_limit[clim*q_num]) / (double)n);
+	return((q_limit[clim*q_num+1] - q_limit[clim*q_num]) / (double)division);
 }
 double* get_tcp_matrix(double(**f)(double*), double *q)
 {
