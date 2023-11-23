@@ -38,7 +38,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 double do_iter_step_position(double(***f)(double, ...), double final[3][4],
 	int type_q, double delta_q, double q1, ...);
 
-double iteration_orientat_step(double(***f)(double, ...), double final[3][4],
+double do_iter_step_orientation(double(***f)(double, ...), double final[3][4],
 	int type_q, double delta_q, double q1, ...);
 
 double break_up_meas(double qmin, double qmax, int n);
