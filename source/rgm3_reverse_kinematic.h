@@ -24,7 +24,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef RGM3_REVERSE_KINEMATIC_H_SENTRY
 #define RGM3_REVERSE_KINEMATIC_H_SENTRY
 
-int is_limit_reached(double q, double q_min, double q_max);
+int is_limit_reached(int q_num, const double *q, const double* q_limit);
 
 double do_iter_step_position(double(***f)(double, ...), double final[3][4],
 	int num_q, double delta_q, double q1, ...);

@@ -25,7 +25,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <stdlib.h>
 #include <stdarg.h>
 #include <math.h>
-enum {mtxs = 4};
+enum {mtxs = 4, clim = 2};
 
 double get_max_element(double *arr, int num)
 {
@@ -69,9 +69,10 @@ double get_diff_btwn_axes(double(***f)(double, ...),
 	va_end(vl);
 	return fabs(f[axis][axis_h](q1, q2, q[2]) - final[axis][axis_h]);
 }
-int is_limit_reached(double q, double q_min, double q_max)
+int is_limit_reached(int q_num, const double *q, const double* q_limit)
 {
-	return ((q < q_min) || (q > q_max));
+	return( (q[q_num] < q_limit[clim*q_num])
+		|| (q[q_num] > q_limit[clim*q_num+1]));
 }
 double do_iter_step_position(double(***f)(double, ...), double final[3][4],
 	int num_q, double delta_q, double q1, ...)
@@ -174,7 +175,7 @@ double do_iter_step_orientation(double(***f)(double, ...), double final[3][4],
 };
 double set_iteration_step(int q_num, const double *q_limit, int n)
 {
-	return((q_limit[q_num+1] - q_limit[q_num]) / (double)n);
+	return((q_limit[clim*q_num+1] - q_limit[clim*q_num]) / (double)n);
 }
 double* get_tcp_matrix(double(**f)(double*), double *q)
 {
