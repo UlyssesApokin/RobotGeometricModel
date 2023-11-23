@@ -164,7 +164,7 @@ double do_iter_step_orientation(double(***f)(double, ...), double final[3][4],
 	va_end(vl);
 	return q_iter;
 };
-double break_up_meas(double qmin, double qmax, int n)
+double set_iteration_step(double qmin, double qmax, int n)
 {
 	return((qmax - qmin) / (double)n);
 }
