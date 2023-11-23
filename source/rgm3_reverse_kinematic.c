@@ -46,14 +46,14 @@ double get_displacement_vector(double(***f)(double, ...),
 	va_list vl;
 	enum { row = 3 };
 	int i;
-	double q2, q3;
+	double q2, q[2];
 	double r[3];
 	va_start(vl, q1);
 	q2 = va_arg(vl, double);
-	q3 = va_arg(vl, double);
+	q[2] = va_arg(vl, double);
 	va_end(vl);
 	for (i = 0; i < row; i++) {
-		r[i] = pow((f[i][3](q1, q2, q3) - final[i][3]), 2);
+		r[i] = pow((f[i][3](q1, q2, q[2]) - final[i][3]), 2);
 	}
 	return sqrt(r[0] + r[1] + r[2]);
 }
@@ -61,12 +61,12 @@ double get_diff_btwn_axes(double(***f)(double, ...),
 	double final[3][4], int axis, int axis_h, double q1, ...)
 {
 	va_list vl;
-	double q2, q3;
+	double q2, q[2];
 	va_start(vl, q1);
 	q2 = va_arg(vl, double);
-	q3 = va_arg(vl, double);
+	q[2] = va_arg(vl, double);
 	va_end(vl);
-	return fabs(f[axis][axis_h](q1, q2, q3) - final[axis][axis_h]);
+	return fabs(f[axis][axis_h](q1, q2, q[2]) - final[axis][axis_h]);
 }
 int is_limit_reached(double q, double q_min, double q_max)
 {
@@ -78,25 +78,25 @@ double do_iter_step_position(double(***f)(double, ...), double final[3][4],
 	va_list vl;
 	static int sign = 0;
 	double q_prev, q_iter, v_iter, v_prev;
-	double q2, q3;
+	double q2, q[2];
 	va_start(vl, q1);
 	q2 = va_arg(vl, double);
-	q3 = va_arg(vl, double);
-	v_prev = get_displacement_vector(f, final, q1, q2, q3);
+	q[2] = va_arg(vl, double);
+	v_prev = get_displacement_vector(f, final, q1, q2, q[2]);
 	switch (num_q) {
 	case 0:
 		q_prev = q1;
 		q_iter = iterative_inc_of_gen_coord(q1, sign, delta_q);
-		v_iter = get_displacement_vector(f, final, q_iter, q2, q3);
+		v_iter = get_displacement_vector(f, final, q_iter, q2, q[2]);
 	break;
 	case 1:
 		q_prev = q2;
 		q_iter = iterative_inc_of_gen_coord(q2, sign, delta_q);
-		v_iter = get_displacement_vector(f, final, q1, q_iter, q3);
+		v_iter = get_displacement_vector(f, final, q1, q_iter, q[2]);
 	break;
 	case 2:
-		q_prev = q3;
-		q_iter = iterative_inc_of_gen_coord(q3, sign, delta_q);
+		q_prev = q[2];
+		q_iter = iterative_inc_of_gen_coord(q[2], sign, delta_q);
 		v_iter = get_displacement_vector(f, final, q1, q2, q_iter);
 	break;
 	default:
@@ -112,7 +112,7 @@ double do_iter_step_position(double(***f)(double, ...), double final[3][4],
 			return q_prev;
 		}
 		sign++;
-		do_iter_step_position(f, final, num_q, delta_q, q1, q2, q3);
+		do_iter_step_position(f, final, num_q, delta_q, q1, q2, q[2]);
 	}
 	va_end(vl);
 	return q_iter;
@@ -125,28 +125,28 @@ double do_iter_step_orientation(double(***f)(double, ...), double final[3][4],
 	static int sign = 0;
 	int i;
 	double q_prev, q_iter, v_iter[3], v_prev[3];
-	double q2, q3;
+	double q2, q[2];
 	va_start(vl, q1);
 	q2 = va_arg(vl, double);
-	q3 = va_arg(vl, double);
+	q[2] = va_arg(vl, double);
 	for (i = 0; i < row; i++)
-		v_prev[i] = get_diff_btwn_axes(f, final, i, i, q1, q2, q3);
+		v_prev[i] = get_diff_btwn_axes(f, final, i, i, q1, q2, q[2]);
 	switch (num_q) {
 	case 0:
 		q_prev = q1;
 		q_iter = iterative_inc_of_gen_coord(q1, sign, delta_q);
 		for (i = 0; i < row; i++)
-			v_iter[i] = get_diff_btwn_axes(f, final, i, i, q_iter, q2, q3);
+			v_iter[i] = get_diff_btwn_axes(f, final, i, i, q_iter, q2, q[2]);
 	break;
 	case 1:
 		q_prev = q2;
 		q_iter = iterative_inc_of_gen_coord(q2, sign, delta_q);
 		for (i = 0; i < row; i++)
-			v_iter[i] = get_diff_btwn_axes(f, final, i, i, q1, q_iter, q3);
+			v_iter[i] = get_diff_btwn_axes(f, final, i, i, q1, q_iter, q[2]);
 	break;
 	case 2:
-		q_prev = q3;
-		q_iter = iterative_inc_of_gen_coord(q3, sign, delta_q);
+		q_prev = q[2];
+		q_iter = iterative_inc_of_gen_coord(q[2], sign, delta_q);
 		for (i = 0; i < row; i++)
 			v_iter[i] = get_diff_btwn_axes(f, final, i, i, q1, q2, q_iter);
 	break;
@@ -166,29 +166,29 @@ double do_iter_step_orientation(double(***f)(double, ...), double final[3][4],
 			return q_prev;
 		}
 		sign++;
-		do_iter_step_orientation(f, final, num_q, delta_q, q1, q2, q3);
+		do_iter_step_orientation(f, final, num_q, delta_q, q1, q2, q[2]);
 	}
 	va_end(vl);
 	return q_iter;
 };
-double set_iteration_step(double qmin, double qmax, int n)
+double set_iteration_step(int q_num, const double *q_limit, int n)
 {
-	return((qmax - qmin) / (double)n);
+	return((q_limit[q_num+1] - q_limit[q_num]) / (double)n);
 }
 double** get_tcp_matrix(double(***f)(double, ...), double q1, ...)
 {
 	va_list vl;
 	int i, j;
-	double q2, q3;
+	double q2, q[2];
 	va_start(vl, q1);
 	q2 = va_arg(vl, double);
-	q3 = va_arg(vl, double);
+	q[2] = va_arg(vl, double);
 	double **t = malloc(3*sizeof(double*));
 	for (i = 0; i < 3; i++)
 		t[i] = malloc(4*sizeof(double));
 	for (i = 0; i < 3; i++)
 		for (j = 0; j < 4; j++) {
-	t[i][j] = f[i][j](q1, q2, q3);
+	t[i][j] = f[i][j](q1, q2, q[2]);
 	}
 	va_end(vl);
 	return t;
