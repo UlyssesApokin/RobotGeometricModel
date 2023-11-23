@@ -40,7 +40,7 @@ double iterative_inc_of_gen_coord(double q, int sign, double delta_q)
 {
 	return q + pow(-1, sign) * delta_q;
 }
-double vector_current_final(double(***f)(double, ...),
+double get_displacement_vector(double(***f)(double, ...),
 	double final[3][4], double q1, ...)
 {
 	va_list vl;
@@ -78,22 +78,22 @@ double do_iter_step_position(double(***f)(double, ...), double final[3][4],
 	va_start(vl, q1);
 	q2 = va_arg(vl, double);
 	q3 = va_arg(vl, double);
-	v_prev = vector_current_final(f, final, q1, q2, q3);
+	v_prev = get_displacement_vector(f, final, q1, q2, q3);
 	switch (type_q) {
 	case 0:
 		q_prev = q1;
 		q_iter = iterative_inc_of_gen_coord(q1, sign, delta_q);
-		v_iter = vector_current_final(f, final, q_iter, q2, q3);
+		v_iter = get_displacement_vector(f, final, q_iter, q2, q3);
 	break;
 	case 1:
 		q_prev = q2;
 		q_iter = iterative_inc_of_gen_coord(q2, sign, delta_q);
-		v_iter = vector_current_final(f, final, q1, q_iter, q3);
+		v_iter = get_displacement_vector(f, final, q1, q_iter, q3);
 	break;
 	case 2:
 		q_prev = q3;
 		q_iter = iterative_inc_of_gen_coord(q3, sign, delta_q);
-		v_iter = vector_current_final(f, final, q1, q2, q_iter);
+		v_iter = get_displacement_vector(f, final, q1, q2, q_iter);
 	break;
 	default:
 		exit(1);
