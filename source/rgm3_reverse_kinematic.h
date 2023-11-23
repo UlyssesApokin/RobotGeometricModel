@@ -36,7 +36,7 @@ double set_iteration_step(int q_num, const double *q_limit, int n);
 
 double* get_tcp_matrix(double(**f)(double*), double *q);
 
-double** get_error_matrix(double **t, double final[3][4]);
+double* get_error_matrix(double *et, const double *final);
 
 
 #endif

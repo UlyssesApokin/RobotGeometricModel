@@ -25,6 +25,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <stdlib.h>
 #include <stdarg.h>
 #include <math.h>
+enum {mtxs = 4};
 
 double get_max_element(double *arr, int num)
 {
@@ -177,7 +178,6 @@ double set_iteration_step(int q_num, const double *q_limit, int n)
 }
 double* get_tcp_matrix(double(**f)(double*), double *q)
 {
-	enum {mtxs = 4};
 	int i, j;
 	double *t = malloc(mtxs*mtxs * sizeof(double));
 	for (i = 0; i < 3; i++)
@@ -186,12 +186,12 @@ double* get_tcp_matrix(double(**f)(double*), double *q)
 	}
 	return t;
 }
-double** get_error_matrix(double **t, double final[3][4])
+double* get_error_matrix(double *et, const double *final)
 {
 	int i, j;
 	for (i = 0; i < 3; i++)
 		for (j = 0; j < 4; j++) {
-			t[i][j] = t[i][j] - final[i][j];
+			et[i*mtxs + j] = et[i*mtxs + j] - final[i*mtxs + j];
 		}
-	return t;
+	return et;
 }
