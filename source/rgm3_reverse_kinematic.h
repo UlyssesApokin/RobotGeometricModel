@@ -26,12 +26,6 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 int is_limit_reached(double q, double q_min, double q_max);
 
-int avoid_limit_of_sliding(double(***f)(double, ...), double final[3][4],
-	int num_q, double q_min, double q_max, double q1, ...);
-	
-double avoid_limit_of_turning(double(***f)(double, ...), double final[3][4],
-	int num_q, double q_min, double q_max, double q1, ...);
-
 double do_iter_step_position(double(***f)(double, ...), double final[3][4],
 	int num_q, double delta_q, double q1, ...);
 
