@@ -26,8 +26,8 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 int is_limit_reached(int q_num, const double *q, const double* q_limit);
 
-double do_iter_step_position(double(***f)(double, ...), double final[3][4],
-	int num_q, double delta_q, double q1, ...);
+double do_iter_step_position(double(**f)(double*), const double *final,
+	int count_of_pairs, int q_num, const double *delta, double *q);
 
 double do_iter_step_orientation(double(***f)(double, ...), double final[3][4],
 	int num_q, double delta_q, double q1, ...);

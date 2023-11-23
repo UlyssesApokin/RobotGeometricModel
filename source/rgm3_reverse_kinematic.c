@@ -59,55 +59,32 @@ double get_diff_btwn_axes(double(**f)(double*),
 }
 int is_limit_reached(int q_num, const double *q, const double* q_limit)
 {
-	return( (q[q_num] < q_limit[clim*q_num])
+	return((q[q_num] < q_limit[clim*q_num])
 		|| (q[q_num] > q_limit[clim*q_num+1]));
 }
-/*
-double do_iter_step_position(double(***f)(double, ...), double final[3][4],
-	int num_q, double delta_q, double q1, ...)
+double do_iter_step_position(double(**f)(double*), const double *final,
+	int count_of_pairs, int q_num, const double *delta, double *q)
 {
-	va_list vl;
 	static int sign = 0;
-	double q_prev, q_iter, v_iter, v_prev;
-	double q2, q[2];
-	va_start(vl, q1);
-	q2 = va_arg(vl, double);
-	q[2] = va_arg(vl, double);
-	v_prev = get_displacement_vector(f, final, q1, q2, q[2]);
-	switch (num_q) {
-	case 0:
-		q_prev = q1;
-		q_iter = iterative_inc_of_gen_coord(q1, sign, delta_q);
-		v_iter = get_displacement_vector(f, final, q_iter, q2, q[2]);
-	break;
-	case 1:
-		q_prev = q2;
-		q_iter = iterative_inc_of_gen_coord(q2, sign, delta_q);
-		v_iter = get_displacement_vector(f, final, q1, q_iter, q[2]);
-	break;
-	case 2:
-		q_prev = q[2];
-		q_iter = iterative_inc_of_gen_coord(q[2], sign, delta_q);
-		v_iter = get_displacement_vector(f, final, q1, q2, q_iter);
-	break;
-	default:
-		exit(1);
-	break;
-	}
-	if (v_prev - v_iter > 0) {
-		return q_iter;
+	int i;
+	double q_iter[count_of_pairs];
+	for (i = 0; i < count_of_pairs; i++)
+		q_iter[i] = q[i];
+	q_iter[q_num] = iterative_inc_of_gen_coord(q_num, q, sign, delta);
+	if (get_displacement_vector(f, final, q)
+		- get_displacement_vector(f, final, q_iter) > 0) {
+		return q_iter[q_num];
 	}
 	else {
 		if (sign == 1) {
 			sign = 0;
-			return q_prev;
+			return q[q_num];
 		}
-		sign++;
-		do_iter_step_position(f, final, num_q, delta_q, q1, q2, q[2]);
+		sign = 1;
+		do_iter_step_position(f, final, count_of_pairs, q_num, delta, q);
 	}
-	va_end(vl);
-	return q_iter;
-};
+	return q_iter[q_num];
+};/*
 double do_iter_step_orientation(double(***f)(double, ...), double final[3][4],
 	int num_q, double delta_q, double q1, ...)
 {
