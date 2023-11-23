@@ -186,7 +186,7 @@ double** get_tcp_matrix(double(***f)(double, ...), double q1, ...)
 	va_end(vl);
 	return t;
 }
-double** errror_tcp_matrix(double **t, double final[3][4])
+double** get_error_matrix(double **t, double final[3][4])
 {
 	int i, j;
 	for (i = 0; i < 3; i++)

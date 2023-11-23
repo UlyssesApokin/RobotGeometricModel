@@ -45,5 +45,5 @@ double set_iteration_step(double qmin, double qmax, int n);
 
 double** get_tcp_matrix(double(***f)(double, ...), double q1, ...);
 
-double** errror_tcp_matrix(double **t, double final[3][4]);
+double** get_error_matrix(double **t, double final[3][4]);
 #endif

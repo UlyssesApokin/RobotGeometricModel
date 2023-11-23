@@ -267,7 +267,7 @@ int main(int argc, char **argv)
 		} while (q3 != q_iter);
 		
 		puts("VALUE OF ERROR:");
-		em = errror_tcp_matrix(get_tcp_matrix(dir_kin_tcp, q1, q2, q3), final2);
+		em = get_error_matrix(get_tcp_matrix(dir_kin_tcp, q1, q2, q3), final2);
 		for (a = 0; a < 3; a++) {
 			printf("|\t");
 		for (b = 0; b < 4; b++) {
