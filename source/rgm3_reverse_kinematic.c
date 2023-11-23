@@ -175,22 +175,15 @@ double set_iteration_step(int q_num, const double *q_limit, int n)
 {
 	return((q_limit[q_num+1] - q_limit[q_num]) / (double)n);
 }
-double** get_tcp_matrix(double(***f)(double, ...), double q1, ...)
+double* get_tcp_matrix(double(**f)(double*), double *q)
 {
-	va_list vl;
+	enum {mtxs = 4};
 	int i, j;
-	double q2, q[2];
-	va_start(vl, q1);
-	q2 = va_arg(vl, double);
-	q[2] = va_arg(vl, double);
-	double **t = malloc(3*sizeof(double*));
-	for (i = 0; i < 3; i++)
-		t[i] = malloc(4*sizeof(double));
+	double *t = malloc(mtxs*mtxs * sizeof(double));
 	for (i = 0; i < 3; i++)
 		for (j = 0; j < 4; j++) {
-	t[i][j] = f[i][j](q1, q2, q[2]);
+	t[i*mtxs + j] = f[i*mtxs + j](q);
 	}
-	va_end(vl);
 	return t;
 }
 double** get_error_matrix(double **t, double final[3][4])

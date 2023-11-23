@@ -34,7 +34,7 @@ double do_iter_step_orientation(double(***f)(double, ...), double final[3][4],
 
 double set_iteration_step(int q_num, const double *q_limit, int n);
 
-double** get_tcp_matrix(double(***f)(double, ...), double q1, ...);
+double* get_tcp_matrix(double(**f)(double*), double *q);
 
 double** get_error_matrix(double **t, double final[3][4]);
 
