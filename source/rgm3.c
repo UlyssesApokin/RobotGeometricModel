@@ -262,7 +262,7 @@ int main(int argc, char **argv)
 		do {
 			iter++;
 			q3 = q_iter;
-			q_iter = iteration_orientat_step(dir_kin_tcp, final2, 2, dq3, q1, q2, q_iter);
+			q_iter = do_iter_step_orientation(dir_kin_tcp, final2, 2, dq3, q1, q2, q_iter);
 			printf("Iter #%3d:\tq3=%2.4lf\n", iter, q_iter);
 		} while (q3 != q_iter);
 		
