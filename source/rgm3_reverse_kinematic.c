@@ -57,7 +57,7 @@ double get_displacement_vector(double(***f)(double, ...),
 	}
 	return sqrt(r[0] + r[1] + r[2]);
 }
-double orientat_current_final(double(***f)(double, ...),
+double get_diff_btwn_axes(double(***f)(double, ...),
 	double final[3][4], int axis, int axis_h, double q1, ...)
 {
 	va_list vl;
@@ -126,25 +126,25 @@ double do_iter_step_orientation(double(***f)(double, ...), double final[3][4],
 	q2 = va_arg(vl, double);
 	q3 = va_arg(vl, double);
 	for (i = 0; i < row; i++)
-		v_prev[i] = orientat_current_final(f, final, i, i, q1, q2, q3);
+		v_prev[i] = get_diff_btwn_axes(f, final, i, i, q1, q2, q3);
 	switch (type_q) {
 	case 0:
 		q_prev = q1;
 		q_iter = iterative_inc_of_gen_coord(q1, sign, delta_q);
 		for (i = 0; i < row; i++)
-			v_iter[i] = orientat_current_final(f, final, i, i, q_iter, q2, q3);
+			v_iter[i] = get_diff_btwn_axes(f, final, i, i, q_iter, q2, q3);
 	break;
 	case 1:
 		q_prev = q2;
 		q_iter = iterative_inc_of_gen_coord(q2, sign, delta_q);
 		for (i = 0; i < row; i++)
-			v_iter[i] = orientat_current_final(f, final, i, i, q1, q_iter, q3);
+			v_iter[i] = get_diff_btwn_axes(f, final, i, i, q1, q_iter, q3);
 	break;
 	case 2:
 		q_prev = q3;
 		q_iter = iterative_inc_of_gen_coord(q3, sign, delta_q);
 		for (i = 0; i < row; i++)
-			v_iter[i] = orientat_current_final(f, final, i, i, q1, q2, q_iter);
+			v_iter[i] = get_diff_btwn_axes(f, final, i, i, q1, q2, q_iter);
 	break;
 	default:
 		exit(1);
