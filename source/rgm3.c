@@ -30,139 +30,53 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #define L1 60
 #define L2 50
 #define L3 25
-double tcp_xxh(double q1, ...)
+double tcp_xxh(double *q)
 {
-	va_list vl;
-	double q2, q3;
-	va_start(vl, q1);
-	q2 = va_arg(vl, double);
-	q2++;
-	q3 = va_arg(vl, double);
-	va_end(vl);
-	return cos(q1) * sin(q3);
+	return cos(q[0]) * sin(q[2]);
 }
-double tcp_xyh(double q1, ...)
+double tcp_xyh(double *q)
 {
-	va_list vl;
-	double q2, q3;
-	va_start(vl, q1);
-	q2 = va_arg(vl, double);
-	q2++;
-	q3 = va_arg(vl, double);
-	va_end(vl);
-	return cos(q1) * cos(q3);
+	return cos(q[0]) * cos(q[2]);
 }
-double tcp_xzh(double q1, ...)
+double tcp_xzh(double *q)
 {
-	va_list vl;
-	double q2, q3;
-	va_start(vl, q1);
-	q2 = va_arg(vl, double);
-	q2++;
-	q3 = va_arg(vl, double);
-	q3++;
-	va_end(vl);
-	return -sin(q1);
+	return -sin(q[0]);
 }
-double tcp_xp(double q1, ...)
+double tcp_xp(double *q)
 {
-	va_list vl;
-	double q2, q3;
-	va_start(vl, q1);
-	q2 = va_arg(vl, double);
-	q2++;
-	q3 = va_arg(vl, double);
-	va_end(vl);
-	return L3 * cos(q1) * sin(q3);
+	return L3 * cos(q[0]) * sin(q[2]);
 }
-double tcp_yxh(double q1, ...)
+double tcp_yxh(double *q)
 {
-	va_list vl;
-	double q2, q3;
-	va_start(vl, q1);
-	q2 = va_arg(vl, double);
-	q2++;
-	q3 = va_arg(vl, double);
-	va_end(vl);
-	return sin(q1) * sin(q3);
+	return sin(q[0]) * sin(q[2]);
 }
-double tcp_yyh(double q1, ...)
+double tcp_yyh(double *q)
 {
-	va_list vl;
-	double q2, q3;
-	va_start(vl, q1);
-	q2 = va_arg(vl, double);
-	q2++;
-	q3 = va_arg(vl, double);
-	va_end(vl);
-	return sin(q1) * cos(q3);
+	return sin(q[0]) * cos(q[2]);
 }
-double tcp_yzh(double q1, ...)
+double tcp_yzh(double *q)
 {
-	va_list vl;
-	double q2, q3;
-	va_start(vl, q1);
-	q2 = va_arg(vl, double);
-	q2++;
-	q3 = va_arg(vl, double);
-	q3++;
-	va_end(vl);
-	return cos(q1);
+	return cos(q[0]);
 }
-double tcp_yp(double q1, ...)
+double tcp_yp(double *q)
 {
-	va_list vl;
-	double q2, q3;
-	va_start(vl, q1);
-	q2 = va_arg(vl, double);
-	q2++;
-	q3 = va_arg(vl, double);
-	va_end(vl);
-	return L3 * sin(q1) * sin(q3);
+	return L3 * sin(q[0]) * sin(q[2]);
 }
-double tcp_zxh(double q1, ...)
+double tcp_zxh(double *q)
 {
-	va_list vl;
-	double q2, q3;
-	va_start(vl, q1);
-	q2 = va_arg(vl, double);
-	q2++;
-	q3 = va_arg(vl, double);
-	va_end(vl);
-	return cos(q3);
+	return cos(q[2]);
 }
-double tcp_zyh(double q1, ...)
+double tcp_zyh(double *q)
 {
-	va_list vl;
-	double q2, q3;
-	va_start(vl, q1);
-	q2 = va_arg(vl, double);
-	q2++;
-	q3 = va_arg(vl, double);
-	va_end(vl);
-	return -sin(q3);
+	return -sin(q[2]);
 }
-double tcp_zzh(double q1, ...)
+double tcp_zzh(double *q)
 {
-	va_list vl;
-	double q2, q3;
-	va_start(vl, q1);
-	q2 = va_arg(vl, double);
-	q2++;
-	q3 = va_arg(vl, double);
-	q3++;
-	va_end(vl);
 	return 0;
 }
-double tcp_zp(double q1, ...)
+double tcp_zp(double *q)
 {
-	va_list vl;
-	double q2, q3;
-	va_start(vl, q1);
-	q2 = va_arg(vl, double);
-	q3 = va_arg(vl, double);
-	va_end(vl);
-	return L3 * cos(q3) + q2 + L1 + L2;
+	return L3 * cos(q[2]) + q[1] + L1 + L2;
 }
 
 int main(int argc, char **argv)
@@ -171,14 +85,14 @@ int main(int argc, char **argv)
 	int a, b;
 	double **em;
 	double q_iter, q_iter2;
-	double q1min = -PI, q1max = +PI,
-		q2min = -30, q2max = 30,
-		q3min = -5*PI/6, q3max = 5*PI/6;
+	double q[0]min = -PI, q[0]max = +PI,
+		q[1]min = -30, q[1]max = 30,
+		q[2]min = -5*PI/6, q[2]max = 5*PI/6;
 	int break_up_low = 50;
-	double dq1, dq2, dq3;
+	double dq[0], dq[1], dq[2];
 	
 	enum {tcp_row = 3, tcp_col = 4};
-	double q1 = 0, q2 = 0, q3 = PI/4;
+	double q[0] = 0, q[1] = 0, q[2] = PI/4;
 	double final[3][4] = {
 		{0.664, -0.664, 0.342, 16.612},
 		{-0.242, 0.242, 0.970, -6.046},
@@ -220,57 +134,57 @@ int main(int argc, char **argv)
 		printf("\tApproximation #%2d:\t STEP = %3d\n", jj+1, break_up_low);
 		
 		/* 1 STAGE*/
-		puts("\t\tTURNING Q1 (POSITION) and SLIDING Q2 (POSITION)");
+		puts("\t\tTURNING q[0] (POSITION) and SLIDING q[1] (POSITION)");
 		iter = 0;
-		dq2 = set_iteration_step(q2min, q2max, break_up_low);
-		dq1 = set_iteration_step(q1min, q1max, break_up_low);
-		q_iter = q1;
-		q_iter2 = q2;
+		dq[1] = set_iteration_step(q[1]min, q[1]max, break_up_low);
+		dq[0] = set_iteration_step(q[0]min, q[0]max, break_up_low);
+		q_iter = q[0];
+		q_iter2 = q[1];
 		do {
 			iter++;
-			q1 = q_iter;
-			q_iter = do_iter_step_position(dir_kin_tcp, final2, 0, dq1, q_iter, q2, q3);
-			printf("Iter #%3d:\tq1=%2.4lf\n", iter, q_iter);
-			if (q1 == q_iter) break;
-			q2 = q_iter2;
-			q_iter2 = do_iter_step_position(dir_kin_tcp, final2, 1, dq3, q1, q_iter2, q3);
-			printf("\t\tq2=%2.4lf\n", q_iter2);
-			if (q2 == q_iter2) break;
+			q[0] = q_iter;
+			q_iter = do_iter_step_position(dir_kin_tcp, final2, 0, dq[0], q_iter, q[1], q[2]);
+			printf("Iter #%3d:\tq[0]=%2.4lf\n", iter, q_iter);
+			if (q[0] == q_iter) break;
+			q[1] = q_iter2;
+			q_iter2 = do_iter_step_position(dir_kin_tcp, final2, 1, dq[2], q[0], q_iter2, q[2]);
+			printf("\t\tq[1]=%2.4lf\n", q_iter2);
+			if (q[1] == q_iter2) break;
 		} while (1);
 				
 		/* 2 STAGE */
-		puts("\t\tSLIDIND Q2 (POSITION) AND TURNING Q3 (POSITION)");
+		puts("\t\tSLIDIND q[1] (POSITION) AND TURNING q[2] (POSITION)");
 		iter = 0;
-		dq2 = set_iteration_step(q2min, q2max, break_up_low);
-		dq3 = set_iteration_step(q3min, q3max, break_up_low);
-		q_iter = q2;
-		q_iter2 = q3;
+		dq[1] = set_iteration_step(q[1]min, q[1]max, break_up_low);
+		dq[2] = set_iteration_step(q[2]min, q[2]max, break_up_low);
+		q_iter = q[1];
+		q_iter2 = q[2];
 		do {
 			iter++;
-			q2 = q_iter;
-			q_iter = do_iter_step_position(dir_kin_tcp, final2, 1, dq2, q1, q_iter, q3);
-			printf("Iter #%3d:\tq2=%2.4lf\n", iter, q_iter);
-			if (q2 == q_iter) break;
-			q3 = q_iter2;
-			q_iter2 = do_iter_step_position(dir_kin_tcp, final2, 2, dq3, q1, q2, q_iter2);
-			printf("\t\tq3=%2.4lf\n", q_iter2);
-			if (q3 == q_iter2) break;
+			q[1] = q_iter;
+			q_iter = do_iter_step_position(dir_kin_tcp, final2, 1, dq[1], q[0], q_iter, q[2]);
+			printf("Iter #%3d:\tq[1]=%2.4lf\n", iter, q_iter);
+			if (q[1] == q_iter) break;
+			q[2] = q_iter2;
+			q_iter2 = do_iter_step_position(dir_kin_tcp, final2, 2, dq[2], q[0], q[1], q_iter2);
+			printf("\t\tq[2]=%2.4lf\n", q_iter2);
+			if (q[2] == q_iter2) break;
 		} while (1);
 		
 		/* 3 STAGE */
-		puts("\t\tTURNING Q3 (ORIENTATION)");
+		puts("\t\tTURNING q[2] (ORIENTATION)");
 		iter = 0;
-		dq3 = set_iteration_step(q3min, q3max, break_up_low);
-		q_iter = q3;
+		dq[2] = set_iteration_step(q[2]min, q[2]max, break_up_low);
+		q_iter = q[2];
 		do {
 			iter++;
-			q3 = q_iter;
-			q_iter = do_iter_step_orientation(dir_kin_tcp, final2, 2, dq3, q1, q2, q_iter);
-			printf("Iter #%3d:\tq3=%2.4lf\n", iter, q_iter);
-		} while (q3 != q_iter);
+			q[2] = q_iter;
+			q_iter = do_iter_step_orientation(dir_kin_tcp, final2, 2, dq[2], q[0], q[1], q_iter);
+			printf("Iter #%3d:\tq[2]=%2.4lf\n", iter, q_iter);
+		} while (q[2] != q_iter);
 		
 		puts("VALUE OF ERROR:");
-		em = get_error_matrix(get_tcp_matrix(dir_kin_tcp, q1, q2, q3), final2);
+		em = get_error_matrix(get_tcp_matrix(dir_kin_tcp, q[0], q[1], q[2]), final2);
 		for (a = 0; a < 3; a++) {
 			printf("|\t");
 		for (b = 0; b < 4; b++) {
