@@ -219,8 +219,8 @@ int main(int argc, char **argv)
 		/* 1 STAGE*/
 		puts("\t\tTURNING Q1 (POSITION) and SLIDING Q2 (POSITION)");
 		iter = 0;
-		dq2 = break_up_meas(q2min, q2max, break_up_low);
-		dq1 = break_up_meas(q1min, q1max, break_up_low);
+		dq2 = set_iteration_step(q2min, q2max, break_up_low);
+		dq1 = set_iteration_step(q1min, q1max, break_up_low);
 		q_iter = q1;
 		q_iter2 = q2;
 		do {
@@ -238,8 +238,8 @@ int main(int argc, char **argv)
 		/* 2 STAGE */
 		puts("\t\tSLIDIND Q2 (POSITION) AND TURNING Q3 (POSITION)");
 		iter = 0;
-		dq2 = break_up_meas(q2min, q2max, break_up_low);
-		dq3 = break_up_meas(q3min, q3max, break_up_low);
+		dq2 = set_iteration_step(q2min, q2max, break_up_low);
+		dq3 = set_iteration_step(q3min, q3max, break_up_low);
 		q_iter = q2;
 		q_iter2 = q3;
 		do {
@@ -257,7 +257,7 @@ int main(int argc, char **argv)
 		/* 3 STAGE */
 		puts("\t\tTURNING Q3 (ORIENTATION)");
 		iter = 0;
-		dq3 = break_up_meas(q3min, q3max, break_up_low);
+		dq3 = set_iteration_step(q3min, q3max, break_up_low);
 		q_iter = q3;
 		do {
 			iter++;
