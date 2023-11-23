@@ -105,7 +105,7 @@ double do_iter_step_position(double(***f)(double, ...), double final[3][4],
 			return q_prev;
 		}
 		sign++;
-		iteration_position_step(f, final, type_q, delta_q, q1, q2, q3);
+		do_iter_step_position(f, final, type_q, delta_q, q1, q2, q3);
 	}
 	va_end(vl);
 	return q_iter;
