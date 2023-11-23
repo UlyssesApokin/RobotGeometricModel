@@ -22,6 +22,9 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <stdarg.h>
+#include <math.h>
 #include "rgm3_reverse_kinematic.h"
 #define PI 3.14
 #define L1 60

@@ -23,17 +23,6 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #ifndef RGM3_REVERSE_KINEMATIC_H_SENTRY
 #define RGM3_REVERSE_KINEMATIC_H_SENTRY
-#include <stdlib.h>
-#include <stdarg.h>
-#include <math.h>
-#define X_AXIS 0
-#define Y_AXIS 1
-#define Z_AXIS 2
-#define Q1_C 0
-#define Q2_C 1
-#define Q3_С 2
-#define POS 0
-#define NEG 1
 
 double do_iter_step_position(double(***f)(double, ...), double final[3][4],
 	int type_q, double delta_q, double q1, ...);

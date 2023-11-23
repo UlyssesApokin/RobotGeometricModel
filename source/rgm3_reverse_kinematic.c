@@ -22,6 +22,9 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 #include "rgm3_reverse_kinematic.h"
+#include <stdlib.h>
+#include <stdarg.h>
+#include <math.h>
 
 double maximum(double *arr, int num)
 {
