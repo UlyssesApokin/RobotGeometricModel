@@ -42,20 +42,13 @@ double iterative_inc_of_gen_coord(int q_num, const double *q, int sign,
 {
 	return q[q_num] + pow(-1, sign) * delta_q[q_num];
 }
-double get_displacement_vector(double(***f)(double, ...),
-	double final[3][4], double q1, ...)
+double get_displacement_vector(double(**f)(double*),
+	const double *final, double *q)
 {
-	va_list vl;
-	enum { row = 3 };
 	int i;
-	double q2, q[2];
 	double r[3];
-	va_start(vl, q1);
-	q2 = va_arg(vl, double);
-	q[2] = va_arg(vl, double);
-	va_end(vl);
-	for (i = 0; i < row; i++) {
-		r[i] = pow((f[i][3](q1, q2, q[2]) - final[i][3]), 2);
+	for (i = 0; i < (mtxs-1); i++) {
+		r[i] = pow((f[i*mtxs + 3](q) - final[i*mtxs + 3]), 2);
 	}
 	return sqrt(r[0] + r[1] + r[2]);
 }
@@ -75,6 +68,7 @@ int is_limit_reached(int q_num, const double *q, const double* q_limit)
 	return( (q[q_num] < q_limit[clim*q_num])
 		|| (q[q_num] > q_limit[clim*q_num+1]));
 }
+/*
 double do_iter_step_position(double(***f)(double, ...), double final[3][4],
 	int num_q, double delta_q, double q1, ...)
 {
@@ -174,6 +168,7 @@ double do_iter_step_orientation(double(***f)(double, ...), double final[3][4],
 	va_end(vl);
 	return q_iter;
 };
+*/
 double set_iteration_step(int q_num, const double *q_limit, int n)
 {
 	return((q_limit[clim*q_num+1] - q_limit[clim*q_num]) / (double)n);
