@@ -52,16 +52,10 @@ double get_displacement_vector(double(**f)(double*),
 	}
 	return sqrt(r[0] + r[1] + r[2]);
 }
-double get_diff_btwn_axes(double(***f)(double, ...),
-	double final[3][4], int axis, int axis_h, double q1, ...)
+double get_diff_btwn_axes(double(**f)(double*),
+	const double *final, int axis, int axis_h, double *q)
 {
-	va_list vl;
-	double q2, q[2];
-	va_start(vl, q1);
-	q2 = va_arg(vl, double);
-	q[2] = va_arg(vl, double);
-	va_end(vl);
-	return fabs(f[axis][axis_h](q1, q2, q[2]) - final[axis][axis_h]);
+	return fabs(f[axis*mtxs + axis_h](q) - final[axis*mtxs + axis_h]);
 }
 int is_limit_reached(int q_num, const double *q, const double* q_limit)
 {
