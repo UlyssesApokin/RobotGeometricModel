@@ -226,11 +226,11 @@ int main(int argc, char **argv)
 		do {
 			iter++;
 			q1 = q_iter;
-			q_iter = iteration_position_step(dir_kin_tcp, final2, 0, dq1, q_iter, q2, q3);
+			q_iter = do_iter_step_position(dir_kin_tcp, final2, 0, dq1, q_iter, q2, q3);
 			printf("Iter #%3d:\tq1=%2.4lf\n", iter, q_iter);
 			if (q1 == q_iter) break;
 			q2 = q_iter2;
-			q_iter2 = iteration_position_step(dir_kin_tcp, final2, 1, dq3, q1, q_iter2, q3);
+			q_iter2 = do_iter_step_position(dir_kin_tcp, final2, 1, dq3, q1, q_iter2, q3);
 			printf("\t\tq2=%2.4lf\n", q_iter2);
 			if (q2 == q_iter2) break;
 		} while (1);
@@ -245,11 +245,11 @@ int main(int argc, char **argv)
 		do {
 			iter++;
 			q2 = q_iter;
-			q_iter = iteration_position_step(dir_kin_tcp, final2, 1, dq2, q1, q_iter, q3);
+			q_iter = do_iter_step_position(dir_kin_tcp, final2, 1, dq2, q1, q_iter, q3);
 			printf("Iter #%3d:\tq2=%2.4lf\n", iter, q_iter);
 			if (q2 == q_iter) break;
 			q3 = q_iter2;
-			q_iter2 = iteration_position_step(dir_kin_tcp, final2, 2, dq3, q1, q2, q_iter2);
+			q_iter2 = do_iter_step_position(dir_kin_tcp, final2, 2, dq3, q1, q2, q_iter2);
 			printf("\t\tq3=%2.4lf\n", q_iter2);
 			if (q3 == q_iter2) break;
 		} while (1);
