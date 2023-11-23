@@ -68,6 +68,10 @@ double get_diff_btwn_axes(double(***f)(double, ...),
 	va_end(vl);
 	return fabs(f[axis][axis_h](q1, q2, q3) - final[axis][axis_h]);
 }
+int is_limit_reached(double q, double q_min, double q_max)
+{
+	return ((q < q_min) || (q > q_max));
+}
 double do_iter_step_position(double(***f)(double, ...), double final[3][4],
 	int type_q, double delta_q, double q1, ...)
 {
