@@ -84,62 +84,33 @@ double do_iter_step_position(double(**f)(double*), const double *final,
 		do_iter_step_position(f, final, count_of_pairs, q_num, delta, q);
 	}
 	return q_iter[q_num];
-};/*
-double do_iter_step_orientation(double(***f)(double, ...), double final[3][4],
-	int num_q, double delta_q, double q1, ...)
+}
+double do_iter_step_orientation(double(**f)(double*), const double *final,
+	int count_of_pairs, int q_num, const double *delta, double *q)
 {
-	va_list vl;
-	enum {row = 3};
 	static int sign = 0;
 	int i;
-	double q_prev, q_iter, v_iter[3], v_prev[3];
-	double q2, q[2];
-	va_start(vl, q1);
-	q2 = va_arg(vl, double);
-	q[2] = va_arg(vl, double);
-	for (i = 0; i < row; i++)
-		v_prev[i] = get_diff_btwn_axes(f, final, i, i, q1, q2, q[2]);
-	switch (num_q) {
-	case 0:
-		q_prev = q1;
-		q_iter = iterative_inc_of_gen_coord(q1, sign, delta_q);
-		for (i = 0; i < row; i++)
-			v_iter[i] = get_diff_btwn_axes(f, final, i, i, q_iter, q2, q[2]);
-	break;
-	case 1:
-		q_prev = q2;
-		q_iter = iterative_inc_of_gen_coord(q2, sign, delta_q);
-		for (i = 0; i < row; i++)
-			v_iter[i] = get_diff_btwn_axes(f, final, i, i, q1, q_iter, q[2]);
-	break;
-	case 2:
-		q_prev = q[2];
-		q_iter = iterative_inc_of_gen_coord(q[2], sign, delta_q);
-		for (i = 0; i < row; i++)
-			v_iter[i] = get_diff_btwn_axes(f, final, i, i, q1, q2, q_iter);
-	break;
-	default:
-		exit(1);
-	break;
+	double q_iter[count_of_pairs], errors[mtxs-1];
+	for (i = 0; i < count_of_pairs; i++)
+		q_iter[i] = q[i];
+	q_iter[q_num] = iterative_inc_of_gen_coord(q_num, q, sign, delta);
+	for (i = 0; i < (mtxs-1); i++) {
+		errors[i] = get_diff_btwn_axes(f, final, i, i, q)
+			- get_diff_btwn_axes(f, final, i, i, q_iter);
 	}
-	for (i = 0; i < row; i++)
-		v_prev[i] = v_prev[i] - v_iter[i];
-	v_prev[0] = get_max_element(v_prev, sizeof(v_prev)/sizeof(*v_prev));
-	if (v_prev[0] > 0) {
-		return q_iter;
+	if (get_max_element(errors, mtxs-1) > 0) {
+		return q_iter[q_num];
 	}
 	else {
 		if (sign == 1) {
 			sign = 0;
-			return q_prev;
+			return q[q_num];
 		}
-		sign++;
-		do_iter_step_orientation(f, final, num_q, delta_q, q1, q2, q[2]);
+		sign = 1;
+		do_iter_step_orientation(f, final, count_of_pairs, q_num, delta, q);
 	}
-	va_end(vl);
-	return q_iter;
-};
-*/
+	return q_iter[q_num];
+}
 double set_iteration_step(int q_num, const double *q_limit, int n)
 {
 	return((q_limit[clim*q_num+1] - q_limit[clim*q_num]) / (double)n);
