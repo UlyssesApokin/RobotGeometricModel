@@ -110,7 +110,7 @@ double do_iter_step_position(double(***f)(double, ...), double final[3][4],
 	va_end(vl);
 	return q_iter;
 };
-double iteration_orientat_step(double(***f)(double, ...), double final[3][4],
+double do_iter_step_orientation(double(***f)(double, ...), double final[3][4],
 	int type_q, double delta_q, double q1, ...)
 {
 	va_list vl;
@@ -159,7 +159,7 @@ double iteration_orientat_step(double(***f)(double, ...), double final[3][4],
 			return q_prev;
 		}
 		sign++;
-		iteration_orientat_step(f, final, type_q, delta_q, q1, q2, q3);
+		do_iter_step_orientation(f, final, type_q, delta_q, q1, q2, q3);
 	}
 	va_end(vl);
 	return q_iter;
