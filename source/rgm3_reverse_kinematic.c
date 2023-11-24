@@ -118,7 +118,7 @@ double* get_tcp_matrix(double(**f)(double*), double *q)
 {
 	int i, j;
 	double *tmatrix = malloc(mtxs*mtxs * sizeof(double));
-	for (i = 0; i < 3; i++)
+	for (i = 0; i < 4; i++)
 		for (j = 0; j < 4; j++) {
 	tmatrix[i*mtxs + j] = f[i*mtxs + j](q);
 	}
