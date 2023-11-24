@@ -238,7 +238,21 @@ double get_max_error_value(double *errmatrix)
 }
 double get_min_error_value(double *errmatrix)
 {
-	return get_min_element(errmatrix, mtxs*(mtxs-1));
+	int i, n;
+	double rez;
+	double *ferrmatrix = malloc(mtxs*mtxs * sizeof(double));
+	int *sign = malloc(mtxs*mtxs * sizeof(int));
+	for (i = 0; i < (mtxs*(mtxs-1)); i++) {
+		ferrmatrix[i] = fabs(errmatrix[i]);
+		sign[i] = (errmatrix[i] >= 0) ? 0 : 1;
+	}
+	for (i = 0; i < (mtxs*(mtxs-1)); i++)
+		if (ferrmatrix[i] == get_min_element(ferrmatrix, mtxs*(mtxs-1)))
+			n = i;
+	rez =  pow(-1, sign[n]) * get_min_element(ferrmatrix, mtxs*(mtxs-1));
+	free(ferrmatrix);
+	free(sign);
+	return rez;
 }
 double get_average_error_value(double *errmatrix)
 {
