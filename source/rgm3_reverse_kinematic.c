@@ -223,8 +223,11 @@ double* get_relative_error_matrix(const double *tmatrix, const double *final)
 	double *errmatrix = malloc(mtxs*mtxs * sizeof(double));
 	for (i = 0; i < mtxs; i++)
 		for (j = 0; j < mtxs; j++) {
-			errmatrix[i*mtxs + j]
-				= fabs(tmatrix[i*mtxs + j]) / fabs(final[i*mtxs + j]);
+			if (final[i*mtxs + j] != 0)
+				errmatrix[i*mtxs + j]
+					= fabs(tmatrix[i*mtxs + j]) / fabs(final[i*mtxs + j]);
+			else
+				errmatrix[i*mtxs + j] = 0;
 			errmatrix[i*mtxs + j] *= 100.0;
 		}
 	return errmatrix;
