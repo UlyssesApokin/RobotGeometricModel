@@ -124,12 +124,13 @@ double* get_tcp_matrix(double(**f)(double*), double *q)
 	}
 	return tmatrix;
 }
-double* get_error_matrix(double *et, const double *final)
+double* get_error_matrix(const double *tmatrix, const double *final)
 {
 	int i, j;
+	double *errmatrix = malloc(mtxs*mtxs * sizeof(double));
 	for (i = 0; i < 3; i++)
 		for (j = 0; j < 4; j++) {
-			et[i*mtxs + j] = et[i*mtxs + j] - final[i*mtxs + j];
+			errmatrix[i*mtxs + j] = tmatrix[i*mtxs + j] - final[i*mtxs + j];
 		}
-	return et;
+	return errmatrix;
 }
