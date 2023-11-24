@@ -24,7 +24,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "rgm3_reverse_kinematic.h"
 #include <stdlib.h>
 #include <math.h>
-enum {mtxs = 4, clim = 2};
+enum {mtxs = 4, extr = 3, clim = 2};
 
 double get_max_element(double *arr, int num)
 {
@@ -59,6 +59,30 @@ int is_limit_reached(int q_num, const double *q, const double* q_limit)
 {
 	return((q[q_num] < q_limit[clim*q_num])
 		|| (q[q_num] > q_limit[clim*q_num+1]));
+}
+double avoid_position_limiter(double(**f)(double*), const double *final,
+	int count_of_pairs, int q_num, const double *q_limit, double *q)
+{
+	int i;
+	double *q_min = malloc(count_of_pairs * sizeof(double));
+	double *q_max = malloc(count_of_pairs * sizeof(double));
+	double *q_aver = malloc(count_of_pairs * sizeof(double));
+	double v[extr], rez;
+	for (i = 0; i < count_of_pairs; i++)
+		q_min[i] = q_max[i] = q_aver[i] = q[i];
+	q_min[q_num] = q_limit[clim*q_num];
+	q_max[q_num] = q_limit[clim*q_num+1];
+	q_aver[q_num] =
+		(q_limit[clim*q_num+1] + q_limit[clim*q_num]) / 2.0;
+	v[0] = get_displacement_vector(f, final, q_min);
+	v[1] = get_displacement_vector(f, final, q_max);
+	v[2] = get_displacement_vector(f, final, q_aver);
+	rez = (get_max_element(v, extr) == v[0]) ? q_min[q_num]
+		: ((get_max_element(v, extr) == v[1]) ? q_max[q_num] : q_aver[q_num]);
+	free(q_min);
+	free(q_max);
+	free(q_aver);
+	return rez;
 }
 double do_iter_step_position(double(**f)(double*), const double *final,
 	int count_of_pairs, int q_num, const double *delta, double *q)

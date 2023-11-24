@@ -26,6 +26,9 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 int is_limit_reached(int q_num, const double *q, const double* q_limit);
 
+double avoid_position_limiter(double(**f)(double*), const double *final,
+	int count_of_pairs, int q_num, const double *q_limit, double *q);
+
 double do_iter_step_position(double(**f)(double*), const double *final,
 	int count_of_pairs, int q_num, const double *delta, double *q);
 
