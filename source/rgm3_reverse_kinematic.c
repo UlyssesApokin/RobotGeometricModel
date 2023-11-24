@@ -94,8 +94,8 @@ double avoid_position_limiter(double(**f)(const double*), const double *final,
 	q_aver[q_num] =
 		(q_limit[clim*q_num+1] + q_limit[clim*q_num]) / 2.0;
 	v = get_max_displacement_vector(f, final, q_min, q_max, q_aver);
-	rez = (get_max_element(v, extr) == v[0]) ? q_min[q_num]
-		: ((get_max_element(v, extr) == v[1]) ? q_max[q_num] : q_aver[q_num]);
+	rez = (get_min_element(v, extr) == v[0]) ? q_max[q_num]
+		: ((get_max_element(v, extr) == v[1]) ? q_aver[q_num] : q_min[q_num]);
 	free(q_min);
 	free(q_max);
 	free(q_aver);
@@ -136,8 +136,8 @@ double avoid_orientation_limiter(double(**f)(const double*),
 	q_aver[q_num] =
 		(q_limit[clim*q_num+1] + q_limit[clim*q_num]) / 2.0;
 	v = get_max_diff_btwn_axes(f, final, q_min, q_max, q_aver);
-	rez = (get_max_element(v, extr) == v[0]) ? q_min[q_num]
-		: ((get_max_element(v, extr) == v[1]) ? q_max[q_num] : q_aver[q_num]);
+	rez = (get_min_element(v, extr) == v[0]) ? q_max[q_num]
+		: ((get_min_element(v, extr) == v[1]) ? q_aver[q_num] : q_min[q_num]);
 	free(q_min);
 	free(q_max);
 	free(q_aver);
@@ -189,13 +189,13 @@ double do_iter_step_orientation(double(**f)(const double*), const double *final,
 			return q[q_num];
 		}
 		sign = 1;
-		do_iter_step_orientation(f, final, count_of_pairs, q_num, delta, q);
+		do_iter_step_orientation(f, final, count_of_pairs, q_num, delta, q_iter);
 	}
 	return q_iter[q_num];
 }
-double set_iteration_step(int q_num, const double *q_limit, int division)
+double set_iteration_step(int q_num, const double *q_limit, unsigned long int division)
 {
-	return((q_limit[clim*q_num+1] - q_limit[clim*q_num]) / (double)division);
+	return((q_limit[clim*q_num+1] - q_limit[clim*q_num]) / (long double)division);
 }
 double* get_tcp_matrix(double(**f)(const double*), double *q)
 {
@@ -225,7 +225,7 @@ double* get_relative_error_matrix(const double *tmatrix, const double *final)
 		for (j = 0; j < mtxs; j++) {
 			if (final[i*mtxs + j] != 0)
 				errmatrix[i*mtxs + j]
-					= fabs(tmatrix[i*mtxs + j]) / fabs(final[i*mtxs + j]);
+					= fabs(tmatrix[i*mtxs + j] - final[i*mtxs + j]) / fabs(final[i*mtxs + j]);
 			else
 				errmatrix[i*mtxs + j] = 0;
 			errmatrix[i*mtxs + j] *= 100.0;

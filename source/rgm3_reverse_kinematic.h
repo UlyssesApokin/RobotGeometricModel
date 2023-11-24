@@ -42,7 +42,8 @@ double do_iter_step_orientation(double(**f)(const double*),
 	const double *final,
 	int count_of_pairs, int q_num, const double *delta, double *q);
 
-double set_iteration_step(int q_num, const double *q_limit, int division);
+double set_iteration_step(int q_num, const double *q_limit,
+	unsigned long int division);
 
 double* get_tcp_matrix(double(**f)(const double*), double *q);
 
