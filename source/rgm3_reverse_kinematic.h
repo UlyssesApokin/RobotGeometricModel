@@ -26,21 +26,25 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 int is_limit_reached(int q_num, const double *q, const double* q_limit);
 
-double avoid_position_limiter(double(**f)(double*), const double *final,
+double avoid_position_limiter(double(**f)(const double*),
+	const double *final,
 	int count_of_pairs, int q_num, const double *q_limit, double *q);
 	
-double avoid_orientation_limiter(double(**f)(double*), const double *final,
+double avoid_orientation_limiter(double(**f)(const double*),
+	const double *final,
 	int count_of_pairs, int q_num, const double *q_limit, double *q);
 
-double do_iter_step_position(double(**f)(double*), const double *final,
+double do_iter_step_position(double(**f)(const double*),
+	const double *final,
 	int count_of_pairs, int q_num, const double *delta, double *q);
 
-double do_iter_step_orientation(double(**f)(double*), const double *final,
+double do_iter_step_orientation(double(**f)(const double*),
+	const double *final,
 	int count_of_pairs, int q_num, const double *delta, double *q);
 
 double set_iteration_step(int q_num, const double *q_limit, int division);
 
-double* get_tcp_matrix(double(**f)(double*), double *q);
+double* get_tcp_matrix(double(**f)(const double*), double *q);
 
 double* get_absolute_error_matrix(const double *tmatrix, const double *final);
 

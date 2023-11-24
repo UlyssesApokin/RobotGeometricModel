@@ -50,7 +50,7 @@ double iterative_inc_of_gen_coord(double q, int sign, double delta)
 {
 	return q + pow(-1, sign) * delta;
 }
-double get_displacement_vector(double(**f)(double*),
+double get_displacement_vector(double(**f)(const double*),
 	const double *final, double *q)
 {
 	int i;
@@ -60,7 +60,7 @@ double get_displacement_vector(double(**f)(double*),
 	}
 	return sqrt(r[0] + r[1] + r[2]);
 }
-double get_diff_btwn_axes(double(**f)(double*),
+double get_diff_btwn_axes(double(**f)(const double*),
 	const double *final, int axis, int axis_h, double *q)
 {
 	return fabs(f[axis*mtxs + axis_h](q) - final[axis*mtxs + axis_h]);
@@ -70,7 +70,7 @@ int is_limit_reached(int q_num, const double *q, const double* q_limit)
 	return((q[q_num] < q_limit[clim*q_num])
 		|| (q[q_num] > q_limit[clim*q_num+1]));
 }
-double* get_max_displacement_vector(double(**f)(double*),
+double* get_max_displacement_vector(double(**f)(const double*),
 	const double *final, double *q_min, double *q_max, double *q_aver)
 {
 	double *v = malloc(extr*sizeof(double));
@@ -79,7 +79,7 @@ double* get_max_displacement_vector(double(**f)(double*),
 	v[2] = get_displacement_vector(f, final, q_aver);
 	return v;
 }
-double avoid_position_limiter(double(**f)(double*), const double *final,
+double avoid_position_limiter(double(**f)(const double*), const double *final,
 	int count_of_pairs, int q_num, const double *q_limit, double *q)
 {
 	int i;
@@ -102,7 +102,7 @@ double avoid_position_limiter(double(**f)(double*), const double *final,
 	free(v);
 	return rez;
 }
-double *get_max_diff_btwn_axes(double(**f)(double*), const double *final,
+double *get_max_diff_btwn_axes(double(**f)(const double*), const double *final,
 	double *q_min, double *q_max, double *q_aver)
 {
 	int i;
@@ -120,7 +120,8 @@ double *get_max_diff_btwn_axes(double(**f)(double*), const double *final,
 	free(d);
 	return v;
 }
-double avoid_orientation_limiter(double(**f)(double*), const double *final,
+double avoid_orientation_limiter(double(**f)(const double*),
+	const double *final,
 	int count_of_pairs, int q_num, const double *q_limit, double *q)
 {
 	int i;
@@ -143,7 +144,7 @@ double avoid_orientation_limiter(double(**f)(double*), const double *final,
 	free(v);
 	return rez;
 }
-double do_iter_step_position(double(**f)(double*), const double *final,
+double do_iter_step_position(double(**f)(const double*), const double *final,
 	int count_of_pairs, int q_num, const double *delta, double *q)
 {
 	static int sign = 0;
@@ -166,7 +167,7 @@ double do_iter_step_position(double(**f)(double*), const double *final,
 	}
 	return q_iter[q_num];
 }
-double do_iter_step_orientation(double(**f)(double*), const double *final,
+double do_iter_step_orientation(double(**f)(const double*), const double *final,
 	int count_of_pairs, int q_num, const double *delta, double *q)
 {
 	static int sign = 0;
@@ -196,7 +197,7 @@ double set_iteration_step(int q_num, const double *q_limit, int division)
 {
 	return((q_limit[clim*q_num+1] - q_limit[clim*q_num]) / (double)division);
 }
-double* get_tcp_matrix(double(**f)(double*), double *q)
+double* get_tcp_matrix(double(**f)(const double*), double *q)
 {
 	int i, j;
 	double *tmatrix = malloc(mtxs*mtxs * sizeof(double));
