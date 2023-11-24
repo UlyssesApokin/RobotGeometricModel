@@ -36,6 +36,16 @@ double get_max_element(double *arr, int num)
 	}
 	return max;
 }	
+double get_min_element(double *arr, int num)
+{
+	int i;
+	double min = arr[0];
+	for (i = 0; i < num; i++) {
+		if (arr[i] < min)
+			min = arr[i];
+	}
+	return min;
+}	
 double iterative_inc_of_gen_coord(double q, int sign, double delta)
 {
 	return q + pow(-1, sign) * delta;
