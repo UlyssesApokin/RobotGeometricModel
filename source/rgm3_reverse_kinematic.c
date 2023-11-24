@@ -196,7 +196,7 @@ double* get_tcp_matrix(double(**f)(double*), double *q)
 	}
 	return tmatrix;
 }
-double* get_error_matrix(const double *tmatrix, const double *final)
+double* get_absolute_error_matrix(const double *tmatrix, const double *final)
 {
 	int i, j;
 	double *errmatrix = malloc(mtxs*mtxs * sizeof(double));

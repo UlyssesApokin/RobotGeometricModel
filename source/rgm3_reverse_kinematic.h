@@ -42,6 +42,6 @@ double set_iteration_step(int q_num, const double *q_limit, int division);
 
 double* get_tcp_matrix(double(**f)(double*), double *q);
 
-double* get_error_matrix(const double *tmatrix, const double *final);
+double* get_absolute_error_matrix(const double *tmatrix, const double *final);
 
 #endif
