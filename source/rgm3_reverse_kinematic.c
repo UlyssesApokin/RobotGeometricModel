@@ -232,3 +232,7 @@ double get_max_error_value(double *errmatrix)
 {
 	return get_max_element(errmatrix, mtxs*(mtxs-1));
 }
+double get_min_error_value(double *errmatrix)
+{
+	return get_min_element(errmatrix, mtxs*(mtxs-1));
+}
