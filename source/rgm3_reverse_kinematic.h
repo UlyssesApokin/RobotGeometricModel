@@ -50,4 +50,6 @@ double get_max_error_value(double *errmatrix);
 
 double get_min_error_value(double *errmatrix);
 
+double get_average_error_value(double *errmatrix);
+
 #endif

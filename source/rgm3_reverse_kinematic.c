@@ -236,3 +236,12 @@ double get_min_error_value(double *errmatrix)
 {
 	return get_min_element(errmatrix, mtxs*(mtxs-1));
 }
+double get_average_error_value(double *errmatrix)
+{
+	int i;
+	double err = 0;
+	for (i = 0; i < (mtxs*(mtxs-1)); i++)
+		err += errmatrix[i];
+	err /= mtxs*(mtxs-1);
+	return err;
+}
