@@ -84,6 +84,47 @@ double avoid_position_limiter(double(**f)(double*), const double *final,
 	free(q_aver);
 	return rez;
 }
+double *get_max_diff_btwn_axes(double(**f)(double*), const double *final,
+	double *q_min, double *q_max, double *q_aver)
+{
+	int i;
+	double *v = malloc(extr*sizeof(double));
+	double *d = malloc(extr*sizeof(double));
+	for (i = 0; i < extr; i++)
+		d[i] = get_diff_btwn_axes(f, final, i, i, q_min);
+	v[0] = get_max_element(d, extr);
+	for (i = 0; i < extr; i++)
+		d[i] = get_diff_btwn_axes(f, final, i, i, q_max);
+	v[1] = get_max_element(d, extr);
+	for (i = 0; i < extr; i++)
+		d[i] = get_diff_btwn_axes(f, final, i, i, q_aver);
+	v[2] = get_max_element(d, extr);
+	free(d);
+	return v;
+}
+double avoid_orientation_limiter(double(**f)(double*), const double *final,
+	int count_of_pairs, int q_num, const double *q_limit, double *q)
+{
+	int i;
+	double *q_min = malloc(count_of_pairs * sizeof(double));
+	double *q_max = malloc(count_of_pairs * sizeof(double));
+	double *q_aver = malloc(count_of_pairs * sizeof(double));
+	double *v, rez;
+	for (i = 0; i < count_of_pairs; i++)
+		q_min[i] = q_max[i] = q_aver[i] = q[i];
+	q_min[q_num] = q_limit[clim*q_num];
+	q_max[q_num] = q_limit[clim*q_num+1];
+	q_aver[q_num] =
+		(q_limit[clim*q_num+1] + q_limit[clim*q_num]) / 2.0;
+	v = get_max_diff_btwn_axes(f, final, q_min, q_max, q_aver);
+	rez = (get_max_element(v, extr) == v[0]) ? q_min[q_num]
+		: ((get_max_element(v, extr) == v[1]) ? q_max[q_num] : q_aver[q_num]);
+	free(q_min);
+	free(q_max);
+	free(q_aver);
+	free(v);
+	return rez;
+}
 double do_iter_step_position(double(**f)(double*), const double *final,
 	int count_of_pairs, int q_num, const double *delta, double *q)
 {
