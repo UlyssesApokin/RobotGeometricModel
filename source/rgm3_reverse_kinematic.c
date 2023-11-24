@@ -228,3 +228,7 @@ double* get_relative_error_matrix(const double *tmatrix, const double *final)
 		}
 	return errmatrix;
 }
+double get_max_error_value(double *errmatrix)
+{
+	return get_max_element(errmatrix, mtxs*(mtxs-1));
+}
