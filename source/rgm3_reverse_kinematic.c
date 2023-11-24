@@ -117,12 +117,12 @@ double set_iteration_step(int q_num, const double *q_limit, int division)
 double* get_tcp_matrix(double(**f)(double*), double *q)
 {
 	int i, j;
-	double *t = malloc(mtxs*mtxs * sizeof(double));
+	double *tmatrix = malloc(mtxs*mtxs * sizeof(double));
 	for (i = 0; i < 3; i++)
 		for (j = 0; j < 4; j++) {
-	t[i*mtxs + j] = f[i*mtxs + j](q);
+	tmatrix[i*mtxs + j] = f[i*mtxs + j](q);
 	}
-	return t;
+	return tmatrix;
 }
 double* get_error_matrix(double *et, const double *final)
 {
