@@ -206,3 +206,15 @@ double* get_absolute_error_matrix(const double *tmatrix, const double *final)
 		}
 	return errmatrix;
 }
+double* get_relative_error_matrix(const double *tmatrix, const double *final)
+{
+	int i, j;
+	double *errmatrix = malloc(mtxs*mtxs * sizeof(double));
+	for (i = 0; i < mtxs; i++)
+		for (j = 0; j < mtxs; j++) {
+			errmatrix[i*mtxs + j]
+				= fabs(tmatrix[i*mtxs + j]) / fabs(final[i*mtxs + j]);
+			errmatrix[i*mtxs + j] *= 100.0;
+		}
+	return errmatrix;
+}

@@ -44,4 +44,6 @@ double* get_tcp_matrix(double(**f)(double*), double *q);
 
 double* get_absolute_error_matrix(const double *tmatrix, const double *final);
 
+double* get_relative_error_matrix(const double *tmatrix, const double *final);
+
 #endif
