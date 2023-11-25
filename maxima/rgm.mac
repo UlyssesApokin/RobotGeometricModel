@@ -67,7 +67,7 @@ A01;
 A02:(A01 . A12);
 T:(A01 . A12 . A23);
 
-theta1:ev(-%pi/4, numer);
-d2:-20;
-theta3:ev(%pi/2, numer);
+theta1:ev(-%pi/9, numer);
+d2:-15;
+theta3:ev(3 * %pi/4, numer);
 ev(T, numer, float);

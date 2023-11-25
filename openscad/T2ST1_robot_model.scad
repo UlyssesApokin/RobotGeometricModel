@@ -32,9 +32,9 @@ use <draw_robotic_arm.scad>
 L1 = 60; //length 1 pair
 L2 = 50; //length 2 pair
 L3 = 25; //length 3 pair 
-Theta1 = rad2deg(-PI/4); //generalized coordinate 1 pair
-D2 = -20; //generalized coordinate 2 pair
-Theta3 = rad2deg(PI/2); //generalized coordinate 3 pair
+Theta1 = rad2deg(0); //generalized coordinate 1 pair
+D2 = 0; //(+-30)generalized coordinate 2 pair
+Theta3 = rad2deg(PI/2); //(+-5*PI/6)generalized coordinate 3 pair
 /*
 Orientation of the robot arm base coordinate system 
 in the standard OpenSCAD coordinate system.
@@ -62,7 +62,7 @@ extended_pair(Base, "turning", P_Base);
 extended_pair(Base, "sliding", P1, A01);
 extended_pair(Base, "turning", P2, A02);
 extended_pair(Base, "tcpx", P_TCP, T);
-echo("TOOL CENTER POINT:", P_TCP);
+tcp_term_output(T, P_TCP);
 extended_link(Base, P_Base, P1);
 extended_link(Base, P1, P2);
 extended_link(Base, P2, P_TCP);
