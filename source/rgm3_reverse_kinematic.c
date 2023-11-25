@@ -24,7 +24,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "rgm3_reverse_kinematic.h"
 #include <stdlib.h>
 #include <math.h>
-enum {mtxs = 4, extr = 3, clim = 2};
+enum {rots = 9, mtxs = 4, poss = 3, extr = 3, clim = 2};
 
 double get_max_element(double *arr, int num)
 {
@@ -65,7 +65,7 @@ double get_diff_btwn_axes(double(**f)(const double*),
 {
 	return fabs(f[axis*mtxs + axis_h](q) - final[axis*mtxs + axis_h]);
 }
-int is_limit_reached(int q_num, const double *q, const double* q_limit)
+int is_limit_reached(int q_num, const double* q_limit, const double *q)
 {
 	return((q[q_num] < q_limit[clim*q_num])
 		|| (q[q_num] > q_limit[clim*q_num+1]));
@@ -227,43 +227,69 @@ double* get_relative_error_matrix(const double *tmatrix, const double *final)
 	double *errmatrix = malloc(mtxs*mtxs * sizeof(double));
 	for (i = 0; i < mtxs; i++)
 		for (j = 0; j < mtxs; j++) {
-			if (final[i*mtxs + j] != 0)
+			if (final[i*mtxs + j] != 0) {
 				errmatrix[i*mtxs + j]
-					= fabs(tmatrix[i*mtxs + j] - final[i*mtxs + j]) / fabs(final[i*mtxs + j]);
-			else
+					= fabs(tmatrix[i*mtxs + j] - final[i*mtxs + j])
+						/ fabs(final[i*mtxs + j]);
+			} else {
 				errmatrix[i*mtxs + j] = 0;
+			}
 			errmatrix[i*mtxs + j] *= 100.0;
 		}
 	return errmatrix;
 }
-double get_max_error_value(double *errmatrix)
-{
-	return get_max_element(errmatrix, mtxs*(mtxs-1));
-}
-double get_min_error_value(double *errmatrix)
+double get_max_error_value(double *errmatrix, int num_of_elemets)
 {
 	int i, n;
 	double rez;
-	double *ferrmatrix = malloc(mtxs*mtxs * sizeof(double));
-	int *sign = malloc(mtxs*mtxs * sizeof(int));
-	for (i = 0; i < (mtxs*(mtxs-1)); i++) {
+	double *ferrmatrix = malloc(num_of_elemets * sizeof(double));
+	int *sign = malloc(num_of_elemets * sizeof(int));
+	for (i = 0; i < (num_of_elemets); i++) {
 		ferrmatrix[i] = fabs(errmatrix[i]);
 		sign[i] = (errmatrix[i] >= 0) ? 0 : 1;
 	}
-	for (i = 0; i < (mtxs*(mtxs-1)); i++)
-		if (ferrmatrix[i] == get_min_element(ferrmatrix, mtxs*(mtxs-1)))
+	for (i = 0; i < (num_of_elemets); i++)
+		if (ferrmatrix[i] == get_max_element(ferrmatrix, num_of_elemets))
 			n = i;
-	rez =  pow(-1, sign[n]) * get_min_element(ferrmatrix, mtxs*(mtxs-1));
+	rez =  pow(-1, sign[n]) * get_max_element(ferrmatrix, num_of_elemets);
 	free(ferrmatrix);
 	free(sign);
 	return rez;
 }
-double get_average_error_value(double *errmatrix)
+double get_average_error_value(double *errmatrix, int num_of_elemets)
 {
 	int i;
 	double err = 0;
-	for (i = 0; i < (mtxs*(mtxs-1)); i++)
-		err += errmatrix[i];
-	err /= mtxs*(mtxs-1);
+	for (i = 0; i < (num_of_elemets); i++)
+		err += fabs(errmatrix[i]);
+	err /= num_of_elemets;
 	return err;
+}
+double get_max_error_of_position(double *errmatrix)
+{
+	double pos[poss] = {errmatrix[3], errmatrix[7], errmatrix[11]};
+	return get_max_error_value(pos, poss);
+}
+double get_average_error_of_position(double *errmatrix)
+{
+	double pos[poss] = {errmatrix[3], errmatrix[7], errmatrix[11]};
+	return get_average_error_value(pos, poss);
+}
+double get_max_error_of_orientaion(double *errmatrix)
+{
+	double rot[rots] = {
+		errmatrix[0], errmatrix[1], errmatrix[2],
+		errmatrix[4], errmatrix[5], errmatrix[6],
+		errmatrix[8], errmatrix[9], errmatrix[10]
+	};
+	return get_max_error_value(rot, rots);
+}
+double get_average_error_of_orientaion(double *errmatrix)
+{
+	double rot[rots] = {
+		errmatrix[0], errmatrix[1], errmatrix[2],
+		errmatrix[4], errmatrix[5], errmatrix[6],
+		errmatrix[8], errmatrix[9], errmatrix[10]
+	};
+	return get_average_error_value(rot, rots);
 }
