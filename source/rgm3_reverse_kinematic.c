@@ -95,7 +95,7 @@ double avoid_position_limiter(double(**f)(const double*), const double *final,
 		(q_limit[clim*q_num+1] + q_limit[clim*q_num]) / 2.0;
 	v = get_max_displacement_vector(f, final, q_min, q_max, q_aver);
 	rez = (get_min_element(v, extr) == v[0]) ? q_max[q_num]
-		: ((get_max_element(v, extr) == v[1]) ? q_aver[q_num] : q_min[q_num]);
+		: ((get_max_element(v, extr) == v[1]) ? q_min[q_num] : q_aver[q_num]);
 	free(q_min);
 	free(q_max);
 	free(q_aver);
@@ -136,8 +136,8 @@ double avoid_orientation_limiter(double(**f)(const double*),
 	q_aver[q_num] =
 		(q_limit[clim*q_num+1] + q_limit[clim*q_num]) / 2.0;
 	v = get_max_diff_btwn_axes(f, final, q_min, q_max, q_aver);
-	rez = (get_min_element(v, extr) == v[0]) ? q_max[q_num]
-		: ((get_max_element(v, extr) == v[1]) ? q_aver[q_num] : q_min[q_num]);
+	rez = (get_min_element(v, extr) == v[0]) ? q_min[q_num]
+		: ((get_max_element(v, extr) == v[1]) ? q_max[q_num] : q_aver[q_num]);
 	free(q_min);
 	free(q_max);
 	free(q_aver);
