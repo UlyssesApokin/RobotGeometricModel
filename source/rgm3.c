@@ -109,6 +109,13 @@ int main(int argc, char **argv)
 		0.866, -0.5, 0, 131.651,
 		0, 0, 0, 1
 	};
+	/*double final2[] = {
+		-0.378401, 0.173178, -0.909297, -9.46003,
+		0.826822, -0.378401, -0.416147, 20.6705,
+		-0.416147, -0.909297, 0, 101.596,
+		0, 0, 0, 1
+	};*/
+	
 	/*equation of tool center point matrix*/
 	double (**tcp_matrix)(const double*)
 		= malloc(mtxs*mtxs * sizeof(double(*)(const double*)));
@@ -129,91 +136,39 @@ int main(int argc, char **argv)
 	tcp_matrix[14] = tcp_zero;
 	tcp_matrix[15] = tcp_nulo;
 	
-	delta[0] = set_iteration_step(0, limit, division);
-	delta[1] = set_iteration_step(1, limit, division);
-	delta[2] = set_iteration_step(2, limit, division);
 	
-	
-	for (i = 0; i < 2; i++) {
-		printf("TURNING Q1 (POSITION) and SLIDING Q2 (POSITION)\n");
-		numero = 0;
+	for (i = 0; i < 3; i++) {
 		delta[0] = set_iteration_step(0, limit, division);
-		delta[1] = set_iteration_step(1, limit, division*60);
-		q_iter[0] = q[0];
-		q_iter[1] = q[1];
+		delta[1] = set_iteration_step(1, limit, division*200);
+		delta[2] = set_iteration_step(2, limit, division);
+		/*turning Q1*/
 		do {
 			iter++;
-			q[numero] = q_iter[numero];
-			q_iter[numero] = do_iter_step_position(tcp_matrix, final2, 3, 0, delta, q);
+			q[0] = q_iter[0];
 			term_print_gen_coord(iter, 3, q);
-			if (q[numero] == q_iter[numero]) break;
+			q_iter[0] = do_iter_step_position(tcp_matrix, final2, 3, 0, delta, q);
+		} while (q[0] != q_iter[0]);
+		/*turning Q3*/
+		do {
 			iter++;
-			q[numero] = q_iter[numero];
-			q_iter[numero] = do_iter_step_position(tcp_matrix, final2, 3, 1, delta, q);
+			q[2] = q_iter[2];
 			term_print_gen_coord(iter, 3, q);
-			if (q[numero] == q_iter[numero]) break;
-			numero = (numero == 0) ? 1 : 0;
-		} while (1);
-		tmatrix = get_tcp_matrix(tcp_matrix, q);
-		amatrix = get_absolute_error_matrix(tmatrix, final2);
-		rmatrix = get_relative_error_matrix(tmatrix, final2);
-		term_print_error(1,
-			get_max_error_of_position(rmatrix),
-			get_average_error_of_position(rmatrix),
-			get_max_error_of_orientaion(rmatrix),
-			get_average_error_of_orientaion(rmatrix));
+			q_iter[2] = do_iter_step_orientation(tcp_matrix, final2, 3, 2, delta, q);
+		} while (q[2] != q_iter[2]);
+		/*sliding Q1*/
+		do {
+			iter++;
+			q[1] = q_iter[1];
+			term_print_gen_coord(iter, 3, q);
+			q_iter[1] = do_iter_step_position(tcp_matrix, final2, 3, 1, delta, q);
+		} while (q[1] != q_iter[1]);
+		division *= 2;
 		
-		printf("SLIDIND Q2 (POSITION) AND TURNING Q3 (POSITION)\n");
-		numero = 1;
-		delta[1] = set_iteration_step(1, limit, division*30);
-		delta[2] = set_iteration_step(2, limit, division);
-		q_iter[1] = q[1];
-		q_iter[2] = q[2];
-		do {
-			iter++;
-			q[numero] = q_iter[numero];
-			q_iter[numero] = do_iter_step_position(tcp_matrix, final2, 3, 1, delta, q);
-			term_print_gen_coord(iter, 3, q);
-			if (q[numero] == q_iter[numero]) break;
-			iter++;
-			q[numero] = q_iter[numero];
-			q_iter[numero] = do_iter_step_position(tcp_matrix, final2, 3, 2, delta, q);
-			term_print_gen_coord(iter, 3, q);
-			if (q[numero] == q_iter[numero]) break;
-			numero = (numero == 1) ? 2 : 1;
-		} while (1);
 		tmatrix = get_tcp_matrix(tcp_matrix, q);
 		amatrix = get_absolute_error_matrix(tmatrix, final2);
 		rmatrix = get_relative_error_matrix(tmatrix, final2);
-		term_print_error(1,
-			get_max_error_of_position(rmatrix),
-			get_average_error_of_position(rmatrix),
-			get_max_error_of_orientaion(rmatrix),
-			get_average_error_of_orientaion(rmatrix));
-		
-		printf("TURNING Q3 (ORIENTATION)\n");
-		numero = 2;
-		delta[2] = set_iteration_step(2, limit, division);
-		delta[2] = set_iteration_step(2, limit, division);
-		q_iter[2] = q[2];
-		do {
-			iter++;
-			q[numero] = q_iter[numero];
-			q_iter[numero] = do_iter_step_position(tcp_matrix, final2, 3, numero, delta, q);
-			term_print_gen_coord(iter, 3, q);
-		} while (q[numero] != q_iter[numero]);
-
-		tmatrix = get_tcp_matrix(tcp_matrix, q);
-		amatrix = get_absolute_error_matrix(tmatrix, final2);
-		rmatrix = get_relative_error_matrix(tmatrix, final2);
-		term_print_error(1,
-			get_max_error_of_position(rmatrix),
-			get_average_error_of_position(rmatrix),
-			get_max_error_of_orientaion(rmatrix),
-			get_average_error_of_orientaion(rmatrix));
-
-		division = division*2;
 	}
+	term_print_gen_coord(iter, 3, q);
 	term_print_matrix("ITERATION POSITION", tmatrix, 4, 4);
 	term_print_matrix("FINAL POSITION", final2, 4, 4);
 	term_print_matrix("ABSOLUTE ERROR", amatrix, 4, 4);
