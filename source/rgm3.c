@@ -25,11 +25,10 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <stdlib.h>
 #include <math.h>
 #include "rgm3_reverse_kinematic.h"
-/*#define PI 3.1415926535*/
-#define PI 3.14
-#define L1 60
-#define L2 50
-#define L3 25
+#include "rgm3_output.h"
+#define L1 60.0
+#define L2 50.0
+#define L3 25.0
 double tcp_xxh(const double *q)
 {
 	return cos(q[0]) * sin(q[2]);
@@ -84,42 +83,19 @@ double tcp_zero(const double *q)
 }
 double tcp_nulo(const double *q)
 {
-	return 0;
+	return 1;
 }
 
-void perrors( double *rel_err_matrix)
-{
-	printf("MAX ERROR:\t%3.2lf%%\n", get_max_error_value(rel_err_matrix));
-	printf("AVERAGE ERROR:\t%3.2lf%%\n", get_average_error_value(rel_err_matrix));
-}
-void primat(double *em)
-{
-	int a, b;
-	for (a = 0; a < 3; a++) {
-		printf("\t");
-		for (b = 0; b < 4; b++) {
-			printf("%2.4lf\t\t", em[a*4 + b]);
-		}
-		puts("");
-	}
-	puts("");
-}
 int main(int argc, char **argv)
 {
 	enum{mtxs = 4};
 	int iter = 0, numero, i;
-	double *rel_err_matrix;
+	double *tmatrix, *rmatrix, *amatrix;
 	double q_iter[] = {0.0, 0.0, PI/4};
 	double q[] = {0.0, 0.0, PI/4};
 	double limit[] = {-PI, PI, -30, 30, -5*PI/6, 5*PI/6};
-	int division;
+	int division = 50;
 	double delta[3];
-	double final[] = {
-		-0.218,	-0.218,	-0.951,	-5.462,
-		0.672,	0.672,	-0.309,	16.812,
-		0.707,	-0.707,	0.000,	127.678,
-		0,		0,		0,		1
-	};
 	double final2[] = {
 		0.250, 0.433, 0.866, 6.250,
 		-0.433, -0.750, 0.500, -10.825,
@@ -146,42 +122,42 @@ int main(int argc, char **argv)
 	tcp_matrix[14] = tcp_zero;
 	tcp_matrix[15] = tcp_nulo;
 	
-	division = 50;
 	delta[0] = set_iteration_step(0, limit, division);
 	delta[1] = set_iteration_step(1, limit, division);
 	delta[2] = set_iteration_step(2, limit, division);
 	
 	
-	for (i = 0; i < 7; i++) {
-		printf("\tApproximation #%2d:\t STEP = %3d\n", i+1, division);
-		/* 1 STAGE*/
-		puts("\t\tTURNING Q1 (POSITION) and SLIDING Q2 (POSITION)");
-		iter = 0;
+	for (i = 0; i < 2; i++) {
+		printf("TURNING Q1 (POSITION) and SLIDING Q2 (POSITION)\n");
+
 		delta[0] = set_iteration_step(0, limit, division);
-		delta[1] = set_iteration_step(2, limit, division);
+		delta[1] = set_iteration_step(1, limit, division*60);
 		q_iter[0] = q[0];
 		q_iter[1] = q[1];
 		do {
 			iter++;
 			q[0] = q_iter[0];
 			q_iter[0] = do_iter_step_position(tcp_matrix, final2, 3, 0, delta, q);
-			printf("Iter #%3d:\tq1=%2.4lf\n", iter, q_iter[0]);
+			term_print_gen_coord(iter, 3, q);
 			if (q[0] == q_iter[0]) break;
+			iter++;
 			q[1] = q_iter[1];
 			q_iter[1] = do_iter_step_position(tcp_matrix, final2, 3, 1, delta, q);
-			printf("\t\tq2=%2.4lf\n", q_iter[1]);
+			term_print_gen_coord(iter, 3, q);
 			if (q[1] == q_iter[1]) break;
 		} while (1);
 		
-		printf("\t\tq1:\t%lf\n", q[0]);
-		printf("\t\tq2:\t%lf\n", q[1]);
-		printf("\t\tq3:\t%lf\n", q[2]);
+		tmatrix = get_tcp_matrix(tcp_matrix, q);
+		amatrix = get_absolute_error_matrix(tmatrix, final2);
+		rmatrix = get_relative_error_matrix(tmatrix, final2);
+		term_print_error(1,
+			get_max_error_of_position(rmatrix),
+			get_average_error_of_position(rmatrix),
+			get_max_error_of_orientaion(rmatrix),
+			get_average_error_of_orientaion(rmatrix));
+		printf("SLIDIND Q2 (POSITION) AND TURNING Q3 (POSITION)\n");
 
-
-		
-		puts("\t\tSLIDIND Q2 (POSITION) AND TURNING Q3 (POSITION)");
-		iter = 0;
-		delta[1] = set_iteration_step(2, limit, division);
+		delta[1] = set_iteration_step(1, limit, division*30);
 		delta[2] = set_iteration_step(2, limit, division);
 		q_iter[1] = q[1];
 		q_iter[2] = q[2];
@@ -189,22 +165,25 @@ int main(int argc, char **argv)
 			iter++;
 			q[1] = q_iter[1];
 			q_iter[1] = do_iter_step_position(tcp_matrix, final2, 3, 1, delta, q);
-			printf("Iter #%3d:\tq2=%2.4lf\n", iter, q_iter[1]);
+			term_print_gen_coord(iter, 3, q);
 			if (q[1] == q_iter[1]) break;
+			iter++;
 			q[2] = q_iter[2];
 			q_iter[2] = do_iter_step_position(tcp_matrix, final2, 3, 2, delta, q);
-			printf("\t\tq3=%2.4lf\n", q_iter[2]);
+			term_print_gen_coord(iter, 3, q);
 			if (q[2] == q_iter[2]) break;
 		} while (1);
 		
-		printf("\t\tq1:\t%lf\n", q[0]);
-		printf("\t\tq2:\t%lf\n", q[1]);
-		printf("\t\tq3:\t%lf\n", q[2]);	
+		tmatrix = get_tcp_matrix(tcp_matrix, q);
+		amatrix = get_absolute_error_matrix(tmatrix, final2);
+		rmatrix = get_relative_error_matrix(tmatrix, final2);
+		term_print_error(1,
+			get_max_error_of_position(rmatrix),
+			get_average_error_of_position(rmatrix),
+			get_max_error_of_orientaion(rmatrix),
+			get_average_error_of_orientaion(rmatrix));
+		printf("TURNING Q3 (ORIENTATION)\n");
 
-
-		
-		puts("\t\tTURNING Q3 (ORIENTATION)");
-		iter = 0;
 		delta[2] = set_iteration_step(2, limit, division);
 		delta[2] = set_iteration_step(2, limit, division);
 		q_iter[2] = q[2];
@@ -212,41 +191,27 @@ int main(int argc, char **argv)
 			iter++;
 			q[2] = q_iter[2];
 			q_iter[2] = do_iter_step_position(tcp_matrix, final2, 3, 2, delta, q);
-			printf("Iter #%3d:\tq3=%2.4lf\n", iter, q_iter[2]);
+			term_print_gen_coord(iter, 3, q);
 		} while (q[2] != q_iter[2]);
-		
-		rel_err_matrix = get_relative_error_matrix(
-			get_tcp_matrix(tcp_matrix, q), final2);
-		perrors(rel_err_matrix);
-		
-		printf("\t\tq1:\t%lf\n", q[0]);
-		printf("\t\tq2:\t%lf\n", q[1]);
-		printf("\t\tq3:\t%lf\n", q[2]);
-	puts("ABS ERROR");
-	primat(get_absolute_error_matrix(get_tcp_matrix(tcp_matrix, q), final2));
 
-		
+		tmatrix = get_tcp_matrix(tcp_matrix, q);
+		amatrix = get_absolute_error_matrix(tmatrix, final2);
+		rmatrix = get_relative_error_matrix(tmatrix, final2);
+		term_print_error(1,
+			get_max_error_of_position(rmatrix),
+			get_average_error_of_position(rmatrix),
+			get_max_error_of_orientaion(rmatrix),
+			get_average_error_of_orientaion(rmatrix));
+
 		division = division*2;
 	}
-	
-
-	
-	printf("division:\t%d\n", division);
-	puts("FINAL");
-	primat(final2);
-	puts("TCP");
-	primat(get_tcp_matrix(tcp_matrix, q));
-	puts("ABS ERROR");
-	primat(get_absolute_error_matrix(get_tcp_matrix(tcp_matrix, q), final2));
-	puts("REL ERROR");
-	primat(get_relative_error_matrix(get_tcp_matrix(tcp_matrix, q), final2));
-	
-	printf("\nGENERALIZED COORINATE:\t");
-	for (i = 0; i < 3; i++)
-		printf("Q%d = %2.4lf   ", i+1, q[i]);
-	puts("");
-	
-	free(rel_err_matrix);
+	term_print_matrix("ITERATION POSITION", tmatrix, 4, 4);
+	term_print_matrix("FINAL POSITION", final2, 4, 4);
+	term_print_matrix("ABSOLUTE ERROR", amatrix, 4, 4);
+	term_print_matrix("RELATIVE ERROR", rmatrix, 4, 4);
+	free(rmatrix);
+	free(tmatrix);
+	free(amatrix);
 	free(tcp_matrix);
 	return 0;
 }
