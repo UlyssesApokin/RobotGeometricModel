@@ -137,7 +137,7 @@ double avoid_orientation_limiter(double(**f)(const double*),
 		(q_limit[clim*q_num+1] + q_limit[clim*q_num]) / 2.0;
 	v = get_max_diff_btwn_axes(f, final, q_min, q_max, q_aver);
 	rez = (get_min_element(v, extr) == v[0]) ? q_max[q_num]
-		: ((get_min_element(v, extr) == v[1]) ? q_aver[q_num] : q_min[q_num]);
+		: ((get_max_element(v, extr) == v[1]) ? q_aver[q_num] : q_min[q_num]);
 	free(q_min);
 	free(q_max);
 	free(q_aver);
@@ -193,9 +193,13 @@ double do_iter_step_orientation(double(**f)(const double*), const double *final,
 	}
 	return q_iter[q_num];
 }
-double set_iteration_step(int q_num, const double *q_limit, unsigned long int division)
+double set_iteration_step(int q_num, const double *q_limit, unsigned int division)
 {
-	return((q_limit[clim*q_num+1] - q_limit[clim*q_num]) / (long double)division);
+	return((q_limit[clim*q_num+1] - q_limit[clim*q_num]) / (double)division);
+}
+double set_simple_iteration_step(double gap, unsigned int division)
+{
+	return gap / (double)division;
 }
 double* get_tcp_matrix(double(**f)(const double*), double *q)
 {
