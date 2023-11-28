@@ -51,11 +51,11 @@ void term_print_error(int percent,
 		printf("Average error of orientation:\t%3.4lf  %%\n", aver_error_ort);
 	}
 }
-void term_print_gen_coord(int num_of_iter, int q_num, double *q)
+void term_print_gen_coord(int num_of_iter, int num_of_q, double *q)
 {
 	int i;
 	printf("Iter #%3d:\t", num_of_iter);
-	for (i = 0; i < q_num; i++)
+	for (i = 0; i < num_of_q; i++)
 		printf("q%d = %3.4lf\t", i+1, q[i]);
 	printf("\n");
 }

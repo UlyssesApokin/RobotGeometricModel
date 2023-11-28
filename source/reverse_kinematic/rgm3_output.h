@@ -31,6 +31,6 @@ void term_print_error(int percent,
 	double max_error_pos, double aver_error_pos,
 	double max_error_ort, double aver_error_ort);
 
-void term_print_gen_coord(int num_of_iter, int q_num, double *q);
+void term_print_gen_coord(int num_of_iter, int num_of_q, double *q);
 
 #endif
