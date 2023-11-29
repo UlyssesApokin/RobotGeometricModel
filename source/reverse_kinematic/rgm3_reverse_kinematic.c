@@ -219,6 +219,8 @@ double* get_absolute_error_matrix(const double *tmatrix, const double *final)
 		for (j = 0; j < 4; j++) {
 			errmatrix[i*mtxs + j] = tmatrix[i*mtxs + j] - final[i*mtxs + j];
 		}
+	for (i = 0; i < 4; i++)
+		errmatrix[(mtxs-1)*mtxs + i] = 0.0;
 	return errmatrix;
 }
 double* get_relative_error_matrix(const double *tmatrix, const double *final)
