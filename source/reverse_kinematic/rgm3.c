@@ -116,9 +116,10 @@ int main(int argc, char **argv)
 			/*присваиваем новое значение обобщенной координаты*/
 			q[0] = q_iter[0]; 
 			/*отправляем в стандартный поток инф-ию об изменении*/
-			term_print_gen_coord(iter, 3, q);
+			term_print_gen_coord(iter, pairs, q);
 			/*итерируем обобщенную координату до тех пор*/
-			q_iter[0] = do_iter_step_position(tcp_matrix, final, 3, 0, delta, q);
+			q_iter[0] =
+				do_iter_step_position(tcp_matrix, final, pairs, 0, delta, q);
 			/*пока возможно приближение*/
 		} while (q[0] != q_iter[0]);
 		/*Второй этап: достижение нужной ориентации схвата
@@ -129,9 +130,10 @@ int main(int argc, char **argv)
 			/*присваиваем новое значение обобщенной координаты*/
 			q[2] = q_iter[2];
 			/*отправляем в стандартный поток инф-ию об изменении*/
-			term_print_gen_coord(iter, 3, q);
+			term_print_gen_coord(iter, pairs, q);
 			/*итерируем обобщенную координату до тех пор*/
-			q_iter[2] = do_iter_step_orientation(tcp_matrix, final, 3, 2, delta, q);
+			q_iter[2] =
+				do_iter_step_orientation(tcp_matrix, final, pairs, 2, delta, q);
 			/*пока возможно приближение*/
 		} while (q[2] != q_iter[2]);
 		/*Третий этап: второе сочленение подводит схват в 
@@ -139,8 +141,9 @@ int main(int argc, char **argv)
 		do {
 			iter++;
 			q[1] = q_iter[1];
-			term_print_gen_coord(iter, 3, q);
-			q_iter[1] = do_iter_step_position(tcp_matrix, final, 3, 1, delta, q);
+			term_print_gen_coord(iter, pairs, q);
+			q_iter[1] =
+				do_iter_step_position(tcp_matrix, final, pairs, 1, delta, q);
 		} while (q[1] != q_iter[1]);
 		/*считаем текущую матрицу однородного
 		преобразования координат*/
@@ -154,15 +157,15 @@ int main(int argc, char **argv)
 	} while (get_average_error_of_position(rmatrix) > 0.5);
 	/*отправляем в стандартный поток вывода
 	финальное значение обобщенных координат*/
-	term_print_gen_coord(iter, 3, q);
+	term_print_gen_coord(iter, pairs, q);
 	/*матрица позиции полученая приближением*/
-	term_print_matrix("ITERATION POSITION", tmatrix, 4, 4);
+	term_print_matrix("ITERATION POSITION", tmatrix, matrix, matrix);
 	/*матрица требуемой позиции*/
-	term_print_matrix("FINAL POSITION", final, 4, 4);
+	term_print_matrix("FINAL POSITION", final, matrix, matrix);
 	/*матрица абсолютной ошибки*/
-	term_print_matrix("ABSOLUTE ERROR", amatrix, 4, 4);
+	term_print_matrix("ABSOLUTE ERROR", amatrix, matrix, matrix);
 	/*матрица относительной ошибки*/
-	term_print_matrix("RELATIVE ERROR", rmatrix, 4, 4);
+	term_print_matrix("RELATIVE ERROR", rmatrix, matrix, matrix);
 	/*суммарный вывод ошибок в процентах*/
 	term_print_error(1,
 		get_max_error_of_position(rmatrix),
