@@ -39,16 +39,17 @@ void term_print_error(int percent,
 	double max_error_pos, double aver_error_pos,
 	double max_error_ort, double aver_error_ort)
 {
-	if (!percent) {
-		printf("Max error of position:\t%3.4lf\n", max_error_pos);
-		printf("Average error of position:\t%3.4lf\n", aver_error_pos);
-		printf("Max error of orientation:\t%3.4lf\n", max_error_ort);
-		printf("Average error of orientation:\t%3.4lf\n", aver_error_ort);
-	} else {
-		printf("Max error of position:\t%3.4lf  %%\n", max_error_pos);
-		printf("Average error of position:\t%3.4lf  %%\n", aver_error_pos);
-		printf("Max error of orientation:\t%3.4lf  %%\n", max_error_ort);
-		printf("Average error of orientation:\t%3.4lf  %%\n", aver_error_ort);
+	printf("Max error of position:\t%3.4lf", max_error_pos);
+	if (percent) puts("  %");
+	printf("Average error of position:\t%3.4lf", aver_error_pos);
+	if (percent) puts("  %");
+	if (max_error_ort != 0) {
+		printf("Max error of orientation:\t%3.4lf", max_error_ort);
+		if (percent) puts("  %");
+	}
+	if (aver_error_ort != 0) {
+		printf("Average error of orientation:\t%3.4lf", aver_error_ort);
+		if (percent) puts("  %");
 	}
 }
 void term_print_gen_coord(int num_of_iter, int num_of_q, double *q)
