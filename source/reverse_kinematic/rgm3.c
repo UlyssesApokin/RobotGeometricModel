@@ -70,10 +70,10 @@ unsigned int division = 100;
 поворота робота*/
 enum {matrix = 4};
 double final[matrix*matrix] = {
-    0.250,	0.433,	0.866, 	6.250,
-    -0.433, -0.750,	0.500, 	-10.825,
-    0.866,	-0.5,	0, 		131.651,
-    0,		0, 		0,		1
+	0.250,	0.433,	0.866, 	6.250,
+	-0.433, -0.750,	0.500, 	-10.825,
+	0.866,	-0.5,	0, 		131.651,
+	0,		0, 		0,		1
 };
 /*А также массив на 16 элементов, который будет
 хранить указатели на функции с прототипом
@@ -81,9 +81,9 @@ double()(const double*), т. е. однородную матрицу
 преобразования обобщенных координат в общем виде*/
 double (*tcp_matrix[matrix*matrix])(const double*) = {
 	tcp_xxh, tcp_xyh, tcp_xzh, tcp_xp,
-  	tcp_yxh, tcp_yyh, tcp_yzh, tcp_yp,
-  	tcp_zxh, tcp_zyh, tcp_zzh, tcp_zp,
-  	tcp_nul, tcp_nul, tcp_nul, tcp_one
+	tcp_yxh, tcp_yyh, tcp_yzh, tcp_yp,
+	tcp_zxh, tcp_zyh, tcp_zzh, tcp_zp,
+	tcp_nul, tcp_nul, tcp_nul, tcp_one
 };
 /*Переменная для хранения количества итераций*/
 int iter = 0;
@@ -99,6 +99,11 @@ double *amatrix;
 double *rmatrix;
 int main(int argc, char **argv)
 {
+	int fd;
+	csv_init_file("example.csv", &fd);
+	csv_create_field(fd, "q1");
+	csv_create_field(fd, "q2");
+	csv_create_field(fd, "q3");
 	do {
 		/*устанавливаем приращение обобщенной координаты
 		для первого сочленения*/
@@ -115,8 +120,11 @@ int main(int argc, char **argv)
 			iter++;
 			/*присваиваем новое значение обобщенной координаты*/
 			q[0] = q_iter[0]; 
-			/*отправляем в стандартный поток инф-ию об изменении*/
+		/*отправляем в стандартный поток инф-ию об изменении*/
 			term_print_gen_coord(iter, pairs, q);
+			csv_print_info(fd, "q1", q[0]);
+			csv_print_info(fd, "q2", q[1]);
+			csv_print_info(fd, "q3", q[2]);
 			/*итерируем обобщенную координату до тех пор*/
 			q_iter[0] =
 				do_iter_step_position(tcp_matrix, final, pairs, 0, delta, q);
@@ -129,8 +137,11 @@ int main(int argc, char **argv)
 			iter++;
 			/*присваиваем новое значение обобщенной координаты*/
 			q[2] = q_iter[2];
-			/*отправляем в стандартный поток инф-ию об изменении*/
+		/*отправляем в стандартный поток инф-ию об изменении*/
 			term_print_gen_coord(iter, pairs, q);
+			csv_print_info(fd, "q1", q[0]);
+			csv_print_info(fd, "q2", q[1]);
+			csv_print_info(fd, "q3", q[2]);
 			/*итерируем обобщенную координату до тех пор*/
 			q_iter[2] =
 				do_iter_step_orientation(tcp_matrix, final, pairs, 2, delta, q);
@@ -142,6 +153,9 @@ int main(int argc, char **argv)
 			iter++;
 			q[1] = q_iter[1];
 			term_print_gen_coord(iter, pairs, q);
+			csv_print_info(fd, "q1", q[0]);
+			csv_print_info(fd, "q2", q[1]);
+			csv_print_info(fd, "q3", q[2]);
 			q_iter[1] =
 				do_iter_step_position(tcp_matrix, final, pairs, 1, delta, q);
 		} while (q[1] != q_iter[1]);
@@ -173,6 +187,7 @@ int main(int argc, char **argv)
 		get_max_error_of_orientaion(rmatrix),
 		get_average_error_of_orientaion(rmatrix)
 		);
+	csv_close_file(fd);
 	free(rmatrix);
 	free(amatrix);
 	free(tmatrix);

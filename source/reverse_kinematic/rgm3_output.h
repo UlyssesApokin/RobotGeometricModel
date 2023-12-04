@@ -33,4 +33,12 @@ void term_print_error(int percent,
 
 void term_print_gen_coord(int num_of_iter, int num_of_q, double *q);
 
+void csv_init_file(const char *filename, int *file_descriptor);
+
+void csv_close_file(int file_descriptor);
+
+void csv_create_field(int file_descriptor, const char *label);
+
+void csv_print_info(int file_descriptor, const char *label, double data);
+
 #endif

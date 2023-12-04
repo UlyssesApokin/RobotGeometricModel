@@ -23,6 +23,12 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "rgm3_output.h"
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <fcntl.h>
+#include <unistd.h>
+
+enum {subn = 64};
 
 void term_print_matrix(const char *subs, const double *matrix, int row, int col)
 {
@@ -60,3 +66,92 @@ void term_print_gen_coord(int num_of_iter, int num_of_q, double *q)
 		printf("q%d = %3.4lf\t", i+1, q[i]);
 	printf("\n");
 }
+void csv_init_file(const char *filename, int *file_descriptor)
+{
+	*file_descriptor = open(filename, O_RDWR | O_CREAT, 0666);
+	if (*file_descriptor == -1) {
+		perror(filename);
+		exit(1);
+	}
+}
+void csv_close_file(int file_descriptor)
+{
+	fsync(file_descriptor);
+	if (file_descriptor == -1) {
+		perror("csv_close_file");
+		exit(1);
+	}
+	close(file_descriptor);
+	if (file_descriptor == -1) {
+		perror("csv_close_file");
+		exit(1);
+	}
+}
+void csv_create_field(int file_descriptor, const char *label)
+{
+	char *str = calloc(subn, sizeof(char));
+	strcat(str, label);
+	strcat(str, "\n");
+	write(file_descriptor, str, strlen(str));
+	free(str);
+}
+void csv_print_info(int file_descriptor, const char *label, double data)
+{
+	int subfd;
+	long offset = 0;
+	char *subname = "rgm3output.cvs.swp";
+	char *buf = calloc(subn, sizeof(char));
+	char *strdata = calloc(subn, sizeof(char)); 
+	subfd = open(subname, O_RDWR | O_CREAT, 0666); 
+	if (subfd == -1) {
+		perror(subname);
+		exit(1);
+	}	
+	fsync(file_descriptor);
+	if (file_descriptor == -1) {
+		perror("csv_close_file");
+		exit(1);
+	}
+	fsync(subfd);
+	if (subfd == -1) {
+		perror("csv_close_file");
+		exit(1);
+	}
+	do {
+		lseek(file_descriptor, offset, SEEK_SET);
+		read(file_descriptor, buf, strlen(label));
+		write(subfd, buf, 1);
+		offset++;
+	} while (strcmp(label, buf));	
+	do {
+		lseek(file_descriptor, offset, SEEK_SET);
+		read(file_descriptor, buf, 1);
+		write(subfd, buf, 1);
+		offset++;
+	} while (strncmp("\n", buf, 1));	
+	memset(buf, '\0', subn);
+	sprintf(strdata, "%6.6lf", data);
+	strcat(buf, ",");
+	strcat(buf, strdata);
+	strcat(buf, "\n");
+	lseek(subfd, -1, SEEK_CUR);
+	write(subfd, buf, strlen(buf));
+	while (read(file_descriptor, buf, 1)) {
+		write(subfd, buf, 1);
+	}
+	ftruncate(file_descriptor, 0);
+	lseek(subfd, 0, SEEK_SET);
+	lseek(file_descriptor, 0, SEEK_SET);
+	while (read(subfd, buf, 1)) {
+		write(file_descriptor, buf, 1);
+	}
+	close(subfd);
+	if (subfd == -1) {
+		perror(subname);
+		exit(1);
+	}	
+	unlink(subname);
+	free(buf);
+	free(strdata);
+}
+
