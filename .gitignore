@@ -6,6 +6,8 @@
 *.dvi
 *.geany
 *.swp
+*.csv
+*.ods
 test*
 clivisrgm*
 videxample*
