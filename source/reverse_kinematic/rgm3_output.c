@@ -95,63 +95,90 @@ void csv_create_field(int file_descriptor, const char *label)
 	write(file_descriptor, str, strlen(str));
 	free(str);
 }
-void csv_print_info(int file_descriptor, const char *label, double data)
+void init_hidden_file(const char *filename, int *fd)
 {
-	int subfd;
-	long offset = 0;
-	char *subname = "rgm3output.cvs.swp";
-	char *buf = calloc(subn, sizeof(char));
-	char *strdata = calloc(subn, sizeof(char)); 
-	subfd = open(subname, O_RDWR | O_CREAT, 0666); 
-	if (subfd == -1) {
-		perror(subname);
+	*fd = open(filename, O_RDWR | O_CREAT | O_EXCL, 0666); 
+	if (*fd == -1) {
+		perror(filename);
 		exit(1);
 	}	
-	fsync(file_descriptor);
-	if (file_descriptor == -1) {
-		perror("csv_close_file");
+}
+void close_hidden_file(const char *filename, int fd)
+{
+	fsync(fd);
+	if (fd == -1) {
+		perror("filename");
 		exit(1);
 	}
-	fsync(subfd);
-	if (subfd == -1) {
-		perror("csv_close_file");
+	close(fd);
+	if (fd == -1) {
+		perror("filename");
 		exit(1);
 	}
-	do {
-		lseek(file_descriptor, offset, SEEK_SET);
-		read(file_descriptor, buf, strlen(label));
-		write(subfd, buf, 1);
-		offset++;
-	} while (strcmp(label, buf));	
-	do {
-		lseek(file_descriptor, offset, SEEK_SET);
-		read(file_descriptor, buf, 1);
-		write(subfd, buf, 1);
-		offset++;
-	} while (strncmp("\n", buf, 1));	
-	memset(buf, '\0', subn);
+	if (unlink(filename) == -1) {
+		perror("filename");
+		exit(1);
+	}
+}
+void set_double_data(char *buf, int length, double data)
+{
+	char *strdata = calloc(subn, sizeof(char));
 	sprintf(strdata, "%6.6lf", data);
+	memset(buf, '\0', length);
 	strcat(buf, ",");
 	strcat(buf, strdata);
 	strcat(buf, "\n");
-	lseek(subfd, -1, SEEK_CUR);
-	write(subfd, buf, strlen(buf));
-	while (read(file_descriptor, buf, 1)) {
-		write(subfd, buf, 1);
-	}
-	ftruncate(file_descriptor, 0);
-	lseek(subfd, 0, SEEK_SET);
-	lseek(file_descriptor, 0, SEEK_SET);
-	while (read(subfd, buf, 1)) {
-		write(file_descriptor, buf, 1);
-	}
-	close(subfd);
-	if (subfd == -1) {
-		perror(subname);
-		exit(1);
-	}	
-	unlink(subname);
-	free(buf);
 	free(strdata);
+}
+long put_data(int fd, const char *str)
+{
+	long offset;
+	offset = lseek(fd, -1, SEEK_END);
+	write(fd, str, strlen(str));
+	return offset;
+}
+long search_this_match(int subfd, int fd, long start, const char *label)
+{
+	long offset = start;
+	char *buf = calloc(subn, sizeof(char));
+	do {
+		lseek(fd, offset, SEEK_SET);
+		read(fd, buf, strlen(label));
+		write(subfd, buf, 1);
+		offset++;
+	} while (strncmp(label, buf, strlen(label)));	
+	free(buf);
+	return offset;
+}
+void move_fully_content(int dest, int src)
+{
+	char *buf = calloc(2, sizeof(char));
+	if (ftruncate(dest, 0) == -1) {
+			perror("Truncate file");
+			exit(1);
+	}
+	lseek(src, 0, SEEK_SET);
+	lseek(dest, 0, SEEK_SET);
+	while (read(src, buf, 1))
+		write(dest, buf, 1);
+	free(buf);
+}
+void csv_print_info(int file_descriptor, const char *label, double data)
+{
+	int subfd;
+	long offset;
+	char *subname = ".#!~rgm3output.cvs.swp";
+	char *buf;
+	init_hidden_file(subname, &subfd);
+	offset = search_this_match(subfd, file_descriptor, 0, label);
+	offset = search_this_match(subfd, file_descriptor, offset, "\n");
+	buf = malloc(subn*sizeof(char));
+	set_double_data(buf, subn, data);
+	offset = put_data(subfd, buf);
+	while (read(file_descriptor, buf, 1))
+		write(subfd, buf, 1);
+	free(buf);
+	move_fully_content(file_descriptor, subfd);
+	close_hidden_file(subname, subfd);
 }
 
